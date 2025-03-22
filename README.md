@@ -9,6 +9,8 @@ The main objective of this assignment is
 language.
 - to work collaboratively as a group to achieve a common goal. 
 
+---
+
 ## Deliverables
 
 ### UML Class Diagram 
@@ -44,9 +46,10 @@ UML Class Diagram:
 #### GitHub Repository
 - Provide a link to your GitHub repository with all relevant files and code.
 
-##### Declaration of Original Work:
+#### Declaration of Original Work:
 - Include a signed Declaration form confirming original work (Appendix B).
 
+---
 
 ## DEMOSTRATION & PRESENTATION (Deadline: Week 14 Friday, 11:59pm)
 Your group is required to present your work to your TA to demonstrate the working of the application – presenting ALL the required functionalities of the
@@ -57,4 +60,31 @@ In the production, you may include:
 
 Presentation is 15min total, font must be large enough and the demo is to be done in real time not prerun display. 
 
-<p style='red;'> Repository is to be submitted one day before presentation with TA </p>
+<p style='color: red;'> Repository is to be submitted one day before presentation with TA </p>
+
+
+--- 
+
+## Assessment Weightage 
+### UML Class Diagram [25 Marks]
+- Show mainly the Entity classes, the essential Control and Boundary classes, and enumeration type (if there is).
+- Clarity, Correctness and Completeness of details and relationship.
+
+### UML Sequence Diagram [20 Marks]
+- Show only the sequence Diagram mentioned in 5(b)
+- Clarity, Correctness and Completeness of flow and object interactions details (Boundary-Control-Entities)
+
+### Design Consideration [15 Marks]
+- Usage of OO concepts and principle - correctness and appropriateness
+- Explanation of design choices and how it fits the project requirements
+- Coupling and cohesion of classes
+
+### Implementation Code [20 Marks]
+- Diagram to Code correctness, readability, Java naming convention, exception handling, completeness of Java Doc and overall quality.
+- Creativity of the additional features/functionality added to the system.
+- A Java API HTML documentation of ALL your defined classes using Javadoc must be submitted.
+
+### Demonstration and report [20 Marks]
+- Coverage of application essentials and functionalities, user friendliness, demo flow, innovation.
+- Report structure and reflection
+- Highlight clearly any additional features implemented in the system
