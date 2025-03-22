@@ -46,3 +46,15 @@ UML Class Diagram:
 
 ##### Declaration of Original Work:
 - Include a signed Declaration form confirming original work (Appendix B).
+
+
+## DEMOSTRATION & PRESENTATION (Deadline: Week 14 Friday, 11:59pm)
+Your group is required to present your work to your TA to demonstrate the working of the application – presenting ALL the required functionalities of the
+application. It is advised that you planned your demonstration in a storyboarding flow to facilitate understanding of your application. Please introduce your members and group number at the start of presentation, all the group members must take turn to present. The presenter should show his/her face while presenting.
+In the production, you may include:
+- Explaining essential and relevant information about the application
+- Run-through and elaborate on essential part/s of your implementation/coding
+
+Presentation is 15min total, font must be large enough and the demo is to be done in real time not prerun display. 
+
+<p style='red;'> Repository is to be submitted one day before presentation with TA </p>
