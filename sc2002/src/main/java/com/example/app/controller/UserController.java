@@ -2,38 +2,36 @@ package com.example.app.controller;
 
 import com.example.app.models.User;
 import com.example.app.service.UserService;
-import com.example.app.utils.InputReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
 
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
-
+    
+    @Autowired
     private UserService userService;
-
-    public static void controller() {
-
+    
+    @GetMapping
+    public List<User> getAllUsers() {
+       return userService.findAllUsers();
     }
-
-    public void login(){
-        System.out.println("Enter your NIRC");
-        String nirc = InputReader.readString();
-        System.out.println("Enter your password");
-        String password = InputReader.readString();
-        User user = userService.login(nirc, password);
-        if(user == null){
-            System.out.println("Invalid NIRC or password");
-            return;
-        }
-        System.out.println("Welcome " + user.getNirc());
-        switch (user.getRole()){
-            case APPLICANT:
-                ApplicantController.controller();
-                break;
-            case OFFICER:
-                OfficerController.controller();
-                break;
-            case MANAGER:
-                ManagerController.controller();
-                break;
-        }
-
+    
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable Long id) {
+       Optional<User> userOpt = userService.findById(id);
+       return userOpt.orElse(null);
+    }
+    
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+       return userService.createUser(user);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+       userService.deleteUser(id);
     }
 }
