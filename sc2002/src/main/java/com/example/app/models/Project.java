@@ -1,47 +1,37 @@
 package com.example.app.models;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Entity
 public class Project {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static long idCounter = 1; // for auto-incrementing IDs
     private Long id;
 
     private String projectName;
-
-    @Temporal(TemporalType.DATE)
     private Date applicationOpenDate;
-
-    @Temporal(TemporalType.DATE)
     private Date applicationCloseDate;
-
+    private String neighborhood;
+    private MaritalStatus group;
     private Boolean visibility;
 
-    @Enumerated(EnumType.STRING)
-    private ProjectStatus projectStatus;
+    private User manager;
+    private List<User> officers = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "manager_id")
-    private Manager manager;
+    public Project() {
+        this.id = idCounter++;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "officer_id")
-    private Officer officer;
-
-    public Project() { }
-
-    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, Boolean visibility,
-                   ProjectStatus statusStr, Manager manager, Officer officer) {
+    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, Manager manager, Officer officer, MaritalStatus group, Boolean visibility) {
+        this();
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
         this.applicationCloseDate = applicationCloseDate;
-        this.visibility = visibility;
-        this.projectStatus = statusStr;
+        this.neighborhood = neighborhood;
         this.manager = manager;
-        this.officer = officer;
+        this.group = group;
+        this.visibility = visibility;
     }
 
     public Long getId() { return id; }
@@ -56,23 +46,25 @@ public class Project {
     public Date getApplicationCloseDate() { return applicationCloseDate; }
     public void setApplicationCloseDate(Date applicationCloseDate) { this.applicationCloseDate = applicationCloseDate; }
 
+    public String getNeighborhood() { return neighborhood; }
+    public void setNeighborhood(String neighborhood) { this.neighborhood = neighborhood; }
+
+    public MaritalStatus getGroup() { return group; }
+    public void setGroup(MaritalStatus group) { this.group = group; }
+
     public Boolean getVisibility() { return visibility; }
     public void setVisibility(Boolean visibility) { this.visibility = visibility; }
 
-    public ProjectStatus getProjectStatus() { return projectStatus; }
-    public void setProjectStatus(ProjectStatus projectStatus) { this.projectStatus = projectStatus; }
+    public User getManager() { return manager; }
+    public void setManager(User manager) { this.manager = manager; }
 
-    public Manager getManager() { return manager; }
-    public void setManager(Manager manager) { this.manager = manager; }
+    public List<User> getOfficers() { return officers; }
+    public void setOfficers(List<User> officers) { this.officers = officers; }
 
-    public Officer getOfficer() { return officer; }
-    public void setOfficer(Officer officer) { this.officer = officer; }
+    public void addOfficer(Officer officer) {
+        if (!officers.contains(officer)) {
+            officers.add(officer);
+            officer.getProjects().add(this);
+        }
+    }
 }
-
-// enum ProjectStatus {
-//     PENDING,
-//     BOOKED,
-//     SUCCESSFUL,
-//     UNSUCCESSFUL
-// }
-

@@ -1,8 +1,7 @@
 package com.example.app.models;
 
-public enum ProjectStatus {
+public enum RegistrationStatus {
     PENDING,
-    BOOKED,
     SUCCESSFUL,
     UNSUCCESSFUL
 }

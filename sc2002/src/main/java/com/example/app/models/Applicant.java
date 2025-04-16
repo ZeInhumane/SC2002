@@ -1,19 +1,21 @@
 package com.example.app.models;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class Applicant extends User {
 
-    private String resumeLink;
+    private FlatType flatType;
 
     public Applicant() { }
 
-    public Applicant(String username, String password, String email, Role role, String resumeLink) {
-       super(username, password, email, role);
-       this.resumeLink = resumeLink;
+    public Applicant(String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
+        super(name, password, email, role, nric, age, maritalStatus);
     }
 
-    public String getResumeLink() { return resumeLink; }
-    public void setResumeLink(String resumeLink) { this.resumeLink = resumeLink; }
+    public FlatType getFlatType() {
+        return flatType;
+    }
+
+    public void setFlatType(FlatType flatType) {
+        this.flatType = flatType;
+    }
 }
+

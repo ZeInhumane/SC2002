@@ -1,8 +1,11 @@
 package com.example.app.repository;
 
+import com.example.app.models.MaritalStatus;
 import com.example.app.models.Project;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProjectRepository extends JpaRepository<Project, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface ProjectRepository{
+
 }
-

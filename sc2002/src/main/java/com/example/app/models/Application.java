@@ -1,48 +1,52 @@
 package com.example.app.models;
 
-import jakarta.persistence.*;
-
-@Entity
 public class Application {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static long idCounter = 1; // shared across all Application instances
+
     private Long id;
-
-    @ManyToOne
-    private Applicant applicant;
-
-    @ManyToOne
+    private User user;
     private Project project;
-
-    @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
 
-    public Application() { }
+    public Application() {
+        this.id = idCounter++;
+    }
 
-    public Application(Applicant applicant, Project project, ApplicationStatus status) {
-        this.applicant = applicant;
+    public Application(User user, Project project, ApplicationStatus status) {
+        this.id = idCounter++;
+        this.user = user;
         this.project = project;
         this.status = status;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Applicant getApplicant() { return applicant; }
-    public void setApplicant(Applicant applicant) { this.applicant = applicant; }
+    // No setter for ID to keep it auto-managed
+    public User getApplicant() {
+        return user;
+    }
 
-    public Project getProject() { return project; }
-    public void setProject(Project project) { this.project = project; }
+    public void setApplicant(User user) {
+        this.user = user;
+    }
 
-    public ApplicationStatus getStatus() { return status; }
-    public void setStatus(ApplicationStatus status) { this.status = status; }
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApplicationStatus status) {
+        this.status = status;
+    }
 }
-
-// enum ApplicationStatus {
-//     FOUND,
-//     BOOKED,
-//     SUCCESSFUL,
-//     UNSUCCESSFUL
-// }
 

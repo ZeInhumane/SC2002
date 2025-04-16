@@ -1,20 +1,31 @@
 package com.example.app.models;
 
-import jakarta.persistence.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-public class Officer extends User {
+public class Officer extends Applicant {
 
-    private String rank;
+    private List<Project> projects = new ArrayList<>();
 
     public Officer() { }
 
-    public Officer(String username, String password, String email, Role role, String rank) {
-        super(username, password, email, role);
-        this.rank = rank;
+    public Officer(String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
+        super(username, password, email, role, nric, age, maritalStatus);
     }
 
-    public String getRank() { return rank; }
-    public void setRank(String rank) { this.rank = rank; }
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public void addProject(Project project) {
+        if (!projects.contains(project)) {
+            projects.add(project);
+        }
+    }
 }
+
 

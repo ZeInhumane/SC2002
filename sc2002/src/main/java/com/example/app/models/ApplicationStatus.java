@@ -1,7 +1,7 @@
 package com.example.app.models;
 
 public enum ApplicationStatus {
-    FOUND,
+    PENDING,
     BOOKED,
     SUCCESSFUL,
     UNSUCCESSFUL

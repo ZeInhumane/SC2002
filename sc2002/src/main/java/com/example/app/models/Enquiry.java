@@ -1,30 +1,31 @@
 package com.example.app.models;
 
-import jakarta.persistence.*;
-
-@Entity
 public class Enquiry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private static long counter = 1; // for manual ID generation
 
+    private Long id;
     private String question;
     private String response;
 
-    @ManyToOne
-    private User postedBy;
+    private Project project;
+    private User enquirer;
+    private User replier;
 
-    public Enquiry() { }
+    public Enquiry() {
+        this.id = counter++;
+    }
 
-    public Enquiry(String question, String response, User postedBy) {
+    public Enquiry(String question, String response, Project project, User enquirer, User replier) {
+        this.id = counter++;
         this.question = question;
         this.response = response;
-        this.postedBy = postedBy;
+        this.project = project;
+        this.enquirer = enquirer;
+        this.replier = replier;
     }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
@@ -32,7 +33,12 @@ public class Enquiry {
     public String getResponse() { return response; }
     public void setResponse(String response) { this.response = response; }
 
-    public User getPostedBy() { return postedBy; }
-    public void setPostedBy(User postedBy) { this.postedBy = postedBy; }
-}
+    public Project getProject() { return project; }
+    public void setProject(Project project) { this.project = project; }
 
+    public User getEnquirer() { return enquirer; }
+    public void setEnquirer(User enquirer) { this.enquirer = enquirer; }
+
+    public User getReplier() { return replier; }
+    public void setReplier(User replier) { this.replier = replier; }
+}
