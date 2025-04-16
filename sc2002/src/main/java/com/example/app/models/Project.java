@@ -3,11 +3,12 @@ package com.example.app.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-public class Project {
+public class Project implements BaseEntity {
 
-    private static long idCounter = 1; // for auto-incrementing IDs
-    private Long id;
+    private static int idCounter = 1; // for auto-incrementing IDs
+    private int id;
 
     private String projectName;
     private Date applicationOpenDate;
@@ -15,6 +16,7 @@ public class Project {
     private String neighborhood;
     private MaritalStatus group;
     private Boolean visibility;
+    private Map<FlatType, Integer> flats;
 
     private User manager;
     private List<User> officers = new ArrayList<>();
@@ -23,7 +25,7 @@ public class Project {
         this.id = idCounter++;
     }
 
-    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, Manager manager, Officer officer, MaritalStatus group, Boolean visibility) {
+    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, Manager manager, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flats) {
         this();
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
@@ -32,34 +34,77 @@ public class Project {
         this.manager = manager;
         this.group = group;
         this.visibility = visibility;
+        this.flats = flats;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Override
+    public int getId() {
+        return id;
+    }
 
-    public String getProjectName() { return projectName; }
-    public void setProjectName(String projectName) { this.projectName = projectName; }
+    public String getProjectName() {
+        return projectName;
+    }
 
-    public Date getApplicationOpenDate() { return applicationOpenDate; }
-    public void setApplicationOpenDate(Date applicationOpenDate) { this.applicationOpenDate = applicationOpenDate; }
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-    public Date getApplicationCloseDate() { return applicationCloseDate; }
-    public void setApplicationCloseDate(Date applicationCloseDate) { this.applicationCloseDate = applicationCloseDate; }
+    public Date getApplicationOpenDate() {
+        return applicationOpenDate;
+    }
 
-    public String getNeighborhood() { return neighborhood; }
-    public void setNeighborhood(String neighborhood) { this.neighborhood = neighborhood; }
+    public void setApplicationOpenDate(Date applicationOpenDate) {
+        this.applicationOpenDate = applicationOpenDate;
+    }
 
-    public MaritalStatus getGroup() { return group; }
-    public void setGroup(MaritalStatus group) { this.group = group; }
+    public Date getApplicationCloseDate() {
+        return applicationCloseDate;
+    }
 
-    public Boolean getVisibility() { return visibility; }
-    public void setVisibility(Boolean visibility) { this.visibility = visibility; }
+    public void setApplicationCloseDate(Date applicationCloseDate) {
+        this.applicationCloseDate = applicationCloseDate;
+    }
 
-    public User getManager() { return manager; }
-    public void setManager(User manager) { this.manager = manager; }
+    public String getNeighborhood() {
+        return neighborhood;
+    }
 
-    public List<User> getOfficers() { return officers; }
-    public void setOfficers(List<User> officers) { this.officers = officers; }
+    public void setNeighborhood(String neighborhood) {
+        this.neighborhood = neighborhood;
+    }
+
+    public MaritalStatus getGroup() {
+        return group;
+    }
+
+    public void setGroup(MaritalStatus group) {
+        this.group = group;
+    }
+
+    public Boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
+    public List<User> getOfficers() {
+        return officers;
+    }
+
+    public void setOfficers(List<User> officers) {
+        this.officers = officers;
+    }
 
     public void addOfficer(Officer officer) {
         if (!officers.contains(officer)) {
@@ -67,4 +112,21 @@ public class Project {
             officer.getProjects().add(this);
         }
     }
+
+    public void decrementFlatCount(FlatType flatType) {
+        if (flats.containsKey(flatType)) {
+            int currentCount = flats.get(flatType);
+            flats.put(flatType, currentCount - 1);
+        }
+    }
+    
+    public boolean hasFlatLeft(FlatType flatType) {
+        return flats.getOrDefault(flatType, 0) > 0;
+    }
+
+    public Map<FlatType, Integer> getFlats() {
+        return flats;
+    }
+
 }
+

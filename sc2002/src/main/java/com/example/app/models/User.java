@@ -1,9 +1,9 @@
 package com.example.app.models;
 
-public class User {
+public class User implements BaseEntity{
 
-    private static long idCounter = 1;
-    private long id;
+    private static int idCounter = 1;
+    private int id;
 
     private String nric;
     private String name;
@@ -30,7 +30,8 @@ public class User {
 
     // Getters and Setters
 
-    public long getId() {
+    @Override
+    public int getId() {
         return id;
     }
 

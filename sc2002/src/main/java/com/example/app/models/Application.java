@@ -1,44 +1,44 @@
 package com.example.app.models;
 
-public class Application {
+public class Application implements BaseEntity {
 
-    private static long idCounter = 1; // shared across all Application instances
+    private static int idCounter = 1; // shared across all Application instances
 
-    private Long id;
-    private User user;
-    private Project project;
+    private final int id;
+    private int userId;
+    private int projectId;
     private ApplicationStatus status;
 
     public Application() {
         this.id = idCounter++;
     }
 
-    public Application(User user, Project project, ApplicationStatus status) {
+    public Application(int userId, int projectId, ApplicationStatus status) {
         this.id = idCounter++;
-        this.user = user;
-        this.project = project;
+        this.userId = userId;
+        this.projectId = projectId;
         this.status = status;
     }
 
-    public Long getId() {
+    @Override
+    public int getId() {
         return id;
     }
 
-    // No setter for ID to keep it auto-managed
-    public User getApplicant() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setApplicant(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public Project getProject() {
-        return project;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
     public ApplicationStatus getStatus() {

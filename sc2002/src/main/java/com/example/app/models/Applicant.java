@@ -2,6 +2,7 @@ package com.example.app.models;
 
 public class Applicant extends User {
 
+    private int applicationId;
     private FlatType flatType;
 
     public Applicant() { }
@@ -10,7 +11,15 @@ public class Applicant extends User {
         super(name, password, email, role, nric, age, maritalStatus);
     }
 
-    public FlatType getFlatType() {
+    public int getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(int applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public FlatType flatType() {
         return flatType;
     }
 

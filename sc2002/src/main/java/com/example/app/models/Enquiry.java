@@ -1,31 +1,30 @@
 package com.example.app.models;
 
-public class Enquiry {
+public class Enquiry implements BaseEntity{
 
-    private static long counter = 1; // for manual ID generation
+    private static int counter = 1; // for manual ID generation
 
-    private Long id;
+    private int id;
     private String question;
     private String response;
 
-    private Project project;
-    private User enquirer;
-    private User replier;
+    private int projectId;
+    private int enquirerId;
+    private int replierId ;
 
     public Enquiry() {
         this.id = counter++;
     }
 
-    public Enquiry(String question, String response, Project project, User enquirer, User replier) {
+    public Enquiry(String question,  int projectId, int enquirerId) {
         this.id = counter++;
         this.question = question;
-        this.response = response;
-        this.project = project;
-        this.enquirer = enquirer;
-        this.replier = replier;
+        this.projectId = projectId;
+        this.enquirerId = enquirerId;
     }
 
-    public Long getId() { return id; }
+    @Override
+    public int getId() { return id; }
 
     public String getQuestion() { return question; }
     public void setQuestion(String question) { this.question = question; }
@@ -33,12 +32,12 @@ public class Enquiry {
     public String getResponse() { return response; }
     public void setResponse(String response) { this.response = response; }
 
-    public Project getProject() { return project; }
-    public void setProject(Project project) { this.project = project; }
+    public int getProjectId() { return projectId; }
+    public void setProjectId(int projectId) { this.projectId = projectId; }
 
-    public User getEnquirer() { return enquirer; }
-    public void setEnquirer(User enquirer) { this.enquirer = enquirer; }
+    public int getEnquirerId() { return enquirerId; }
+    public void setEnquirerId(int enquirerId) { this.enquirerId = enquirerId; }
 
-    public User getReplier() { return replier; }
-    public void setReplier(User replier) { this.replier = replier; }
+    public int getReplierId() { return replierId; }
+    public void setReplierId(int replierId) { this.replierId = replierId; }
 }

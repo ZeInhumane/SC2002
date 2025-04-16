@@ -5,6 +5,7 @@ import com.example.app.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
-public class UserService {
+public class ApplicantService {
+    
     
 }

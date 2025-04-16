@@ -1,32 +1,33 @@
 package com.example.app.models;
 
-public class Registration {
+public class Registration implements BaseEntity{
 
-    private static long idCounter = 1;
-    private long id;
+    private static int idCounter = 1;
+    private int id;
 
-    private User user;
-    private Project project;
+    private int userId;
+    private int projectId;
     private RegistrationStatus status;
 
     public Registration() {
         this.id = idCounter++;
     }
 
-    public Registration(User user, Project project, RegistrationStatus status) {
+    public Registration(int userId, int projectId, RegistrationStatus status) {
         this(); // call the no-arg constructor to generate the id
-        this.user = user;
-        this.project = project;
+        this.userId = userId;
+        this.projectId = projectId;
         this.status = status;
     }
 
-    public long getId() { return id; }
+    @Override
+    public int getId() { return id; }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
-    public Project getProject() { return project; }
-    public void setProject(Project project) { this.project = project; }
+    public int getProjectId() { return projectId; }
+    public void setProjectId(int projectId) { this.projectId = projectId; }
 
     public RegistrationStatus getStatus() { return status; }
     public void setStatus(RegistrationStatus status) { this.status = status; }

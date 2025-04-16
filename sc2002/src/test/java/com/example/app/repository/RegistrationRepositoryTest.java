@@ -1,120 +1,72 @@
 package com.example.app.repository;
 
-import com.example.app.models.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.example.app.models.MaritalStatus;
+import com.example.app.models.Project;
+import com.example.app.models.Registration;
+import com.example.app.models.RegistrationStatus;
+import com.example.app.models.Role;
+import com.example.app.models.User;
 
 public class RegistrationRepositoryTest {
 
-    private List<Registration> registrationDB = new ArrayList<>();
-    private List<User> userDB = new ArrayList<>();
-    private List<Project> projectDB = new ArrayList<>();
+    private RegistrationRepository repo;
+    private UserRepository userRepo;
+    private ProjectRepository projectRepo;
 
-    @Test
-    public void testFindById() {
-        User user = createUser("S1234567A");
-        Project project = createProject("Sky Oasis");
-
-        Registration registration = new Registration(user, project, RegistrationStatus.PENDING);
-        // registration.setId(1L);
-        registrationDB.add(registration);
-
-        // Registration found = findRegistrationById(1L);
-        // assertNotNull(found);
-        // assertEquals(RegistrationStatus.PENDING, found.getStatus());
+    @BeforeEach
+    public void setup() {
+        repo = new RegistrationRepository();
+        userRepo = new UserRepository();
+        projectRepo = new ProjectRepository();
     }
 
     @Test
-    public void testFindByUserNric() {
-        User user = createUser("S7654321B");
-        Project project = createProject("Green Haven");
+    public void testFindByUserId() {
+        User user1 = new User("Alice", "pass", "a@email.com", Role.APPLICANT, "S123", 25, MaritalStatus.SINGLE);
+        User user2 = new User("Bob", "pass", "b@email.com", Role.MANAGER, "S456", 35, MaritalStatus.MARRIED);
+        userRepo.save(user1);
+        userRepo.save(user2);
 
-        Registration registration = new Registration(user, project, RegistrationStatus.PENDING);
-        // registration.setId(2L);
-        registrationDB.add(registration);
+        Project project = new Project();
+        project.setProjectName("Skyline");
+        projectRepo.save(project);
 
-        List<Registration> found = findByUserNric("S7654321B");
-        assertEquals(1, found.size());
-        assertEquals("S7654321B", found.get(0).getUser().getNric());
+        Registration reg1 = new Registration(user1, project, RegistrationStatus.PENDING);
+        Registration reg2 = new Registration(user2, project, RegistrationStatus.SUCCESSFUL);
+        repo.save(reg1);
+        repo.save(reg2);
+
+        List<Registration> result = repo.findByUserId(user1.getId());
+        assertEquals(1, result.size());
+        assertEquals("S123", result.get(0).getUser().getNric());
     }
 
     @Test
     public void testFindByProjectId() {
-        User user = createUser("S1122334C");
-        Project project = createProject("Horizon View");
+        User user = new User("Alice", "pass", "a@email.com", Role.APPLICANT, "S123", 25, MaritalStatus.SINGLE);
+        userRepo.save(user);
 
-        Registration registration = new Registration(user, project, RegistrationStatus.PENDING);
-        // registration.setId(3L);
-        registrationDB.add(registration);
+        Project project1 = new Project();
+        project1.setProjectName("Skyline");
+        projectRepo.save(project1);
 
-        List<Registration> found = findByProjectId(project.getId());
-        assertEquals(1, found.size());
-        assertEquals("Horizon View", found.get(0).getProject().getProjectName());
-    }
+        Project project2 = new Project();
+        project2.setProjectName("Horizon");
+        projectRepo.save(project2);
 
-    @Test
-    public void testDeleteById() {
-        User user = createUser("S9999999D");
-        Project project = createProject("Sunrise Residences");
+        Registration reg1 = new Registration(user, project1, RegistrationStatus.PENDING);
+        Registration reg2 = new Registration(user, project2, RegistrationStatus.SUCCESSFUL);
+        repo.save(reg1);
+        repo.save(reg2);
 
-        Registration registration = new Registration(user, project, RegistrationStatus.PENDING);
-        // registration.setId(4L);
-        registrationDB.add(registration);
-
-        deleteById(4L);
-
-        // assertNull(findRegistrationById(4L));
-    }
-
-    // ----------------------
-    // Helper logic
-    // ----------------------
-
-    private User createUser(String nric) {
-        User user = new User("Test User", "password", nric + "@email.com", Role.APPLICANT, nric, 30, MaritalStatus.SINGLE);
-        // user.setId((long) (userDB.size() + 1));
-        userDB.add(user);
-        return user;
-    }
-
-    private Project createProject(String name) {
-        Project project = new Project();
-        project.setId((long) (projectDB.size() + 1));
-        project.setProjectName(name);
-        project.setVisibility(true);
-        projectDB.add(project);
-        return project;
-    }
-
-    // private Registration findRegistrationById(Long id)
-    //     return new Registraion();
-    //     // return registrationDB.stream().filter(r -> r.getId().equals(id)).findFirst().orElse(null);
-    // }
-
-    private List<Registration> findByUserNric(String nric) {
-        List<Registration> result = new ArrayList<>();
-        for (Registration reg : registrationDB) {
-            if (reg.getUser().getNric().equals(nric)) {
-                result.add(reg);
-            }
-        }
-        return result;
-    }
-
-    private List<Registration> findByProjectId(Long projectId) {
-        List<Registration> result = new ArrayList<>();
-        for (Registration reg : registrationDB) {
-            if (reg.getProject().getId().equals(projectId)) {
-                result.add(reg);
-            }
-        }
-        return result;
-    }
-
-    private void deleteById(Long id) {
-        // registrationDB.removeIf(r -> r.getId().equals(id));
+        List<Registration> result = repo.findByProjectId(project2.getId());
+        assertEquals(1, result.size());
+        assertEquals("Horizon", result.get(0).getProject().getProjectName());
     }
 }
