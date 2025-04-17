@@ -6,7 +6,7 @@ import java.util.List;
 public class Manager extends User {
 
     private int currentProjectId;
-    private List<Project> pastProjects = new ArrayList<>();
+    private List<Integer> pastProjects = new ArrayList<>();
 
     public Manager() { }
 
@@ -22,17 +22,25 @@ public class Manager extends User {
         this.currentProjectId = currentProjectId;
     }
 
-    public List<Project> getPastProjects() {
+    public List<Integer> getPastProjects() {
         return pastProjects;
     }
 
-    public void setPastProjects(List<Project> pastProjects) {
+    public void setPastProjects(List<Integer> pastProjects) {
         this.pastProjects = pastProjects;
     }
 
-    public void addProject(Project project) {
-        if (!pastProjects.contains(project)) {
-            pastProjects.add(project);
+    public void addProject(int projectId) {
+        if (!pastProjects.contains(projectId)) {
+            pastProjects.add(projectId);
         }
     }
+
+    public void removeProject(int projectId) {
+        if (currentProjectId == projectId) {
+            currentProjectId = -1; 
+        }
+        pastProjects.remove(Integer.valueOf(projectId));
+    }
+
 }

@@ -3,21 +3,20 @@ package com.example.app.service;
 import java.util.List;
 
 import com.example.app.models.Enquiry;
-import com.example.app.models.User;
 import com.example.app.repository.EnquiryRepository;
 
-public class EnquiryService extends GeneralService {
+public class EnquiryService {
 
     private EnquiryRepository enquiryRepository = new EnquiryRepository();
 
-    public EnquiryService(User user) {
-        super(user); 
+    public EnquiryService() {
+
     }
 
-
+    
     // Allow user to add Enquiry
-    public int submitEnquiry(String question, int projectId) {
-        Enquiry newEnquiry = new Enquiry(question, projectId, user.getId());
+    public int submitEnquiry(String question, int projectId, int userId) {
+        Enquiry newEnquiry = new Enquiry(question, projectId, userId);
         Enquiry enquiry = enquiryRepository.save(newEnquiry);
         return enquiry.getId();
     }
@@ -34,9 +33,16 @@ public class EnquiryService extends GeneralService {
         enquiryRepository.deleteById(id);
     }
 
+    // Delete all enquiries related to a project
+    public void deleteEnquiriesByProjectId(int projectId) {
+        List<Enquiry> enquiries = enquiryRepository.findByProjectId(projectId);
+        for (Enquiry enquiry : enquiries) {
+            enquiryRepository.deleteById(enquiry.getId());
+        }
+    }
 
     // Get project based enquiries
-    public List<Enquiry> getProjectEnquiries(int projectId) {
+    public List<Enquiry> getEnquiriesByProjectId(int projectId) {
         return enquiryRepository.findByProjectId(projectId);
     }
 
@@ -47,10 +53,10 @@ public class EnquiryService extends GeneralService {
 
     // Reply enquiry based on enquiry id
     // Save user respnse and responder id
-    public void replyEnquiry(int id, String reply) {
+    public void replyEnquiry(int id, String reply, int replierId) {
         Enquiry enquiry = getEnquiry(id);
         enquiry.setResponse(reply);
-        enquiry.setReplierId(user.getId());
+        enquiry.setReplierId(replierId);
     } 
     
 }

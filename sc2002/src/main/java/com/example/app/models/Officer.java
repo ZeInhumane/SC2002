@@ -1,11 +1,8 @@
 package com.example.app.models;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Officer extends Applicant implements ProjectAssignable{
 
-public class Officer extends Applicant {
-
-    private List<Project> projects = new ArrayList<>();
+    private int registeredProject = -1;
 
     public Officer() { }
 
@@ -13,19 +10,16 @@ public class Officer extends Applicant {
         super(username, password, email, role, nric, age, maritalStatus);
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public void setRegisteredProject(int registerId) {
+        this.registeredProject = registerId;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public int getRegisteredProject() {
+        return registeredProject;
     }
 
-    public void addProject(Project project) {
-        if (!projects.contains(project)) {
-            projects.add(project);
-        }
-    }
+    
 }
+
 
 

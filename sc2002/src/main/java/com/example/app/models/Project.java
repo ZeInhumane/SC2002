@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.example.app.exceptions.OfficerAlreadyInsideException;
+import com.example.app.exceptions.OfficerLimitExceededException;
+
 public class Project implements BaseEntity {
 
     private static int idCounter = 1; // for auto-incrementing IDs
@@ -18,20 +21,20 @@ public class Project implements BaseEntity {
     private Boolean visibility;
     private Map<FlatType, Integer> flats;
 
-    private User manager;
-    private List<User> officers = new ArrayList<>();
+    private int managerId;
+    private List<Integer> officers = new ArrayList<>();
 
     public Project() {
         this.id = idCounter++;
     }
 
-    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, Manager manager, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flats) {
+    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flats) {
         this();
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
         this.applicationCloseDate = applicationCloseDate;
         this.neighborhood = neighborhood;
-        this.manager = manager;
+        this.managerId = managerId;
         this.group = group;
         this.visibility = visibility;
         this.flats = flats;
@@ -90,42 +93,65 @@ public class Project implements BaseEntity {
         this.visibility = visibility;
     }
 
-    public User getManager() {
-        return manager;
+    public int getManagerId() {
+        return managerId;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setManager(int managerId) {
+        this.managerId = managerId;
     }
 
-    public List<User> getOfficers() {
+    public List<Integer> getOfficers() {
         return officers;
     }
 
-    public void setOfficers(List<User> officers) {
+    public void setOfficers(List<Integer> officers) {
         this.officers = officers;
     }
 
-    public void addOfficer(Officer officer) {
-        if (!officers.contains(officer)) {
-            officers.add(officer);
-            officer.getProjects().add(this);
+    public void addOfficer(int officerId) {
+        if (officers.size() >= 10) {
+            throw new OfficerLimitExceededException("Cannot assign more than 10 offciers to this project");
         }
+
+        if (officers.contains(officerId)) {
+            throw new OfficerAlreadyInsideException("Cannot assign to project when officer is already inside");
+        }
+
+        officers.add(officerId);
+
     }
 
-    public void decrementFlatCount(FlatType flatType) {
-        if (flats.containsKey(flatType)) {
-            int currentCount = flats.get(flatType);
-            flats.put(flatType, currentCount - 1);
-        }
+    public void removeOfficer(int officerId) {
+        if (!officers.remove(Integer.valueOf(officerId))) {
+            throw new IllegalArgumentException("Officer ID " + officerId + " not found in this project.");
+        }    
     }
-    
+
+
+    public void decrementFlatCount(FlatType flatType) {
+        if (!flats.containsKey(flatType)) {
+            throw new IllegalArgumentException("Flat type " + flatType + " is not available in this project.");
+        }
+
+        int currentCount = flats.get(flatType);
+        if (currentCount <= 0) {
+            throw new IllegalStateException("No flats of type " + flatType + " are left to allocate.");
+        }
+
+        flats.put(flatType, currentCount - 1);
+    }
+
     public boolean hasFlatLeft(FlatType flatType) {
         return flats.getOrDefault(flatType, 0) > 0;
     }
 
     public Map<FlatType, Integer> getFlats() {
         return flats;
+    }
+
+    public void setFlats(Map<FlatType, Integer> flats) {
+        this.flats = flats;
     }
 
 }

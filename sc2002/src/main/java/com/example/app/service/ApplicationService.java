@@ -5,21 +5,20 @@ import java.util.stream.Collectors;
 
 import com.example.app.models.Application;
 import com.example.app.models.ApplicationStatus;
-import com.example.app.models.User;
 import com.example.app.repository.ApplicationRepository;
 
-public class ApplicationService extends GeneralService{
+public class ApplicationService {
     private ApplicationRepository applicationRepository = new ApplicationRepository();
-    
-    public ApplicationService(User user) {
-        super(user); 
+
+    public ApplicationService() {
+
     }
 
     // Apply for a project using id for that user
     // Return application Id for user to save
-    public int applyForProject(int projectId) {
+    public int applyForProject(int userId ,int projectId) {
         Application apply = new Application(
-            user.getId(), projectId, ApplicationStatus.PENDING
+            userId, projectId, ApplicationStatus.PENDING
         );
 
         Application application = applicationRepository.save(apply);
@@ -27,8 +26,8 @@ public class ApplicationService extends GeneralService{
     } 
 
     // Get Applied project by user Id
-    public int getAppliedProjectId() {
-        Application userApplication =  applicationRepository.findOneByUserId(user.getId());
+    public int getAppliedProjectId(int userId) {
+        Application userApplication =  applicationRepository.findOneByUserId(userId);
         return userApplication.getProjectId();
     } 
 
@@ -54,6 +53,14 @@ public class ApplicationService extends GeneralService{
         applicationRepository.deleteById(id);
     }
 
+    // Delete all applications related to a project
+    public void deleteApplicationsByProjectId(int projectId) {
+        List<Application> applications = applicationRepository.findByProjectId(projectId);
+        for (Application application : applications) {
+            applicationRepository.deleteById(application.getId());
+        }
+    }
+
 
     // Get all applications relating to a project 
     // Meant for officer and manager
@@ -66,6 +73,13 @@ public class ApplicationService extends GeneralService{
         return applicationRepository.findById(id);
     }
 
+    // Meant for officer to check if a user is an applicant for a specific project
+    public boolean isApplicantFor(int userId, int projectId) { 
+        List<Application> applications = applicationRepository.findByProjectId(projectId);
+        return applications.stream().anyMatch(app -> app.getUserId() == userId);
+    }
+
+    
 
 }
 
