@@ -1,6 +1,7 @@
 package com.example.app.cli;
 
 import com.example.app.models.Enquiry;
+import com.example.app.models.FlatType;
 import com.example.app.models.Project;
 import com.example.app.models.Registration;
 import com.example.app.service.OfficerService;
@@ -31,6 +32,9 @@ public class OfficerCLI extends ApplicantCLI {
             System.out.println("9) Reply to Enquiry (Officer)");
             System.out.println("10) Register as Officer for Project");
             System.out.println("11) View My Officer Registration");
+            System.out.println("12) Book Flat for Applicant");
+            System.out.println("13) Generate Booking Receipt");
+            System.out.println("14) View All Booked Applicants");
             System.out.println("0) Logout");
 
             int choice = Console.readInt("Choose an option: ");
@@ -47,6 +51,9 @@ public class OfficerCLI extends ApplicantCLI {
                 case 9 -> replyToEnquiry();
                 case 10 -> registerAsOfficer();
                 case 11 -> viewMyRegistration();
+                case 12 -> bookFlatForApplicant();
+                case 13 -> printBookingReceipt();
+                case 14 -> viewAllBookings();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -150,4 +157,53 @@ public class OfficerCLI extends ApplicantCLI {
             System.out.println("❌ You are not registered for any project.");
         }
     }
+
+    private void bookFlatForApplicant() {
+        String nric = Console.readLine("Enter Applicant NRIC: ");
+        List<FlatType> types = List.of(FlatType._2ROOM, FlatType._3ROOM);
+        System.out.println("Select Flat Type:");
+        for (int i = 0; i < types.size(); i++) {
+            System.out.println((i + 1) + ") " + types.get(i));
+        }
+
+        int choice = Console.readInt("Choice: ");
+        if (choice < 1 || choice > types.size()) {
+            System.out.println("Invalid flat type selection.");
+            return;
+        }
+
+        FlatType selected = types.get(choice - 1);
+
+        try {
+            officerService.bookFlatForApplicant(nric, selected);
+            System.out.println("✅ Flat booked successfully.");
+        } catch (Exception e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    private void printBookingReceipt() {
+        String nric = Console.readLine("Enter Applicant NRIC: ");
+        try {
+            String receipt = officerService.generateBookingReceipt(nric);
+            System.out.println(receipt);
+        } catch (Exception e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    private void viewAllBookings() {
+        try {
+            List<String> bookings = officerService.getAllBookingsForHandledProject();
+            if (bookings.isEmpty()) {
+                System.out.println("📭 No bookings found for your project.");
+            } else {
+                System.out.println("=== Booked Applicants ===");
+                bookings.forEach(System.out::println);
+            }
+        } catch (Exception e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.app.cli;
 
 import com.example.app.models.Application;
 import com.example.app.models.Enquiry;
+import com.example.app.models.FlatType;
 import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
 import com.example.app.utils.Console;
@@ -70,14 +71,40 @@ public class ApplicantCLI {
             return;
         }
 
-        viewProjects(); // reuse method to show valid projects
-
+        viewProjects();
         int projectId = Console.readInt("Enter project ID to apply: ");
+
+        List<FlatType> eligibleTypes;
         try {
-            appService.applyForProject(projectId);
-            System.out.println("Application submitted!");
+            eligibleTypes = appService.getEligibleFlatTypesForProject(projectId);
         } catch (Exception e) {
-            System.out.println("Failed to apply: " + e.getMessage());
+            System.out.println("❌ " + e.getMessage());
+            return;
+        }
+
+        if (eligibleTypes.isEmpty()) {
+            System.out.println("No eligible flat types available for your profile in this project.");
+            return;
+        }
+
+        System.out.println("Eligible Flat Types:");
+        for (int i = 0; i < eligibleTypes.size(); i++) {
+            System.out.println((i + 1) + ") " + eligibleTypes.get(i));
+        }
+
+        int choice = Console.readInt("Select a flat type (by number): ");
+        if (choice < 1 || choice > eligibleTypes.size()) {
+            System.out.println("Invalid flat type selection.");
+            return;
+        }
+
+        FlatType selectedType = eligibleTypes.get(choice - 1);
+
+        try {
+            appService.applyForProject(projectId, selectedType);
+            System.out.println("✅ Application submitted with preferred flat type: " + selectedType);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to apply: " + e.getMessage());
         }
     }
 

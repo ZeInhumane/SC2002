@@ -4,9 +4,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.app.models.Applicant;
+import com.example.app.models.Application;
+import com.example.app.models.ApplicationStatus;
 import com.example.app.models.Enquiry;
+import com.example.app.models.FlatType;
 import com.example.app.models.Officer;
 import com.example.app.models.Registration;
+import com.example.app.models.User;
 import com.example.app.models.Project;
 
 public class OfficerService extends ApplicantService {
@@ -104,9 +109,93 @@ public class OfficerService extends ApplicantService {
     // ------------------------------
     // Additionally Required functions
     // ------------------------------
+    // === Flat selection responsibilities ===
+
+    public void bookFlatForApplicant(String applicantNric, FlatType chosenFlatType) {
+        User user = userManagementService.findByNric(applicantNric);
+        if (!(user instanceof Applicant applicant)) {
+            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
+        }
+
+        Application app = applicationService.getApplicationById(applicant.getApplicationId());
+        if (app == null || app.getStatus() != ApplicationStatus.SUCCESSFUL) {
+            throw new IllegalStateException("Applicant has no successful application.");
+        }
+
+        // Update project flat count
+        projectService.decrementFlatCount(app.getProjectId(), chosenFlatType);
+
+        // Update application status
+        app.setStatus(ApplicationStatus.BOOKED);
+
+        // Assign flat type to applicant
+        applicant.setFlatType(chosenFlatType);
+    }
+
+    public String generateBookingReceipt(String applicantNric) {
+        User user = userManagementService.findByNric(applicantNric);
+        if (!(user instanceof Applicant applicant)) {
+            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
+        }
+
+        Application app = applicationService.getApplicationById(applicant.getApplicationId());
+        if (app == null || app.getStatus() != ApplicationStatus.BOOKED) {
+            throw new IllegalStateException("Applicant has not booked a flat.");
+        }
+
+        Project project = projectService.findById(app.getProjectId());
+
+        return String.format("""
+                === Booking Receipt ===
+                Name: %s
+                NRIC: %s
+                Age: %d
+                Marital Status: %s
+                Booked Flat Type: %s
+                Project Name: %s
+                Neighborhood: %s
+                """,
+                applicant.getName(),
+                applicant.getNric(),
+                applicant.getAge(),
+                applicant.getMaritalStatus(),
+                applicant.getFlatType(),
+                project.getProjectName(),
+                project.getNeighborhood());
+    }
 
     // Maybe get all bookings
 
     // bookUser
+    public List<String> getAllBookingsForHandledProject() {
+        Officer officer = (Officer) user;
+        int projectId = officer.getRegisteredProject();
+
+        if (projectId == -1) {
+            throw new IllegalStateException("Officer is not assigned to any project.");
+        }
+
+        List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
+        return applications.stream()
+                .filter(app -> app.getStatus() == ApplicationStatus.BOOKED)
+                .map(app -> {
+                    User u = userManagementService.findById(app.getUserId());
+                    if (u instanceof Applicant applicant) {
+                        return String.format("""
+                                Name: %s | NRIC: %s | Age: %d | Marital Status: %s | Flat Type: %s | Project: %s (%s)
+                                """,
+                                applicant.getName(),
+                                applicant.getNric(),
+                                applicant.getAge(),
+                                applicant.getMaritalStatus(),
+                                applicant.getFlatType(),
+                                projectService.findById(projectId).getProjectName(),
+                                projectService.findById(projectId).getNeighborhood());
+                    }
+                    return null;
+                })
+                .filter(s -> s != null)
+                .toList();
+    }
 
 }
