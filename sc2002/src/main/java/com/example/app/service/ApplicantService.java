@@ -94,8 +94,7 @@ public class ApplicantService {
     }
 
     public boolean isOfficerFor(int projectId) {
-        Project project = projectService.findById(projectId);
-        return project.getOfficers().contains(user.getId());
+        return projectService.isOfficerFor(user.getId(), projectId);
     }
 
     // Submit enquiry (stores ID back to user profile)

@@ -18,6 +18,8 @@ public class ManagerCLI {
 
     public void run() {
         while (true) {
+
+            // Re check current project handling
             managerService.reassignManaging();
             System.out.println("\n=== HDB Manager Menu ===");
             System.out.println("1) View Projects");

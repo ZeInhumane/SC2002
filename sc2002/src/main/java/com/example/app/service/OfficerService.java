@@ -23,10 +23,6 @@ public class OfficerService extends ApplicantService {
         super(user);
     }
 
-    // Check if Officer is officer for a project (After Officer Application)
-    public boolean isOfficerFor(int projectId) {
-        return projectService.isOfficerFor(user.getId(), projectId);
-    }
 
     // Check if is applicant for HDB (Before Officer Application)
     public boolean isApplicantFor(int projectId) {
