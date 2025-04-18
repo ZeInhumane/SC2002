@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.app.models.Applicant;
-import com.example.app.models.Application;
 import com.example.app.models.ApplicationStatus;
 import com.example.app.models.Enquiry;
 import com.example.app.models.FlatType;
@@ -17,7 +16,11 @@ import com.example.app.models.Project;
 import com.example.app.models.Registration;
 import com.example.app.models.RegistrationStatus;
 import com.example.app.models.User;
+import com.example.app.models.Application;
+
+
 import java.util.Comparator;
+
 
 public class ManagerService {
     
@@ -55,6 +58,10 @@ public class ManagerService {
         return project.getManagerId() == admin.getId();
     }
 
+    // view applications relating to project 
+    public List<Application> getApplicationsByProjectId(int projectId) {
+        return applicationService.getApplicationsByProjectId(projectId);
+    }
 
 
     // Reassign the managers current project handling to another project if date limit is over or if manager has no project yet 
@@ -197,10 +204,11 @@ public class ManagerService {
     }
     
     // Edit application status
-    public void approveBTOStatus(int applicationId, boolean success) {
+    public boolean approveApplication(int applicationId, boolean success) {
         ApplicationStatus status = success ? ApplicationStatus.SUCCESSFUL : ApplicationStatus.UNSUCCESSFUL;
         applicationService.changeStatus(applicationId, status);
-    }
+        return success;
+    }    
 
 
     // Get Enquiries

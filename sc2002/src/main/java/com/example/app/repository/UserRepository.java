@@ -13,7 +13,7 @@ public class UserRepository extends GeneralRepository<User> {
             .findFirst()
             .orElse(null);
     }
-    // ✅ Add this to return all users
+    //  Add this to return all users
     // public List<User> findAll() {
     //     System.out.println(users);
     //     return new ArrayList<>(users.values());

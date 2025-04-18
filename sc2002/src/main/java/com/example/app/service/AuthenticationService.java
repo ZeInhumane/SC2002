@@ -28,6 +28,7 @@ public class AuthenticationService {
         }
     }
 
+    // Load users from excel
     private void loadUsersFromExcel(String filename, Role role, Map<String, String> credMap) throws Exception {
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream(filename);
                 Workbook wb = new XSSFWorkbook(fis)) {
@@ -56,6 +57,8 @@ public class AuthenticationService {
         }
     }
 
+    // Load Projects from excel
+    // Current Projects Not able to store officers yet
     private void loadProjectsFromExcel(String filename) throws Exception {
         try (InputStream fis = getClass().getClassLoader().getResourceAsStream(filename);
                 Workbook wb = new XSSFWorkbook(fis)) {

@@ -102,7 +102,7 @@ public class ApplicantService {
     public int submitEnquiry(String question, int projectId) {
         Project project = projectService.findById(projectId);
         if (project == null) {
-            throw new IllegalArgumentException("Project ID " + projectId + " not found.");
+                throw new IllegalArgumentException("Project ID " + projectId + " not found.");
         }
 
         int enquiryId = enquiryService.submitEnquiry(question, projectId, user.getId(), project.getProjectName());
@@ -123,7 +123,7 @@ public class ApplicantService {
     public List<Enquiry> getAllPastEnquiries() {
         return user.getPastEnquiries().stream()
                 .map(enquiryService::getEnquiry)
-                .collect(Collectors.toList()); // ✅ this was missing
+                .collect(Collectors.toList()); //  this was missing
     }
 
     // Edit enquiry (if it belongs to this user)

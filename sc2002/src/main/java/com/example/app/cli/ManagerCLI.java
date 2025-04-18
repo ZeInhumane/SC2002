@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ManagerCLI {
+
     private final ManagerService managerService;
 
     public ManagerCLI(ManagerService managerService) {
@@ -24,24 +25,34 @@ public class ManagerCLI {
             System.out.println("3) Delete Project");
             System.out.println("4) Update Project");
             System.out.println("5) Handle Officer Registrations");
+            System.out.println("6) Handle Applications");
             System.out.println("0) Logout");
 
             int choice = Console.readInt("Choose an option: ");
             switch (choice) {
-                case 1 -> viewProjectsMenu();
-                case 2 -> createProject();
-                case 3 -> deleteProject();
-                case 4 -> updateProjectMenu();
-                case 5 -> handleRegistrations();
+                case 1 ->
+                    viewProjectsMenu();
+                case 2 ->
+                    createProject();
+                case 3 ->
+                    deleteProject();
+                case 4 ->
+                    updateProjectMenu();
+                case 5 ->
+                    handleRegistrations();
+                case 6 ->
+                    handleApplications();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
                 }
-                default -> System.out.println("Invalid option.");
+                default ->
+                    System.out.println("Invalid option.");
             }
         }
     }
 
+    // View Project Options
     private void viewProjectsMenu() {
         System.out.println("\n1) View All Projects");
         System.out.println("2) View My Projects");
@@ -49,13 +60,16 @@ public class ManagerCLI {
 
         int choice = Console.readInt("Choose an option: ");
         switch (choice) {
-            case 1 -> viewAllProjects();
-            case 2 -> viewMyProjects();
-            case 3 -> viewHandlingProject();
-            default -> System.out.println("Invalid option.");
+            case 1 ->
+                viewAllProjects();
+            case 2 ->
+                viewMyProjects();
+            case 3 ->
+                viewHandlingProject();
+            default ->
+                System.out.println("Invalid option.");
         }
     }
-
 
     // View all projects
     private void viewAllProjects() {
@@ -70,7 +84,6 @@ public class ManagerCLI {
         }
     }
 
-
     // view all of the managers projects
     private void viewMyProjects() {
         Collection<Project> projects = managerService.viewMyProjects();
@@ -84,7 +97,6 @@ public class ManagerCLI {
         }
     }
 
-
     // View the current project the manager is handling 
     private void viewHandlingProject() {
         Project current = managerService.viewHandlingProject();
@@ -95,9 +107,6 @@ public class ManagerCLI {
             System.out.println(current);
         }
     }
-
-
-
 
     // Create New Project
     private void createProject() {
@@ -120,6 +129,7 @@ public class ManagerCLI {
             return;
         }
 
+        // Get Date and check format
         String openDateStr = Console.readLine("Enter application open date (yyyy-MM-dd): ");
         String closeDateStr = Console.readLine("Enter application close date (yyyy-MM-dd): ");
         Date applicationOpenDate;
@@ -132,11 +142,13 @@ public class ManagerCLI {
             return;
         }
 
+        // Check if date overlaps with any other project
         if (managerService.hasDateOverlap(applicationOpenDate, applicationCloseDate)) {
             System.out.println("You already have a project with an overlapping application period. Please choose a different date range.");
             return;
         }
 
+        // Enter the number of flats per flat type
         Map<FlatType, Integer> flats = new HashMap<>();
         System.out.println("Enter unit count for each flat type:");
         for (FlatType type : FlatType.values()) {
@@ -144,6 +156,7 @@ public class ManagerCLI {
             flats.put(type, count);
         }
 
+        // Create the project
         try {
             managerService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats);
             System.out.println("Project created successfully.");
@@ -168,17 +181,21 @@ public class ManagerCLI {
             System.out.println(p);
         }
 
+        // Check if it is manager's project
         int projectId = Console.readInt("Enter Project ID to delete: ");
         if (!managerService.isProjectBelongToManager(projectId)) {
             System.out.println("You no project with that Id");
             return;
         }
+
+        // Confirm delete
         String confirm = Console.readLine("Are you sure you want to delete this project? (yes/no): ");
         if (!confirm.equalsIgnoreCase("yes")) {
             System.out.println("Deletion cancelled.");
             return;
         }
 
+        // Delete Project 
         try {
             managerService.deleteProject(projectId);
             System.out.println("Project deleted successfully.");
@@ -189,19 +206,24 @@ public class ManagerCLI {
     }
 
 
-private void updateProjectMenu() {
+    // Update project menu
+    private void updateProjectMenu() {
         System.out.println("=== Update Project Menu ===");
         System.out.println("1) Update Project Particulars");
         System.out.println("2) Toggle Project Visibility");
 
         int choice = Console.readInt("Choose an option: ");
         switch (choice) {
-            case 1 -> updateProjectParticulars();
-            case 2 -> toggleProjectVisibility();
-            default -> System.out.println("Invalid option.");
+            case 1 ->
+                updateProjectParticulars();
+            case 2 ->
+                toggleProjectVisibility();
+            default ->
+                System.out.println("Invalid option.");
         }
     }
 
+    // Update the projects visibility
     private void toggleProjectVisibility() {
         Collection<Project> myProjects = managerService.viewMyProjects();
         if (myProjects.isEmpty()) {
@@ -227,6 +249,8 @@ private void updateProjectMenu() {
         }
     }
 
+
+    // Update the projects particulars
     private void updateProjectParticulars() {
         System.out.println("=== Update BTO Project ===");
 
@@ -256,10 +280,14 @@ private void updateProjectMenu() {
         System.out.println("Press enter to keep the existing value.");
 
         String projectName = Console.readLine("Project Name [%s]: ".formatted(project.getProjectName()));
-        if (projectName.isBlank()) projectName = project.getProjectName();
+        if (projectName.isBlank()) {
+            projectName = project.getProjectName();
+        }
 
         String neighborhood = Console.readLine("Neighborhood [%s]: ".formatted(project.getNeighborhood()));
-        if (neighborhood.isBlank()) neighborhood = project.getNeighborhood();
+        if (neighborhood.isBlank()) {
+            neighborhood = project.getNeighborhood();
+        }
 
         System.out.println("Eligible group options:");
         for (MaritalStatus status : MaritalStatus.values()) {
@@ -314,6 +342,7 @@ private void updateProjectMenu() {
     }
 
 
+    // Handle Registrations
     private void handleRegistrations() {
         Collection<Project> myProjects = managerService.viewMyProjects();
         if (myProjects.isEmpty()) {
@@ -347,7 +376,9 @@ private void updateProjectMenu() {
 
         while (true) {
             int regId = Console.readInt("Enter Registration ID to approve/reject (or -1 to exit): ");
-            if (regId == -1) break;
+            if (regId == -1) {
+                break;
+            }
 
             String action = Console.readLine("Approve or Reject? (a/r): ");
             if (action.equalsIgnoreCase("a")) {
@@ -361,4 +392,67 @@ private void updateProjectMenu() {
             }
         }
     }
+
+
+    // Handle project Applications
+    private void handleApplications() {
+        Collection<Project> myProjects = managerService.viewMyProjects();
+        if (myProjects.isEmpty()) {
+            System.out.println("You have not created any projects.");
+            return;
+        }
+
+        System.out.println("=== Your Projects ===");
+        for (Project p : myProjects) {
+            System.out.println(p);
+        }
+
+        int projectId = Console.readInt("Enter Project ID to view applications: ");
+        Project currentProject = managerService.getProjectById(projectId);
+        if (currentProject == null || !managerService.isProjectBelongToManager(projectId)) {
+            System.out.println("Invalid project ID or you do not have access to this project.");
+            return;
+        }
+
+        List<Application> applications = managerService.getApplicationsByProjectId(currentProject.getId());
+        if (applications.isEmpty()) {
+            System.out.println("No applications for this project.");
+            return;
+        }
+
+        System.out.println("=== Applications for Project: " + currentProject.getProjectName() + " ===");
+        for (Application app : applications) {
+            System.out.println(app);
+        }
+
+        while (true) {
+            int appId = Console.readInt("Enter Application ID to approve/reject (or -1 to exit): ");
+            if (appId == -1) {
+                break;
+            }
+
+            Application app = applications.stream()
+                    .filter(a -> a.getId() == appId && a.getStatus() == ApplicationStatus.PENDING)
+                    .findFirst()
+                    .orElse(null);
+
+            if (app == null) {
+                System.out.println("Invalid or already processed application ID.");
+                continue;
+            }
+
+            String action = Console.readLine("Approve or Reject? (a/r): ");
+            if (action.equalsIgnoreCase("a")) {
+                managerService.approveApplication(appId, true);
+                System.out.println("Application approved.");
+
+            } else if (action.equalsIgnoreCase("r")) {
+                managerService.approveApplication(appId, false);
+                System.out.println("Application rejected.");
+            } else {
+                System.out.println("Invalid action.");
+            }
+        }
+    }
+
 }

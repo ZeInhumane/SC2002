@@ -62,9 +62,11 @@ public class Application implements BaseEntity {
     @Override
     public String toString() {
         return String.format("""
-                Project: %s
-                Application Status: %s
-                """, projectName, status);
+            [Application Id: %s]
+            Project (%s): %s
+            Application Status: %s
+            """, id , projectId, projectName, status);
     }
+
 }
 

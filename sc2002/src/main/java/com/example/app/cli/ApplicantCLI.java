@@ -25,8 +25,6 @@ public class ApplicantCLI {
             System.out.println("3) View Current Application");
             System.out.println("4) Submit Enquiry");
             System.out.println("5) View My Enquiries");
-            // System.out.println("6) Edit Enquiry");
-            // System.out.println("7) Delete Enquiry");
             System.out.println("0) Logout");
 
             int choice = Console.readInt("Choose an option: ");
@@ -46,6 +44,7 @@ public class ApplicantCLI {
         }
     }
 
+    // View projects eligible to applicant based on marital status and visibility
     protected void viewProjects() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
@@ -53,47 +52,50 @@ public class ApplicantCLI {
             return;
         }
 
+        // Load projects out
         System.out.println("=== Available Projects ===");
         for (Project p : projects) {
             System.out.println(p);
         }
     }
 
+    // Apply for Project
     protected void applyForProject() {
+        
+        // Check if user already has an application that is pending/successful/booked
         if (!appService.isAbleToApply()) {
             System.out.println("You already have an active or successful application.");
             return;
         }
 
-        Collection<Project> projects = appService.viewProjects();
-        if (projects.isEmpty()) {
-            System.out.println("No available projects to apply for at the moment.");
-            return;
-        }
-
+        // Get the projects         
         viewProjects();
+
+        // Enter the project you want to apply for 
         int projectId = Console.readInt("Enter project ID to apply: ");
 
         List<FlatType> eligibleTypes;
         try {
             eligibleTypes = appService.getEligibleFlatTypesForProject(projectId);
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println(" " + e.getMessage());
             return;
         }
 
+        // If you are not an officer for (just checks if id is in user)
         if (appService.isOfficerFor(projectId)) {
             System.out.println("You are an officer for this project and hence cannot apply");
             return;
         }
 
+
+        // Check of there are any flats that are eligible
         if (eligibleTypes.isEmpty()) {
             System.out.println("No eligible flat types available for your profile in this project.");
             return;
         }
 
-        
-
+        // If there is choose a flat
         System.out.println("Eligible Flat Types:");
         for (int i = 0; i < eligibleTypes.size(); i++) {
             System.out.println((i + 1) + ") " + eligibleTypes.get(i));
@@ -109,12 +111,14 @@ public class ApplicantCLI {
 
         try {
             appService.applyForProject(projectId, selectedType);
-            System.out.println("✅ Application submitted with preferred flat type: " + selectedType);
+            System.out.println(" Application submitted with preferred flat type: " + selectedType);
         } catch (Exception e) {
-            System.out.println("❌ Failed to apply: " + e.getMessage());
+            System.out.println(" Failed to apply: " + e.getMessage());
         }
     }
 
+
+    // View applicants current application
     protected void viewCurrentApplication() {
         Application app = appService.viewCurrentApplication();
         if (app == null) {
@@ -124,6 +128,7 @@ public class ApplicantCLI {
         }
     }
 
+    // Submit enquiry
     protected void submitEnquiry() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
@@ -145,6 +150,7 @@ public class ApplicantCLI {
         }
     }
 
+    // View applicant enquiruies
     protected void viewMyEnquiries() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
@@ -156,10 +162,11 @@ public class ApplicantCLI {
         }
     }
 
+    // Edit applicant enquiries
     protected void editEnquiry() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
-            System.out.println("📭 You have no enquiries to edit.");
+            System.out.println("You have no enquiries to edit.");
             return;
         }
 
@@ -179,10 +186,12 @@ public class ApplicantCLI {
         }
     }
 
+
+    // Delete Enquiry
     protected void deleteEnquiry() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
-            System.out.println("📭 You have no enquiries to delete.");
+            System.out.println("You have no enquiries to delete.");
             return;
         }
 

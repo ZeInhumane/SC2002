@@ -76,7 +76,7 @@ public class OfficerCLI extends ApplicantCLI {
                 System.out.println(e);
             }
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println(" " + e.getMessage());
         }
     }
 
@@ -87,7 +87,7 @@ public class OfficerCLI extends ApplicantCLI {
         if (e != null) {
             System.out.println(e);
         } else {
-            System.out.println("❌ Enquiry not found or not part of your project.");
+            System.out.println(" Enquiry not found or not part of your project.");
         }
     }
 
@@ -99,12 +99,12 @@ public class OfficerCLI extends ApplicantCLI {
         try {
             e = officerService.getEnquiry(id);
         } catch (IllegalArgumentException ex) {
-            System.out.println("❌ Enquiry ID not found.");
+            System.out.println(" Enquiry ID not found.");
             return;
         }
 
         if (e == null) {
-            System.out.println("❌ Enquiry not found.");
+            System.out.println(" Enquiry not found.");
             return;
         }
 
@@ -154,7 +154,7 @@ public class OfficerCLI extends ApplicantCLI {
             System.out.println("=== Your Officer Registration ===");
             System.out.println(r);
         } catch (Exception e) {
-            System.out.println("❌ You are not registered for any project.");
+            System.out.println(" You are not registered for any project.");
         }
     }
 
@@ -176,9 +176,9 @@ public class OfficerCLI extends ApplicantCLI {
 
         try {
             officerService.bookFlatForApplicant(nric, selected);
-            System.out.println("✅ Flat booked successfully.");
+            System.out.println(" Flat booked successfully.");
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println(" " + e.getMessage());
         }
     }
 
@@ -188,7 +188,7 @@ public class OfficerCLI extends ApplicantCLI {
             String receipt = officerService.generateBookingReceipt(nric);
             System.out.println(receipt);
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println(" " + e.getMessage());
         }
     }
 
@@ -202,7 +202,7 @@ public class OfficerCLI extends ApplicantCLI {
                 bookings.forEach(System.out::println);
             }
         } catch (Exception e) {
-            System.out.println("❌ " + e.getMessage());
+            System.out.println(" " + e.getMessage());
         }
     }
 
