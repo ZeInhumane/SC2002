@@ -21,7 +21,6 @@ public class ApplicantService {
 
     public ApplicantService(Applicant user) {
         this.user = user;
-        System.out.println(user);
     }
 
     public Applicant getUser() {

@@ -24,7 +24,7 @@ public class AuthenticationService {
             System.out.println(userMgmt.listUsers());
             loadProjectsFromExcel("ProjectList.xlsx");
         } catch (Exception e) {
-            throw new RuntimeException("❌ Failed to load initial data", e);
+            throw new RuntimeException("Failed to load initial data", e);
         }
     }
 
@@ -98,11 +98,11 @@ public class AuthenticationService {
                 );
             }
 
-            System.out.println("✅ Project list loaded.");
+            System.out.println("Project list loaded.");
             System.out.println(projectService.findAll());
 
         } catch (Exception e) {
-            System.err.println("❌ Failed to load project list: " + e.getMessage());
+            System.err.println("Failed to load project list: " + e.getMessage());
             throw e;
         }
     }
