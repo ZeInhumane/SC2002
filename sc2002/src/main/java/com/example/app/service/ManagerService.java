@@ -20,11 +20,11 @@ import com.example.app.models.User;
 
 public class ManagerService {
     
-    ProjectService projectService = new ProjectService();
-    ApplicationService applicationService = new ApplicationService();
-    EnquiryService enquiryService = new EnquiryService();
-    RegistrationService registrationService = new RegistrationService();
-    UserManagementService userManagementService = new UserManagementService();
+    static ProjectService projectService = new ProjectService();
+    static ApplicationService applicationService = new ApplicationService();
+    static EnquiryService enquiryService = new EnquiryService();
+    static RegistrationService registrationService = new RegistrationService();
+    static UserManagementService userManagementService = new UserManagementService();
 
     private Manager admin;
 

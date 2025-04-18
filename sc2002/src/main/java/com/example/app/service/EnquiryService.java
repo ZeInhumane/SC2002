@@ -7,7 +7,7 @@ import com.example.app.repository.EnquiryRepository;
 
 public class EnquiryService {
 
-    private EnquiryRepository enquiryRepository = new EnquiryRepository();
+    private static EnquiryRepository enquiryRepository = new EnquiryRepository();
 
     public EnquiryService() {
 

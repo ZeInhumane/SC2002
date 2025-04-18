@@ -13,9 +13,9 @@ import com.example.app.models.Project;
 
 public class ApplicantService {
     
-    ProjectService projectService = new ProjectService();
-    ApplicationService applicationService = new ApplicationService();
-    EnquiryService enquiryService = new EnquiryService();
+    static ProjectService projectService = new ProjectService();
+    static ApplicationService applicationService = new ApplicationService();
+    static EnquiryService enquiryService = new EnquiryService();
 
     protected Applicant user;
 

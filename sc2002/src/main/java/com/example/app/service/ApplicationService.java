@@ -8,7 +8,7 @@ import com.example.app.models.ApplicationStatus;
 import com.example.app.repository.ApplicationRepository;
 
 public class ApplicationService {
-    private ApplicationRepository applicationRepository = new ApplicationRepository();
+    private static ApplicationRepository applicationRepository = new ApplicationRepository();
 
     public ApplicationService() {
 

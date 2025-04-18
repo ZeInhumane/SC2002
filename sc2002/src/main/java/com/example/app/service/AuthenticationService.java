@@ -13,8 +13,8 @@ public class AuthenticationService {
     private final Map<String, String> officerCreds = new HashMap<>();
     private final Map<String, String> managerCreds = new HashMap<>();
 
-    private final UserManagementService userMgmt = new UserManagementService();
-    private final ProjectService projectService = new ProjectService();
+    private static final UserManagementService userMgmt = new UserManagementService();
+    private static final ProjectService projectService = new ProjectService();
 
     public AuthenticationService() {
         try {

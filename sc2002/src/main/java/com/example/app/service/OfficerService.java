@@ -10,8 +10,8 @@ import com.example.app.models.Registration;
 public class OfficerService extends ApplicantService {
     
 
-    RegistrationService registrationService = new RegistrationService();
-    UserManagementService userManagementService = new UserManagementService();
+    static RegistrationService registrationService = new RegistrationService();
+    static UserManagementService userManagementService = new UserManagementService();
 
     public OfficerService(Officer user) {
         super(user);

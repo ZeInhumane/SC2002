@@ -94,10 +94,24 @@ public class ApplicantCLI {
     }
 
     private void submitEnquiry() {
-        int projectId = Console.readInt("Enter Project ID: ");
+        Collection<Project> projects = appService.viewProjects();
+        if (projects.isEmpty()) {
+            System.out.println("No projects available to submit enquiry.");
+            return;
+        }
+
+        for (Project p : projects) {
+            System.out.println("ID " + p.getId() + " → " + p.getProjectName());
+        }
+
+        int projectId = Console.readInt("Enter Project ID for enquiry: ");
         String question = Console.readLine("Enter your enquiry: ");
-        int enquiryId = appService.submitEnquiry(question, projectId);
-        System.out.println("Enquiry submitted with ID: " + enquiryId);
+        try {
+            int enquiryId = appService.submitEnquiry(question, projectId);
+            System.out.println("✅ Enquiry submitted (ID: " + enquiryId + ")");
+        } catch (Exception e) {
+            System.out.println("❌ Failed to submit enquiry: " + e.getMessage());
+        }
     }
 
     private void viewMyEnquiries() {

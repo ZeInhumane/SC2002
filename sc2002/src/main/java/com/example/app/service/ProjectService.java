@@ -14,7 +14,7 @@ import com.example.app.repository.ProjectRepository;
 
 public class ProjectService {
 
-    private ProjectRepository projectRepository = new ProjectRepository();
+    static private ProjectRepository projectRepository = new ProjectRepository();
 
     public ProjectService() {
     
