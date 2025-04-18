@@ -9,9 +9,11 @@ import com.example.app.service.OfficerService;
 import com.example.app.service.UserManagementService;
 import com.example.app.service.ManagerService;
 import com.example.app.cli.ApplicantCLI;
+import com.example.app.cli.ManagerCLI;
 import com.example.app.cli.OfficerCLI;
 import com.example.app.models.Applicant;
 import com.example.app.models.Officer;
+import com.example.app.models.Manager;
 // import com.example.app.service.dummy.DummyOfficerService;
 // import com.example.app.service.dummy.DummyManagerService;
 import com.example.app.utils.Console;
@@ -69,7 +71,10 @@ public class Main {
                     break;
                 case 3:
                     if (auth.authenticateManager(id, pw)) {
-                        // new ManagerCLI(mgrSvc).run();
+                        System.out.println("You're logged in");
+                        Manager user = (Manager) userMgmt.findByNric(id);
+                        ManagerService appSvc = new ManagerService(user);
+                        new ManagerCLI(appSvc).run();
                     } else {
                         System.out.println("Invalid Manager credentials.");
                     }

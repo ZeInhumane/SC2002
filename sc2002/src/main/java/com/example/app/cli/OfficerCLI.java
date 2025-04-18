@@ -151,8 +151,7 @@ public class OfficerCLI extends ApplicantCLI {
         try {
             Registration r = officerService.viewCurrentRegistration();
             System.out.println("=== Your Officer Registration ===");
-            System.out.println("Project ID: " + r.getProjectId());
-            System.out.println("Status: " + r.getStatus());
+            System.out.println(r);
         } catch (Exception e) {
             System.out.println("❌ You are not registered for any project.");
         }

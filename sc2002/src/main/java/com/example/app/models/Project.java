@@ -21,7 +21,7 @@ public class Project implements BaseEntity {
     private Boolean visibility;
     private Map<FlatType, Integer> flats;
 
-    private int managerId;
+    private int managerId = -1 ;
     private List<Integer> officers = new ArrayList<>();
 
     public Project() {
@@ -98,7 +98,7 @@ public class Project implements BaseEntity {
         return managerId;
     }
 
-    public void setManager(int managerId) {
+    public void setManagerId(int managerId) {
         this.managerId = managerId;
     }
 
@@ -164,6 +164,7 @@ public class Project implements BaseEntity {
                 Neighborhood: %s  For Group: %s People
                 Flats: %s
                 Visibility: %s
+                ManagerId: %s
                 -----------------------------------------
                 """,
                 id,
@@ -173,7 +174,7 @@ public class Project implements BaseEntity {
                 neighborhood,
                 group,
                 formatFlats(),
-                visibility ? "ON" : "OFF");
+                visibility ? "ON" : "OFF", managerId);
     }
 
     private String formatDate(Date date) {

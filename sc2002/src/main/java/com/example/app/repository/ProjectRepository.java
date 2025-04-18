@@ -19,4 +19,11 @@ public class ProjectRepository extends GeneralRepository<Project> {
                 .filter(p -> p.getVisibility() == visibility)
                 .collect(Collectors.toList());
     }
+
+    public List<Project> findByManagerId(int managerId) {
+        return storage.values().stream()
+                .filter(p -> Integer.valueOf(managerId).equals(p.getManagerId()))
+                .collect(Collectors.toList());
+    }
+
 }

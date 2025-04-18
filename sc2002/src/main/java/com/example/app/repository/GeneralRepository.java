@@ -16,9 +16,6 @@ public class GeneralRepository<T extends BaseEntity> {
 
     public T findById(int id) {
         T entity = storage.get(id);
-        if (entity == null) {
-            throw new IllegalArgumentException("Entity with ID " + id + " not found.");
-        }
         return entity;
     }
 

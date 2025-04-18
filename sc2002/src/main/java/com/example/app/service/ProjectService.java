@@ -2,8 +2,12 @@ package com.example.app.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Calendar;
+
 import java.util.List;
 import java.util.Map;
+
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 
 import com.example.app.models.FlatType;
 import com.example.app.models.MaritalStatus;
@@ -14,7 +18,7 @@ import com.example.app.repository.ProjectRepository;
 
 public class ProjectService {
 
-    static private ProjectRepository projectRepository = new ProjectRepository();
+    private static ProjectRepository projectRepository = new ProjectRepository();
 
     public ProjectService() {
     
@@ -25,6 +29,11 @@ public class ProjectService {
     public Collection<Project> findAll() {
         return projectRepository.findAll();
     }
+
+    public Collection<Project> findByManagerId(int managerId) {
+        return projectRepository.findByManagerId(managerId);
+    }
+
 
     // Get projects meant for applicant and officer
     public Collection<Project> findByMaritalStatusAndVisibility(MaritalStatus userStatus, boolean visibility) {
@@ -76,12 +85,18 @@ public class ProjectService {
 
     public boolean isProjectStillApplying(int projectId) {
         Project project = projectRepository.findById(projectId);
+        if (project == null) {
+            return false;
+        }
+
         Date now = new Date();
         Date openDate = project.getApplicationOpenDate();
         Date closeDate = project.getApplicationCloseDate();
-
+        System.out.println(now);
+        System.out.println(now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0);
         return now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0;
     }
+
 
     // For manager to add officer to flat project
     public void addOfficer(int userId, int projectId) {
@@ -100,7 +115,7 @@ public class ProjectService {
     public int createProject(
         String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, MaritalStatus group, Map<FlatType, Integer> flats, int managerId
     ) {
-        Project project = new Project(projectName, applicationOpenDate, applicationCloseDate, neighborhood,  managerId,  group,  true,  flats);
+        Project project = new Project(projectName, stripTime(applicationOpenDate), stripTime(applicationCloseDate), neighborhood,  managerId,  group,  true,  flats);
         return projectRepository.save(project).getId();
     }
 
@@ -132,6 +147,16 @@ public class ProjectService {
     }
 
         projectRepository.deleteById(projectId);
+    }
+
+    public Date stripTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
     // Filtered View for project 

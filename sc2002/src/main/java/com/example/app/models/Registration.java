@@ -37,8 +37,9 @@ public class Registration implements BaseEntity{
     @Override
     public String toString() {
         return String.format("""
-                Project: %s
+                [Registration Id: %s]
+                Project (%s): %s
                 Application Status: %s
-                """, projectName, status);
+                """, id , projectId, projectName, status);
     }
 }

@@ -75,6 +75,7 @@ public class AuthenticationService {
                 int type1Qty = (int) row.getCell(3).getNumericCellValue();
                 String type2Str = row.getCell(5).getStringCellValue().trim();
                 int type2Qty = (int) row.getCell(6).getNumericCellValue();
+                int managerId = (int) row.getCell(10).getNumericCellValue();
 
                 Date openDate = row.getCell(8).getDateCellValue();
                 Date closeDate = row.getCell(9).getDateCellValue();
@@ -94,7 +95,7 @@ public class AuthenticationService {
                         neighborhood,
                         group,
                         flatMap,
-                        0 // managerId placeholder
+                        managerId // managerId placeholder
                 );
             }
 

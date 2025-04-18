@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Manager extends User {
 
-    private int currentProjectId;
+    private int currentProjectId = -1;
     private List<Integer> pastProjects = new ArrayList<>();
 
     public Manager() { }

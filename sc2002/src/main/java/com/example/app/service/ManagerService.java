@@ -17,6 +17,7 @@ import com.example.app.models.Project;
 import com.example.app.models.Registration;
 import com.example.app.models.RegistrationStatus;
 import com.example.app.models.User;
+import java.util.Comparator;
 
 public class ManagerService {
     
@@ -28,7 +29,7 @@ public class ManagerService {
 
     private Manager admin;
 
-    ManagerService(Manager admin) {
+    public  ManagerService(Manager admin) {
         this.admin = admin;
     }
     
@@ -45,6 +46,59 @@ public class ManagerService {
     {
         int projectId = projectService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats, admin.getId());
         admin.addProject(projectId);
+    }
+
+    // Check project ownership
+    public boolean isProjectBelongToManager(int projectId) {
+        Project project = projectService.findById(projectId);
+        if (project == null) return false;
+        return project.getManagerId() == admin.getId();
+    }
+
+
+
+    // Reassign the managers current project handling to another project if date limit is over or if manager has no project yet 
+    public void reassignManaging() {
+        int currentId = admin.getCurrentProjectId();
+
+        // Case 1: Still managing current project
+        if (projectService.isProjectStillApplying(currentId)) {
+            return;
+        }
+
+        // Case 2: Not managing, find next project that has started today or earlier
+        Collection<Project> myProjects = viewMyProjects();
+        Date today = projectService.stripTime(new Date());
+
+        Project nextProject = myProjects.stream()
+            .filter(p -> {
+                Date projectDate = projectService.stripTime(p.getApplicationOpenDate());
+                return !projectDate.after(today); // projectDate <= today
+            })
+            .min(Comparator.comparing(p -> projectService.stripTime(p.getApplicationOpenDate())))
+            .orElse(null);
+
+        if (nextProject != null) {
+            admin.setCurrentProjectId(nextProject.getId());
+        } else {
+            admin.setCurrentProjectId(-1); // reset if none found
+        }
+    }
+
+
+   // Returns List of projects open to user group and "on" visibility
+    public Collection<Project> viewProjects() {
+        return projectService.findAll();        
+    }
+
+    // View my projects
+    public Collection<Project> viewMyProjects() {
+        return projectService.findByManagerId(admin.getId());        
+    }
+
+    // View project he is currently handling
+    public Project viewHandlingProject() {
+        return projectService.findById(admin.getCurrentProjectId());
     }
 
 
@@ -64,7 +118,13 @@ public class ManagerService {
         projectService.editProject(projectId, projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats, visibility);
     }
 
-   // Delete Project
+
+    // Toggle Visibility for project
+    public void toggleVisibility(int projectId) {
+        Project project = projectService.findById(projectId);
+        project.setVisibility(!project.getVisibility());
+    }
+
     // Delete Project and clean up related records from users
     public void deleteProject(int projectId) {
         // 1. Delete related applications and remove from applicants
@@ -106,11 +166,7 @@ public class ManagerService {
         // Manager delete project also 
         admin.removeProject(projectId);
 
-    }
 
-   // Returns List of projects open to user group and "on" visibility
-    public Collection<Project> viewProjects() {
-        return projectService.findAll();        
     }
 
 
@@ -118,7 +174,6 @@ public class ManagerService {
     public List<Registration> viewRegistrations(int projectId) {
         return registrationService.getRegistrationsByProjectId(projectId);
     }
-
 
     // Approve the registration
     public void approveRegistration(int registrationId) {
@@ -135,6 +190,11 @@ public class ManagerService {
         // Change officer current portfolio project to this one
         userManagementService.assignProjectToOfficer(userId, projectId);
     }
+
+    public void rejectRegistration(int registrationId) {
+        Registration registration = registrationService.getRegistrationByRegistrationId(registrationId);
+        registration.setStatus(RegistrationStatus.REJECTED);
+    }
     
     // Edit application status
     public void approveBTOStatus(int applicationId, boolean success) {
@@ -147,4 +207,22 @@ public class ManagerService {
     public  List<Enquiry> viewEnquiriesOfProject(int projectId) {
         return enquiryService.getEnquiriesByProjectId(projectId);
     }
+
+    // Get project by id
+    public Project getProjectById(int projectId) {
+        return projectService.findById(projectId);
+    }
+
+    public  boolean hasDateOverlap(Date start, Date end) {
+        Collection<Project> myProjects = projectService.findByManagerId(admin.getId());
+        return myProjects.stream()
+            .filter(p -> p.getId() != admin.getCurrentProjectId())
+            .anyMatch(p -> {
+                Date pStart = p.getApplicationOpenDate();
+                Date pEnd = p.getApplicationCloseDate();
+                return !(end.before(pStart) || start.after(pEnd));
+            });
+    }
+
+
 }
