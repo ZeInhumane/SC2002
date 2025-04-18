@@ -24,8 +24,8 @@ public class ApplicantCLI {
             System.out.println("3) View Current Application");
             System.out.println("4) Submit Enquiry");
             System.out.println("5) View My Enquiries");
-            System.out.println("6) Edit Enquiry");
-            System.out.println("7) Delete Enquiry");
+            // System.out.println("6) Edit Enquiry");
+            // System.out.println("7) Delete Enquiry");
             System.out.println("0) Logout");
 
             int choice = Console.readInt("Choose an option: ");
@@ -35,9 +35,7 @@ public class ApplicantCLI {
                 case 2 -> applyForProject(); // Done
                 case 3 -> viewCurrentApplication();
                 case 4 -> submitEnquiry();
-                case 5 -> viewMyEnquiries();
-                case 6 -> editEnquiry();
-                case 7 -> deleteEnquiry();
+                case 5 -> handleEnquiry();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -50,7 +48,7 @@ public class ApplicantCLI {
     private void viewProjects() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
-            System.out.println("📭 No available projects at the moment.");
+            System.out.println("No available projects at the moment.");
             return;
         }
 
@@ -62,13 +60,13 @@ public class ApplicantCLI {
 
     private void applyForProject() {
         if (!appService.isAbleToApply()) {
-            System.out.println("⚠️ You already have an active or successful application.");
+            System.out.println("You already have an active or successful application.");
             return;
         }
 
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
-            System.out.println("📭 No available projects to apply for at the moment.");
+            System.out.println("No available projects to apply for at the moment.");
             return;
         }
 
@@ -77,9 +75,9 @@ public class ApplicantCLI {
         int projectId = Console.readInt("Enter project ID to apply: ");
         try {
             appService.applyForProject(projectId);
-            System.out.println("✅ Application submitted!");
+            System.out.println("Application submitted!");
         } catch (Exception e) {
-            System.out.println("❌ Failed to apply: " + e.getMessage());
+            System.out.println("Failed to apply: " + e.getMessage());
         }
     }
 
@@ -100,16 +98,16 @@ public class ApplicantCLI {
         }
 
         for (Project p : projects) {
-            System.out.println("ID " + p.getId() + " → " + p.getProjectName());
+            System.out.println("ID " + p.getId() + " > " + p.getProjectName());
         }
 
         int projectId = Console.readInt("Enter Project ID for enquiry: ");
         String question = Console.readLine("Enter your enquiry: ");
         try {
             int enquiryId = appService.submitEnquiry(question, projectId);
-            System.out.println("✅ Enquiry submitted (ID: " + enquiryId + ")");
+            System.out.println("Enquiry submitted (ID: " + enquiryId + ")");
         } catch (Exception e) {
-            System.out.println("❌ Failed to submit enquiry: " + e.getMessage());
+            System.out.println("Failed to submit enquiry: " + e.getMessage());
         }
     }
 
@@ -141,9 +139,9 @@ public class ApplicantCLI {
 
         try {
             appService.updateEnquiry(id, updated);
-            System.out.println("✅ Enquiry updated.");
+            System.out.println("Enquiry updated.");
         } catch (Exception e) {
-            System.out.println("❌ Could not update: " + e.getMessage());
+            System.out.println("Could not update: " + e.getMessage());
         }
     }
 
@@ -162,10 +160,30 @@ public class ApplicantCLI {
         int id = Console.readInt("Enter Enquiry ID to delete: ");
         try {
             appService.deleteEnquiry(id);
-            System.out.println("✅ Enquiry deleted.");
+            System.out.println("Enquiry deleted.");
         } catch (Exception e) {
-            System.out.println("❌ Could not delete: " + e.getMessage());
+            System.out.println("Could not delete: " + e.getMessage());
         }
     }
+
+    // reuse existing display method
+    private void handleEnquiry() {
+        viewMyEnquiries(); 
+
+        if (appService.getAllPastEnquiries().isEmpty()) return;
+
+        System.out.println("1) Edit Enquiry");
+        System.out.println("2) Delete Enquiry");
+        System.out.println("0) Back");
+
+        int choice = Console.readInt("Choose an option: ");
+        switch (choice) {
+            case 1 -> editEnquiry();
+            case 2 -> deleteEnquiry();
+            case 0 -> System.out.println("Returning to menu...");
+            default -> System.out.println("Invalid choice.");
+    }
+}
+
 
 }

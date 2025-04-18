@@ -45,4 +45,28 @@ public class Applicant extends User implements FlatTypeAssignable {
     public Set<Integer> getPastEnquiries() {
         return pastEnquiries;
     }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                [Applicant ID: %d]
+                Name: %s
+                NRIC: %s
+                Age: %d
+                Marital Status: %s
+                Email: %s
+                Application ID: %d
+                Flat Type: %s
+                """,
+                getId(),
+                getName(),
+                getNric(),
+                getAge(),
+                getMaritalStatus(),
+                getEmail(),
+                applicationId,
+                flatType != null ? flatType.name() : "None"
+        );
+    }
+
 }

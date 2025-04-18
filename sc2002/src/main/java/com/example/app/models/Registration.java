@@ -8,16 +8,18 @@ public class Registration implements BaseEntity{
     private int userId;
     private int projectId;
     private RegistrationStatus status;
+    private String projectName;
 
     public Registration() {
         this.id = idCounter++;
     }
 
-    public Registration(int userId, int projectId, RegistrationStatus status) {
+    public Registration(int userId, int projectId, RegistrationStatus status, String projectName) {
         this(); // call the no-arg constructor to generate the id
         this.userId = userId;
         this.projectId = projectId;
         this.status = status;
+        this.projectName = projectName;
     }
 
     @Override
@@ -31,4 +33,12 @@ public class Registration implements BaseEntity{
 
     public RegistrationStatus getStatus() { return status; }
     public void setStatus(RegistrationStatus status) { this.status = status; }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Project: %s
+                Application Status: %s
+                """, projectName, status);
+    }
 }

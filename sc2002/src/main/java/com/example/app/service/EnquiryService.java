@@ -15,8 +15,8 @@ public class EnquiryService {
 
     
     // Allow user to add Enquiry
-    public int submitEnquiry(String question, int projectId, int userId) {
-        Enquiry newEnquiry = new Enquiry(question, projectId, userId);
+    public int submitEnquiry(String question, int projectId, int userId, String projectName) {
+        Enquiry newEnquiry = new Enquiry(question, projectId, userId,  projectName);
         Enquiry enquiry = enquiryRepository.save(newEnquiry);
         return enquiry.getId();
     }

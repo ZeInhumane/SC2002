@@ -16,9 +16,9 @@ public class RegistrationService {
     }
 
     // Applicant can add registration as Officer
-    public int registerAsOfficerForProject(int userId, int projectId) {
+    public int registerAsOfficerForProject(int userId, int projectId, String projectName) {
         Registration register = new Registration(
-            userId, projectId, RegistrationStatus.PENDING
+            userId, projectId, RegistrationStatus.PENDING, projectName
         );
 
         Registration registration = registrationRepository.save(register);

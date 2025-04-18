@@ -7,17 +7,19 @@ public class Application implements BaseEntity {
     private final int id;
     private int userId;
     private int projectId;
+    private String projectName; 
     private ApplicationStatus status;
 
     public Application() {
         this.id = idCounter++;
     }
 
-    public Application(int userId, int projectId, ApplicationStatus status) {
+    public Application(int userId, int projectId, ApplicationStatus status, String projectName) {
         this.id = idCounter++;
         this.userId = userId;
         this.projectId = projectId;
         this.status = status;
+        this.projectName = projectName;
     }
 
     @Override
@@ -47,6 +49,22 @@ public class Application implements BaseEntity {
 
     public void setStatus(ApplicationStatus status) {
         this.status = status;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Project: %s
+                Application Status: %s
+                """, projectName, status);
     }
 }
 

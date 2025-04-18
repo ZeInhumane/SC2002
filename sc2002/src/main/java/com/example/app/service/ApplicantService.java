@@ -50,7 +50,7 @@ public class ApplicantService {
             applicationService.deleteApplication(user.getApplicationId());
         }
 
-        int applicationId = applicationService.applyForProject(user.getId(), projectId);
+        int applicationId = applicationService.applyForProject(user.getId(), projectId, project.getProjectName());
         user.setApplicationId(applicationId);
     }
 
@@ -78,7 +78,7 @@ public class ApplicantService {
             throw new IllegalArgumentException("Project ID " + projectId + " not found.");
         }
 
-        int enquiryId = enquiryService.submitEnquiry(question, projectId, user.getId());
+        int enquiryId = enquiryService.submitEnquiry(question, projectId, user.getId(), project.getProjectName());
         user.addToPastEnquiries(enquiryId);
         return enquiryId;
     }

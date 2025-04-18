@@ -42,5 +42,6 @@ public class Manager extends User {
         }
         pastProjects.remove(Integer.valueOf(projectId));
     }
+    
 
 }

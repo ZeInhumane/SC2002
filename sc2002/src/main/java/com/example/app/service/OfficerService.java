@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.app.models.Enquiry;
 import com.example.app.models.Officer;
 import com.example.app.models.Registration;
+import com.example.app.models.Project;
 
 
 public class OfficerService extends ApplicantService {
@@ -43,12 +44,18 @@ public class OfficerService extends ApplicantService {
     // Register for project
     public void registerAsOfficer(int projectId) {
         Officer officer = (Officer) user; // Cast explicitly since user is declared as Applicant
+
+        Project project = projectService.findById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project ID " + projectId + " not found.");
+        }
+
         if (officer.getRegisteredProject() != -1 ) {
             registrationService.deleteOfficerRegistration(officer.getRegisteredProject());
         }    
 
         // Override the registration to the latest one
-        int registrationId = registrationService.registerAsOfficerForProject(officer.getId(), projectId);
+        int registrationId = registrationService.registerAsOfficerForProject(officer.getId(), projectId, project.getProjectName());
         officer.setRegisteredProject(registrationId);
 
     }

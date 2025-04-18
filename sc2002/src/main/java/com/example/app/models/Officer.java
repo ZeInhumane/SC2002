@@ -10,10 +10,12 @@ public class Officer extends Applicant implements ProjectAssignable{
         super(username, password, email, role, nric, age, maritalStatus);
     }
 
+    @Override
     public void setRegisteredProject(int registerId) {
         this.registeredProject = registerId;
     }
 
+    @Override
     public int getRegisteredProject() {
         return registeredProject;
     }

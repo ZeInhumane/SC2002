@@ -16,9 +16,9 @@ public class ApplicationService {
 
     // Apply for a project using id for that user
     // Return application Id for user to save
-    public int applyForProject(int userId ,int projectId) {
+    public int applyForProject(int userId ,int projectId, String projectName) {
         Application apply = new Application(
-            userId, projectId, ApplicationStatus.PENDING
+            userId, projectId, ApplicationStatus.PENDING, projectName
         );
 
         Application application = applicationRepository.save(apply);

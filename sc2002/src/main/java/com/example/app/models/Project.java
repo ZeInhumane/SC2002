@@ -157,24 +157,23 @@ public class Project implements BaseEntity {
     @Override
     public String toString() {
         return String.format("""
-                [Project ID: %d]
-                Name: %s
-                Neighborhood: %s
-                Group: %s
-                Application Period: %s to %s
+                ----------------------------------------
+                [Project Id: %s]
+                ~~~~~~~~~~~~~~~~~
+                Name: %s (Application Period: %s to %s)
+                Neighborhood: %s  For Group: %s People
                 Flats: %s
                 Visibility: %s
-                Officers Assigned: %d
+                -----------------------------------------
                 """,
                 id,
                 projectName,
-                neighborhood,
-                group,
                 formatDate(applicationOpenDate),
                 formatDate(applicationCloseDate),
+                neighborhood,
+                group,
                 formatFlats(),
-                visibility ? "ON" : "OFF",
-                officers.size());
+                visibility ? "ON" : "OFF");
     }
 
     private String formatDate(Date date) {

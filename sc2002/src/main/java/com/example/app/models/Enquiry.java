@@ -7,7 +7,7 @@ public class Enquiry implements BaseEntity{
     private int id;
     private String question;
     private String response;
-
+    private String projectName;
     private int projectId;
     private int enquirerId;
     private int replierId ;
@@ -16,11 +16,12 @@ public class Enquiry implements BaseEntity{
         this.id = counter++;
     }
 
-    public Enquiry(String question,  int projectId, int enquirerId) {
+    public Enquiry(String question,  int projectId, int enquirerId, String projectName) {
         this.id = counter++;
         this.question = question;
         this.projectId = projectId;
         this.enquirerId = enquirerId;
+        this.projectName = projectName;
     }
 
     @Override
@@ -40,4 +41,22 @@ public class Enquiry implements BaseEntity{
 
     public int getReplierId() { return replierId; }
     public void setReplierId(int replierId) { this.replierId = replierId; }
+
+
+    public String getProjectName() { return projectName; }
+    public void setProjectName(String projectName) { this.projectName = projectName; }
+
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Enquiry For Project: %s 
+                Question: %s
+                Response: %s
+                """,
+                projectName,
+                question, 
+                response != null ? response : "N/A");
+    }
+
 }
