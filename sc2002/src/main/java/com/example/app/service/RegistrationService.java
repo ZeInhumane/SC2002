@@ -9,7 +9,7 @@ import com.example.app.repository.RegistrationRepository;
 
 public class RegistrationService {
     
-    private RegistrationRepository registrationRepository = new RegistrationRepository();
+    private static RegistrationRepository registrationRepository = new RegistrationRepository();
 
     public RegistrationService() {
 

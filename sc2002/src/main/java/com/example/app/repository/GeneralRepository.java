@@ -30,4 +30,5 @@ public class GeneralRepository<T extends BaseEntity> {
     public void deleteById(int id) {
         storage.remove(id);
     }
+    
 }

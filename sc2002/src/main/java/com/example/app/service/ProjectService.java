@@ -28,6 +28,9 @@ public class ProjectService {
 
     // Get projects meant for applicant and officer
     public Collection<Project> findByMaritalStatusAndVisibility(MaritalStatus userStatus, boolean visibility) {
+        System.out.println("pog");
+        System.out.println(userStatus);
+        System.out.println(visibility);
         return projectRepository.findByMaritalStatusAndVisibility(userStatus, visibility);
     }
 
