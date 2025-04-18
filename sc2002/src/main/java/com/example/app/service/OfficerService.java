@@ -1,15 +1,16 @@
 package com.example.app.service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.app.models.Enquiry;
 import com.example.app.models.Officer;
 import com.example.app.models.Registration;
 import com.example.app.models.Project;
 
-
 public class OfficerService extends ApplicantService {
-    
+
     static RegistrationService registrationService = new RegistrationService();
     static UserManagementService userManagementService = new UserManagementService();
 
@@ -32,12 +33,16 @@ public class OfficerService extends ApplicantService {
         return projectService.isProjectStillApplying(projectId);
     }
 
-    // Checks if cannot register as officer (An applicant for the hdb or has a projhect somewhere before deadline)
+    // Checks if cannot register as officer (An applicant for the hdb or has a
+    // projhect somewhere before deadline)
     public boolean isNotRegisterableAsOfficer(int projectId) {
-        Officer officer = (Officer) user; // Cast explicitly since user is declared as Applicant
+        Officer officer = (Officer) user;
         int oldProjectId = officer.getRegisteredProject();
-        
-        return isApplicantFor(projectId) || isProjectStillApplying(oldProjectId);
+
+        boolean isAlreadyApplicant = isApplicantFor(projectId);
+        boolean isAlreadyHandling = oldProjectId != -1 && isProjectStillApplying(oldProjectId);
+
+        return isAlreadyApplicant || isAlreadyHandling;
     }
 
     // Register for project
@@ -49,12 +54,13 @@ public class OfficerService extends ApplicantService {
             throw new IllegalArgumentException("Project ID " + projectId + " not found.");
         }
 
-        if (officer.getRegisteredProject() != -1 ) {
+        if (officer.getRegisteredProject() != -1) {
             registrationService.deleteOfficerRegistration(officer.getRegisteredProject());
-        }    
+        }
 
         // Override the registration to the latest one
-        int registrationId = registrationService.registerAsOfficerForProject(officer.getId(), projectId, project.getProjectName());
+        int registrationId = registrationService.registerAsOfficerForProject(officer.getId(), projectId,
+                project.getProjectName());
         officer.setRegisteredProject(registrationId);
 
     }
@@ -67,7 +73,7 @@ public class OfficerService extends ApplicantService {
 
     // get Enquiries regarding a project
     public List<Enquiry> getProjectEnquiries() {
-        
+
         Officer officer = (Officer) user;
         int projectId = officer.getRegisteredProject();
         if (projectId == -1) {
@@ -82,17 +88,24 @@ public class OfficerService extends ApplicantService {
         return enquiryService.getEnquiry(id);
     }
 
-    // reply Enquiry 
+    // reply Enquiry
     public void replyEnquiry(int id, String reply) {
         enquiryService.replyEnquiry(id, reply, user.getId());
     }
-    
 
-    //------------------------------
-    //Additionally Required functions
-    //------------------------------
+    public List<Project> getRegisterableProjects() {
+        Collection<Project> allProjects = projectService.findByMaritalStatusAndVisibility(user.getMaritalStatus(),
+                true);
+        return allProjects.stream()
+                .filter(p -> !isNotRegisterableAsOfficer(p.getId()))
+                .collect(Collectors.toList());
+    }
 
-    // Maybe get all bookings 
+    // ------------------------------
+    // Additionally Required functions
+    // ------------------------------
+
+    // Maybe get all bookings
 
     // bookUser
 

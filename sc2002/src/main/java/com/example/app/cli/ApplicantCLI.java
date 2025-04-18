@@ -45,7 +45,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void viewProjects() {
+    protected void viewProjects() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
             System.out.println("No available projects at the moment.");
@@ -58,7 +58,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void applyForProject() {
+    protected void applyForProject() {
         if (!appService.isAbleToApply()) {
             System.out.println("You already have an active or successful application.");
             return;
@@ -81,7 +81,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void viewCurrentApplication() {
+    protected void viewCurrentApplication() {
         Application app = appService.viewCurrentApplication();
         if (app == null) {
             System.out.println("No application found.");
@@ -90,7 +90,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void submitEnquiry() {
+    protected void submitEnquiry() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
             System.out.println("No projects available to submit enquiry.");
@@ -111,7 +111,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void viewMyEnquiries() {
+    protected void viewMyEnquiries() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
             System.out.println("No enquiries submitted.");
@@ -122,7 +122,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void editEnquiry() {
+    protected void editEnquiry() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
             System.out.println("📭 You have no enquiries to edit.");
@@ -145,7 +145,7 @@ public class ApplicantCLI {
         }
     }
 
-    private void deleteEnquiry() {
+    protected void deleteEnquiry() {
         List<Enquiry> enquiries = appService.getAllPastEnquiries();
         if (enquiries.isEmpty()) {
             System.out.println("📭 You have no enquiries to delete.");
@@ -167,10 +167,11 @@ public class ApplicantCLI {
     }
 
     // reuse existing display method
-    private void handleEnquiry() {
-        viewMyEnquiries(); 
+    protected void handleEnquiry() {
+        viewMyEnquiries();
 
-        if (appService.getAllPastEnquiries().isEmpty()) return;
+        if (appService.getAllPastEnquiries().isEmpty())
+            return;
 
         System.out.println("1) Edit Enquiry");
         System.out.println("2) Delete Enquiry");
@@ -182,8 +183,7 @@ public class ApplicantCLI {
             case 2 -> deleteEnquiry();
             case 0 -> System.out.println("Returning to menu...");
             default -> System.out.println("Invalid choice.");
+        }
     }
-}
-
 
 }
