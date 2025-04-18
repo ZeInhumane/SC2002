@@ -396,21 +396,11 @@ public class ManagerCLI {
 
     // Handle project Applications
     private void handleApplications() {
-        Collection<Project> myProjects = managerService.viewMyProjects();
-        if (myProjects.isEmpty()) {
-            System.out.println("You have not created any projects.");
-            return;
-        }
-
-        System.out.println("=== Your Projects ===");
-        for (Project p : myProjects) {
-            System.out.println(p);
-        }
-
-        int projectId = Console.readInt("Enter Project ID to view applications: ");
-        Project currentProject = managerService.getProjectById(projectId);
-        if (currentProject == null || !managerService.isProjectBelongToManager(projectId)) {
-            System.out.println("Invalid project ID or you do not have access to this project.");
+        Project currentProject = managerService.viewHandlingProject();
+        System.out.println("--Handling applications for--");
+        System.out.println(currentProject);
+        if (currentProject == null) {
+            System.out.println("You are not currently handling any project.");
             return;
         }
 
@@ -427,9 +417,7 @@ public class ManagerCLI {
 
         while (true) {
             int appId = Console.readInt("Enter Application ID to approve/reject (or -1 to exit): ");
-            if (appId == -1) {
-                break;
-            }
+            if (appId == -1) break;
 
             Application app = applications.stream()
                     .filter(a -> a.getId() == appId && a.getStatus() == ApplicationStatus.PENDING)
@@ -445,7 +433,7 @@ public class ManagerCLI {
             if (action.equalsIgnoreCase("a")) {
                 managerService.approveApplication(appId, true);
                 System.out.println("Application approved.");
-
+    
             } else if (action.equalsIgnoreCase("r")) {
                 managerService.approveApplication(appId, false);
                 System.out.println("Application rejected.");
@@ -454,5 +442,7 @@ public class ManagerCLI {
             }
         }
     }
+
+    // Other methods remain unchanged...
 
 }
