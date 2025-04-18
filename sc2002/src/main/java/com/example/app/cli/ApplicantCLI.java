@@ -125,15 +125,47 @@ public class ApplicantCLI {
     }
 
     private void editEnquiry() {
+        List<Enquiry> enquiries = appService.getAllPastEnquiries();
+        if (enquiries.isEmpty()) {
+            System.out.println("📭 You have no enquiries to edit.");
+            return;
+        }
+
+        System.out.println("=== Your Enquiries ===");
+        for (Enquiry e : enquiries) {
+            System.out.println(e); // uses toString()
+        }
+
         int id = Console.readInt("Enter Enquiry ID to edit: ");
         String updated = Console.readLine("Enter new question: ");
-        appService.updateEnquiry(id, updated);
-        System.out.println("Enquiry updated.");
+
+        try {
+            appService.updateEnquiry(id, updated);
+            System.out.println("✅ Enquiry updated.");
+        } catch (Exception e) {
+            System.out.println("❌ Could not update: " + e.getMessage());
+        }
     }
 
     private void deleteEnquiry() {
+        List<Enquiry> enquiries = appService.getAllPastEnquiries();
+        if (enquiries.isEmpty()) {
+            System.out.println("📭 You have no enquiries to delete.");
+            return;
+        }
+
+        System.out.println("=== Your Enquiries ===");
+        for (Enquiry e : enquiries) {
+            System.out.println(e); // uses toString()
+        }
+
         int id = Console.readInt("Enter Enquiry ID to delete: ");
-        appService.deleteEnquiry(id);
-        System.out.println("Enquiry deleted.");
+        try {
+            appService.deleteEnquiry(id);
+            System.out.println("✅ Enquiry deleted.");
+        } catch (Exception e) {
+            System.out.println("❌ Could not delete: " + e.getMessage());
+        }
     }
+
 }
