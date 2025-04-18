@@ -130,6 +130,10 @@ public class AuthenticationService {
     }
 
     public boolean authenticateOfficer(String nric, String pw) {
+        System.out.println("CHECK THIS");
+        System.out.println(officerCreds);
+        System.out.println(nric);
+        System.out.println(pw);
         return pw.equals(officerCreds.get(nric));
     }
 

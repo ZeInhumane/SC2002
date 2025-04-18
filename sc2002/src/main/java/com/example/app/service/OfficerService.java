@@ -10,7 +10,6 @@ import com.example.app.models.Project;
 
 public class OfficerService extends ApplicantService {
     
-
     static RegistrationService registrationService = new RegistrationService();
     static UserManagementService userManagementService = new UserManagementService();
 
