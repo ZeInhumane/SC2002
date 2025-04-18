@@ -186,8 +186,7 @@ public class OfficerCLI extends ApplicantCLI {
         String nric = Console.readLine("Enter Applicant NRIC: ");
         try {
             String receipt = officerService.generateBookingReceipt(nric);
-     
-
+            System.out.println(receipt);
         } catch (Exception e) {
             System.out.println("❌ " + e.getMessage());
         }
@@ -201,10 +200,10 @@ public class OfficerCLI extends ApplicantCLI {
             } else {
                 System.out.println("=== Booked Applicants ===");
                 bookings.forEach(System.out::println);
-     
-
+            }
+        } catch (Exception e) {
+            System.out.println("❌ " + e.getMessage());
+        }
     }
-
-    
 
 }
