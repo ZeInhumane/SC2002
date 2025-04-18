@@ -9,7 +9,9 @@ import com.example.app.service.OfficerService;
 import com.example.app.service.UserManagementService;
 import com.example.app.service.ManagerService;
 import com.example.app.cli.ApplicantCLI;
+import com.example.app.cli.OfficerCLI;
 import com.example.app.models.Applicant;
+import com.example.app.models.Officer;
 // import com.example.app.service.dummy.DummyOfficerService;
 // import com.example.app.service.dummy.DummyManagerService;
 import com.example.app.utils.Console;
@@ -19,6 +21,7 @@ public class Main {
         // 1) Load Excel‑based credentials
         AuthenticationService auth = new AuthenticationService();
         UserManagementService userMgmt = new UserManagementService();
+        // OfficerManagementService offMgmt = new OfficerService();
 
 
         // 2) Hook up your real or dummy service implementations
@@ -57,7 +60,9 @@ public class Main {
                     break;
                 case 2:
                     if (auth.authenticateOfficer(id, pw)) {
-                        // new OfficerCLI(offSvc).run();
+                        Officer user = (Officer) userMgmt.findByNric(id);
+                        OfficerService appSvc = new OfficerService(user);
+                        new OfficerCLI(appSvc).run();
                     } else {
                         System.out.println("Invalid Officer credentials.");
                     }
