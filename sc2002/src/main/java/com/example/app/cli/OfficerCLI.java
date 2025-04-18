@@ -22,7 +22,6 @@ public class OfficerCLI extends ApplicantCLI {
         while (true) {
             System.out.println("\n=== Officer Menu (includes Applicant features) ===");
             System.out.println("1) View Available Projects");
-            
             System.out.println("2) Apply for Project");
             System.out.println("3) View Current Application");
             System.out.println("4) Submit Enquiry");
@@ -36,6 +35,7 @@ public class OfficerCLI extends ApplicantCLI {
             System.out.println("12) Book Flat for Applicant");
             System.out.println("13) Generate Booking Receipt");
             System.out.println("14) View All Booked Applicants");
+            System.out.println("15) View All Applications");
             System.out.println("0) Logout");
 
             int choice = Console.readInt("Choose an option: ");
@@ -55,6 +55,7 @@ public class OfficerCLI extends ApplicantCLI {
                 case 12 -> bookFlatForApplicant();
                 case 13 -> printBookingReceipt();
                 case 14 -> viewAllBookings();
+                case 15 -> viewAllApplications();
                 case 0 -> {
                     System.out.println("Logging out...");
                     return;
@@ -99,12 +100,12 @@ public class OfficerCLI extends ApplicantCLI {
         try {
             e = officerService.getEnquiry(id);
         } catch (IllegalArgumentException ex) {
-            System.out.println(" Enquiry ID not found.");
+            System.out.println("Enquiry ID not found.");
             return;
         }
 
         if (e == null) {
-            System.out.println(" Enquiry not found.");
+            System.out.println("Enquiry not found.");
             return;
         }
 
@@ -154,7 +155,21 @@ public class OfficerCLI extends ApplicantCLI {
             System.out.println("=== Your Officer Registration ===");
             System.out.println(r);
         } catch (Exception e) {
-            System.out.println(" You are not registered for any project.");
+            System.out.println("You are not registered for any project.");
+        }
+    }
+
+    private void viewAllApplications() {
+        try {
+            List<String> applications = officerService.getAllApplicationsForHandledProject();
+            if (applications.isEmpty()) {
+                System.out.println("No applications found for your project.");
+            } else {
+                System.out.println("=== Applications for Your Project ===");
+                applications.forEach(System.out::println);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -176,9 +191,9 @@ public class OfficerCLI extends ApplicantCLI {
 
         try {
             officerService.bookFlatForApplicant(nric, selected);
-            System.out.println(" Flat booked successfully.");
+            System.out.println("Flat booked successfully.");
         } catch (Exception e) {
-            System.out.println(" " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -188,7 +203,7 @@ public class OfficerCLI extends ApplicantCLI {
             String receipt = officerService.generateBookingReceipt(nric);
             System.out.println(receipt);
         } catch (Exception e) {
-            System.out.println(" " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -196,7 +211,7 @@ public class OfficerCLI extends ApplicantCLI {
         try {
             List<String> bookings = officerService.getAllBookingsForHandledProject();
             if (bookings.isEmpty()) {
-                System.out.println("📭 No bookings found for your project.");
+                System.out.println("No bookings found for your project.");
             } else {
                 System.out.println("=== Booked Applicants ===");
                 bookings.forEach(System.out::println);

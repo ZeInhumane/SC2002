@@ -115,20 +115,6 @@ public class AuthenticationService {
         return "_" + s.toUpperCase().replace("-", "").replace(" ", "");
     }
 
-    private Date parseDate(String dateStr) throws Exception {
-        return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-    }
-
-    private String getCellAsString(Cell cell) {
-        return switch (cell.getCellType()) {
-            case STRING -> cell.getStringCellValue();
-            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
-            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
-            case FORMULA -> cell.getCellFormula();
-            default -> "";
-        };
-    }
-
     public boolean authenticateApplicant(String nric, String pw) {
         return pw.equals(applicantCreds.get(nric));
     }

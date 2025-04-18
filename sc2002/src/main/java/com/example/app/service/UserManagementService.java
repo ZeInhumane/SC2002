@@ -26,7 +26,6 @@ public class UserManagementService {
         if (user instanceof FlatTypeAssignable assignable) {
             assignable.setFlatType(flatType);
         }
-
     }
 
     public int createUser(User user) {

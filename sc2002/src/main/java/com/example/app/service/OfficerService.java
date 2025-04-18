@@ -106,18 +106,40 @@ public class OfficerService extends ApplicantService {
                 .collect(Collectors.toList());
     }
 
-    // ------------------------------
-    // Additionally Required functions
-    // ------------------------------
-    // === Flat selection responsibilities ===
+    public List<String> getAllApplicationsForHandledProject() {
+        Officer officer = (Officer) user;
+        int projectId = officer.getRegisteredProject();
+
+        if (projectId == -1) {
+            throw new IllegalStateException("Officer is not assigned to any project.");
+        }
+
+        List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
+
+        return applications.stream()
+                .map(app -> {
+                    User u = userManagementService.findById(app.getUserId());
+                    if (u instanceof Applicant applicant) {
+                        return String.format(
+                                "Name: %s | NRIC: %s | Status: %s | Flat Type: %s",
+                                applicant.getName(),
+                                applicant.getNric(),
+                                app.getStatus(),
+                                applicant.getFlatType() != null ? applicant.getFlatType() : "(none)");
+                    }
+                    return null;
+                })
+                .filter(s -> s != null)
+                .toList();
+    }
 
     public void bookFlatForApplicant(String applicantNric, FlatType chosenFlatType) {
         User user = userManagementService.findByNric(applicantNric);
         if (!(user instanceof Applicant applicant)) {
             throw new IllegalArgumentException("NRIC does not belong to an applicant.");
         }
-
         Application app = applicationService.getApplicationById(applicant.getApplicationId());
+        // CHANGE BACK TO SUCCESSFUL
         if (app == null || app.getStatus() != ApplicationStatus.SUCCESSFUL) {
             throw new IllegalStateException("Applicant has no successful application.");
         }
@@ -164,9 +186,6 @@ public class OfficerService extends ApplicantService {
                 project.getNeighborhood());
     }
 
-    // Maybe get all bookings
-
-    // bookUser
     public List<String> getAllBookingsForHandledProject() {
         Officer officer = (Officer) user;
         int projectId = officer.getRegisteredProject();
