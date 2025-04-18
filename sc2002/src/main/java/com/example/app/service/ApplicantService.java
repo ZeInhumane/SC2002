@@ -1,4 +1,5 @@
 package com.example.app.service;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,11 +9,11 @@ import com.example.app.models.Application;
 import com.example.app.models.ApplicationStatus;
 import com.example.app.models.Enquiry;
 import com.example.app.models.FlatType;
+import com.example.app.models.MaritalStatus;
 import com.example.app.models.Project;
 
-
 public class ApplicantService {
-    
+
     static ProjectService projectService = new ProjectService();
     static ApplicationService applicationService = new ApplicationService();
     static EnquiryService enquiryService = new EnquiryService();
@@ -28,22 +29,42 @@ public class ApplicantService {
         return user;
     }
 
-
     // Returns List of projects open to user group and "on" visibility
     public Collection<Project> viewProjects() {
         return projectService.findByMaritalStatusAndVisibility(user.getMaritalStatus(), true);
     }
 
-    // Get eligible flat types based on age and marital status
-    public List<FlatType> getEligibleFlatTypes() {
-        return projectService.getEligibleFlatTypes(user.getMaritalStatus(), user.getAge());
+    public List<FlatType> getEligibleFlatTypesForProject(int projectId) {
+        Project project = projectService.findById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
+        }
+
+        return project.getFlats().keySet().stream()
+                .filter(flat -> {
+                    if (user.getMaritalStatus() == MaritalStatus.SINGLE && user.getAge() >= 35) {
+                        return flat == FlatType._2ROOM;
+                    } else if (user.getMaritalStatus() == MaritalStatus.MARRIED && user.getAge() >= 21) {
+                        return flat == FlatType._2ROOM || flat == FlatType._3ROOM;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 
-    // Apply for project (removes existing application if necessary)
-    public void applyForProject(int projectId) {
+    public void applyForProject(int projectId, FlatType preferredFlatType) {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " does not exist.");
+        }
+
+        if (!project.getFlats().containsKey(preferredFlatType)) {
+            throw new IllegalArgumentException("Selected flat type is not offered in the chosen project.");
+        }
+
+        List<FlatType> eligibleTypes = getEligibleFlatTypesForProject(projectId);
+        if (!eligibleTypes.contains(preferredFlatType)) {
+            throw new IllegalArgumentException("You are not eligible for the selected flat type.");
         }
 
         if (user.getApplicationId() != -1) {
@@ -52,11 +73,13 @@ public class ApplicantService {
 
         int applicationId = applicationService.applyForProject(user.getId(), projectId, project.getProjectName());
         user.setApplicationId(applicationId);
+        user.setFlatType(preferredFlatType);
     }
 
     // Get current application safely
     public Application viewCurrentApplication() {
-        if (user.getApplicationId() == -1) return null;
+        if (user.getApplicationId() == -1)
+            return null;
         try {
             return applicationService.getApplicationById(user.getApplicationId());
         } catch (IllegalArgumentException e) {
@@ -96,8 +119,7 @@ public class ApplicantService {
     public List<Enquiry> getAllPastEnquiries() {
         return user.getPastEnquiries().stream()
                 .map(enquiryService::getEnquiry)
-                .filter(e -> e != null)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // ✅ this was missing
     }
 
     // Edit enquiry (if it belongs to this user)
@@ -118,6 +140,5 @@ public class ApplicantService {
         enquiryService.deleteEnquiry(enquiryId);
         user.removeFromPastEnquiries(enquiryId);
     }
-    
-    
+
 }
