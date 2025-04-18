@@ -93,6 +93,11 @@ public class ApplicantService {
         return current == null || current.getStatus() == ApplicationStatus.UNSUCCESSFUL;
     }
 
+    public boolean isOfficerFor(int projectId) {
+        Project project = projectService.findById(projectId);
+        return project.getOfficers().contains(user.getId());
+    }
+
     // Submit enquiry (stores ID back to user profile)
     public int submitEnquiry(String question, int projectId) {
         Project project = projectService.findById(projectId);

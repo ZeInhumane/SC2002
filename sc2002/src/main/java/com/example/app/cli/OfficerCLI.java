@@ -22,6 +22,7 @@ public class OfficerCLI extends ApplicantCLI {
         while (true) {
             System.out.println("\n=== Officer Menu (includes Applicant features) ===");
             System.out.println("1) View Available Projects");
+            
             System.out.println("2) Apply for Project");
             System.out.println("3) View Current Application");
             System.out.println("4) Submit Enquiry");

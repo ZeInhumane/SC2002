@@ -83,6 +83,8 @@ public class ProjectService {
         return project.getOfficers().contains(userId);
     }
 
+
+    // Check if project can be applied for date
     public boolean isProjectStillApplying(int projectId) {
         Project project = projectRepository.findById(projectId);
         if (project == null) {

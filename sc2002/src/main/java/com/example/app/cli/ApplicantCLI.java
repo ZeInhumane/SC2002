@@ -82,10 +82,17 @@ public class ApplicantCLI {
             return;
         }
 
+        if (appService.isOfficerFor(projectId)) {
+            System.out.println("You are an officer for this project and hence cannot apply");
+            return;
+        }
+
         if (eligibleTypes.isEmpty()) {
             System.out.println("No eligible flat types available for your profile in this project.");
             return;
         }
+
+        
 
         System.out.println("Eligible Flat Types:");
         for (int i = 0; i < eligibleTypes.size(); i++) {
