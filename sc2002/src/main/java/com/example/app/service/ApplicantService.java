@@ -119,4 +119,5 @@ public class ApplicantService {
         user.removeFromPastEnquiries(enquiryId);
     }
     
+    
 }

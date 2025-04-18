@@ -50,11 +50,13 @@ public class ApplicantCLI {
     private void viewProjects() {
         Collection<Project> projects = appService.viewProjects();
         if (projects.isEmpty()) {
-            System.out.println("No available projects at the moment.");
-        } else {
-            for (Project p : projects) {
-                System.out.println(p);
-            }
+            System.out.println("📭 No available projects at the moment.");
+            return;
+        }
+
+        System.out.println("=== Available Projects ===");
+        for (Project p : projects) {
+            System.out.println(p);
         }
     }
 
@@ -70,10 +72,7 @@ public class ApplicantCLI {
             return;
         }
 
-        System.out.println("=== Available Projects ===");
-        for (Project p : projects) {
-            System.out.println(p);
-        }
+        viewProjects(); // reuse method to show valid projects
 
         int projectId = Console.readInt("Enter project ID to apply: ");
         try {
