@@ -4,7 +4,7 @@ package com.example.app.service;
 import java.util.List;
 
 import com.example.app.models.Registration;
-import com.example.app.models.RegistrationStatus;
+import com.example.app.enums.RegistrationStatus;
 import com.example.app.repository.RegistrationRepository;
 
 public class RegistrationService {

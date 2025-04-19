@@ -1,53 +1,31 @@
 package com.example.app.models;
-import java.util.HashSet;
-import java.util.Set;
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
+import com.example.app.enums.Role;
 
+public class Applicant extends User {
 
-
-public class Applicant extends User implements FlatTypeAssignable {
-
-    private int applicationId = -1;
     private FlatType flatType;
-    private Set<Integer> pastEnquiries = new HashSet<>();
 
-    public Applicant() { }
-
-    public Applicant(String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
-        super(name, password, email, role, nric, age, maritalStatus);
+    public Applicant() {
+        super();
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public Applicant(Integer id, String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType) {
+        super(id, name, password, email, role, nric, age, maritalStatus);
+        this.flatType = flatType;
     }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    @Override
     public FlatType getFlatType() {
         return flatType;
     }
 
-    @Override
     public void setFlatType(FlatType flatType) {
         this.flatType = flatType;
     }
 
-    public void addToPastEnquiries(int enquiryId) {
-        pastEnquiries.add(enquiryId);
-    }
-
-    public void removeFromPastEnquiries(int enquiryId) {
-        pastEnquiries.remove(enquiryId);
-    }
-
-    public Set<Integer> getPastEnquiries() {
-        return pastEnquiries;
-    }
-
     @Override
-    public String toString() {
+    public String toDisplay() {
         return String.format("""
                 [Applicant ID: %d]
                 Name: %s
@@ -55,7 +33,6 @@ public class Applicant extends User implements FlatTypeAssignable {
                 Age: %d
                 Marital Status: %s
                 Email: %s
-                Application ID: %d
                 Flat Type: %s
                 """,
                 getId(),
@@ -64,7 +41,7 @@ public class Applicant extends User implements FlatTypeAssignable {
                 getAge(),
                 getMaritalStatus(),
                 getEmail(),
-                applicationId,
+//                applicationId,
                 flatType != null ? flatType.name() : "None"
         );
     }

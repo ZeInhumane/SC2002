@@ -5,31 +5,29 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
 import com.example.app.exceptions.OfficerAlreadyInsideException;
 import com.example.app.exceptions.OfficerLimitExceededException;
 
 public class Project implements BaseEntity {
 
-    private static int idCounter = 1; // for auto-incrementing IDs
-    private int id;
-
+    private Integer id;
     private String projectName;
     private Date applicationOpenDate;
     private Date applicationCloseDate;
     private String neighborhood;
+    private Integer managerId;
     private MaritalStatus group;
     private Boolean visibility;
-    private Map<FlatType, Integer> flats;
+    private Map<FlatType, Integer> flatCount;
 
-    private int managerId = -1 ;
-    private List<Integer> officers = new ArrayList<>();
 
     public Project() {
-        this.id = idCounter++;
     }
 
-    public Project(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
-            int managerId, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flats) {
+    public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
+            Integer managerId, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flatCount) {
         this();
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
@@ -38,12 +36,17 @@ public class Project implements BaseEntity {
         this.managerId = managerId;
         this.group = group;
         this.visibility = visibility;
-        this.flats = flats;
+        this.flatCount = flatCount;
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    @Override
+    public void setId(Integer id){
+        this.id = id;
     }
 
     public String getProjectName() {
@@ -102,56 +105,29 @@ public class Project implements BaseEntity {
         this.managerId = managerId;
     }
 
-    public List<Integer> getOfficers() {
-        return officers;
-    }
-
-    public void setOfficers(List<Integer> officers) {
-        this.officers = officers;
-    }
-
-    public void addOfficer(int officerId) {
-        if (officers.size() >= 10) {
-            throw new OfficerLimitExceededException("Cannot assign more than 10 offciers to this project");
-        }
-
-        if (officers.contains(officerId)) {
-            throw new OfficerAlreadyInsideException("Cannot assign to project when officer is already inside");
-        }
-
-        officers.add(officerId);
-
-    }
-
-    public void removeOfficer(int officerId) {
-        if (!officers.remove(Integer.valueOf(officerId))) {
-            throw new IllegalArgumentException("Officer ID " + officerId + " not found in this project.");
-        }
-    }
-
     public void decrementFlatCount(FlatType flatType) {
-        if (!flats.containsKey(flatType)) {
+        if (!flatCount.containsKey(flatType)) {
             throw new IllegalArgumentException("Flat type " + flatType + " is not available in this project.");
         }
 
-        int currentCount = flats.get(flatType);
+        int currentCount = flatCount.get(flatType);
         if (currentCount <= 0) {
             throw new IllegalStateException("No flats of type " + flatType + " are left to allocate.");
         }
 
-        flats.put(flatType, currentCount - 1);
+        flatCount.put(flatType, currentCount - 1);
     }
 
     public boolean hasFlatLeft(FlatType flatType) {
-        return flats.getOrDefault(flatType, 0) > 0;
+        return flatCount.getOrDefault(flatType, 0) > 0;
     }
 
     public Map<FlatType, Integer> getFlats() {
-        return flats;
+        return flatCount;
     }
 
-    public void setFlats(Map<FlatType, Integer> flats) {
-        this.flats = flats;
+    public void setFlats(Map<FlatType, Integer> flatCount) {
+        this.flatCount = flatCount;
     }
 
     @Override
@@ -182,10 +158,10 @@ public class Project implements BaseEntity {
     }
 
     private String formatFlats() {
-        if (flats == null || flats.isEmpty())
+        if (flatCount == null || flatCount.isEmpty())
             return "None";
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<FlatType, Integer> entry : flats.entrySet()) {
+        for (Map.Entry<FlatType, Integer> entry : flatCount.entrySet()) {
             sb.append(entry.getKey()).append(": ").append(entry.getValue()).append(" units, ");
         }
         return sb.substring(0, sb.length() - 2);

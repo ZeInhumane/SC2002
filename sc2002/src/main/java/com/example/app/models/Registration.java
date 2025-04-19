@@ -1,45 +1,45 @@
 package com.example.app.models;
 
+import com.example.app.enums.RegistrationStatus;
+
 public class Registration implements BaseEntity{
-
-    private static int idCounter = 1;
-    private int id;
-
-    private int userId;
-    private int projectId;
+    private Integer id;
+    private Integer userId;
+    private Integer projectId;
     private RegistrationStatus status;
-    private String projectName;
 
     public Registration() {
-        this.id = idCounter++;
     }
 
-    public Registration(int userId, int projectId, RegistrationStatus status, String projectName) {
-        this(); // call the no-arg constructor to generate the id
+    public Registration(Integer id, Integer userId, Integer projectId, RegistrationStatus status) {
+        this.id = id;
         this.userId = userId;
         this.projectId = projectId;
         this.status = status;
-        this.projectName = projectName;
     }
 
     @Override
-    public int getId() { return id; }
+    public Integer getId() { return id; }
 
-    public int getUserId() { return userId; }
+    @Override
+    public void setId(Integer id) { this.id = id; }
+
+    public Integer getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
-    public int getProjectId() { return projectId; }
+    public Integer getProjectId() { return projectId; }
     public void setProjectId(int projectId) { this.projectId = projectId; }
 
     public RegistrationStatus getStatus() { return status; }
     public void setStatus(RegistrationStatus status) { this.status = status; }
 
-    @Override
-    public String toString() {
-        return String.format("""
-                [Registration Id: %s]
-                Project (%s): %s
-                Application Status: %s
-                """, id , projectId, projectName, status);
-    }
+//    @Override
+//    public String toDisplay() {
+//         Implement later
+//        return String.format("""
+//                [Registration Id: %s]
+//                Project (%s): %s
+//                Application Status: %s
+//                """, id , projectId, projectName, status);
+//    }
 }

@@ -1,15 +1,20 @@
 package com.example.app.repository;
-import java.util.*;
+import java.io.IOException;
+import java.util.Objects;
 
 import com.example.app.models.User;
+import com.example.app.serializer.SerializerDependency;
 
 
 public class UserRepository extends GeneralRepository<User> {
-    private final Map<Integer, User> users = new HashMap<>();
 
-    public User findByNric (String nric){
-        return storage.values().stream()
-            .filter(user -> user.getNric().equals(nric))
+    public UserRepository() {
+        super(SerializerDependency.getUserSerializer(), "users.txt");
+    }
+
+    public User findByNric (String nric) throws IOException {
+        return this.findAll().stream()
+            .filter(user -> Objects.equals(user.getNric(), nric))
             .findFirst()
             .orElse(null);
     }

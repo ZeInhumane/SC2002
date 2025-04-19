@@ -7,10 +7,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
-
-import com.example.app.models.FlatType;
-import com.example.app.models.MaritalStatus;
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
 import com.example.app.repository.ProjectRepository;
 

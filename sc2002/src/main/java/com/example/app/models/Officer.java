@@ -1,22 +1,25 @@
 package com.example.app.models;
 
-public class Officer extends Applicant implements ProjectAssignable{
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
+import com.example.app.enums.Role;
 
-    private int registeredProject = -1;
+public class Officer extends Applicant{
+
+    private Integer registeredProject;
 
     public Officer() { }
 
-    public Officer(String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
-        super(username, password, email, role, nric, age, maritalStatus);
+    public Officer(Integer id, String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType, Integer registeredProject) {
+        super(id, username, password, email, role, nric, age, maritalStatus, flatType);
+        this.registeredProject = registeredProject;
     }
 
-    @Override
-    public void setRegisteredProject(int registerId) {
+    public void setRegisteredProject(Integer registerId) {
         this.registeredProject = registerId;
     }
 
-    @Override
-    public int getRegisteredProject() {
+    public Integer getRegisteredProject() {
         return registeredProject;
     }
 

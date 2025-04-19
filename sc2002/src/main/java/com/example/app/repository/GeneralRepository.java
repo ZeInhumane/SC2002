@@ -1,31 +1,66 @@
 package com.example.app.repository;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.example.app.models.BaseEntity;
+import com.example.app.serializer.Serializer;
 
 public class GeneralRepository<T extends BaseEntity> {
 
-    protected final Map<Integer, T> storage = new HashMap<>();
+    private final Serializer<T> serializer;
+    private final String filePath;
 
-    public T save(T obj) {
-        storage.put(obj.getId(), obj);
-        return obj;
+    public GeneralRepository(Serializer<T> serializer, String filePath) {
+        this.serializer = serializer;
+        this.filePath = filePath;
     }
 
-    public T findById(int id) {
-        T entity = storage.get(id);
-        return entity;
+    public void save(T entity) throws IOException {
+        HashMap<Integer, T> all = findAllAsMap();
+        all.put(entity.getId(), entity); // prevents ID overlap by updating
+        overwriteFile(all);
+    }
+
+    public List<T> findAll() throws IOException {
+        List<T> result = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                result.add(serializer.deserialize(line));
+            }
+        }
+        return result;
+    }
+
+    public T findById(Integer id) throws IOException {
+        return this.findAll().stream()
+                .filter(entity -> Objects.equals(entity.getId(), id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void deleteById(Integer id) throws IOException {
+        HashMap<Integer, T> all = findAllAsMap();
+        all.remove(id);
+        overwriteFile(all);
+    }
+
+    private HashMap<Integer, T> findAllAsMap() throws IOException {
+        HashMap<Integer, T> result = new HashMap<>();
+        for (T entity : findAll()) {
+            result.put(entity.getId(), entity);
+        }
+        return result;
     }
 
 
-    public Collection<T> findAll() {
-        return storage.values();
+    private void overwriteFile(HashMap<Integer, T> entities) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (T entity : new ArrayList<>(entities.values())) {
+                writer.write(serializer.serialize(entity));
+                writer.newLine();
+            }
+        }
     }
-
-    public void deleteById(int id) {
-        storage.remove(id);
-    }
-    
 }

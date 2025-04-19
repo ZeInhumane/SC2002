@@ -1,4 +1,4 @@
-package com.example.app.models;
+package com.example.app.enums;
 
 public enum FlatType {
     _2ROOM,

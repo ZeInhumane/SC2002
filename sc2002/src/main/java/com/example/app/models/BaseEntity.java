@@ -1,5 +1,7 @@
 package com.example.app.models;
 
 public interface BaseEntity {
-    int getId();
+    Integer getId();
+    void setId(Integer id);
+    String toDisplay();
 }

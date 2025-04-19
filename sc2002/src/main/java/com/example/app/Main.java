@@ -6,7 +6,7 @@ package com.example.app;
 import com.example.app.service.AuthenticationService;
 import com.example.app.service.ApplicantService;
 import com.example.app.service.OfficerService;
-import com.example.app.service.UserManagementService;
+import com.example.app.service.UserService;
 import com.example.app.service.ManagerService;
 import com.example.app.cli.ApplicantCLI;
 import com.example.app.cli.ManagerCLI;
@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         // 1) Load Excel‑based credentials
         AuthenticationService auth = new AuthenticationService();
-        UserManagementService userMgmt = new UserManagementService();
+        UserService userMgmt = new UserService();
         // OfficerManagementService offMgmt = new OfficerService();
 
 

@@ -1,11 +1,13 @@
 package com.example.app.service;
 
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
+import com.example.app.enums.Role;
 import com.example.app.models.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class AuthenticationService {
@@ -13,7 +15,7 @@ public class AuthenticationService {
     private final Map<String, String> officerCreds = new HashMap<>();
     private final Map<String, String> managerCreds = new HashMap<>();
 
-    private static final UserManagementService userMgmt = new UserManagementService();
+    private static final UserService userMgmt = new UserService();
     private static final ProjectService projectService = new ProjectService();
 
     public AuthenticationService() {

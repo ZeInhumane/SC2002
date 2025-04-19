@@ -1,30 +1,35 @@
 package com.example.app.models;
 
+import com.example.app.enums.ApplicationStatus;
+import com.example.app.enums.FlatType;
+
 public class Application implements BaseEntity {
 
-    private static int idCounter = 1; // shared across all Application instances
-
-    private final int id;
-    private int userId;
-    private int projectId;
-    private String projectName; 
+    private Integer id;
+    private Integer userId;
+    private Integer projectId;
     private ApplicationStatus status;
+    private FlatType flatType;
 
     public Application() {
-        this.id = idCounter++;
     }
 
-    public Application(int userId, int projectId, ApplicationStatus status, String projectName) {
-        this.id = idCounter++;
+    public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status, FlatType flatType) {
+        this.id = id;
         this.userId = userId;
         this.projectId = projectId;
         this.status = status;
-        this.projectName = projectName;
+        this.flatType = flatType;
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public int getUserId() {
@@ -51,21 +56,21 @@ public class Application implements BaseEntity {
         this.status = status;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public FlatType getFlatType() {
+        return flatType;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setFlatType(FlatType flatType) {
+        this.flatType = flatType;
     }
 
     @Override
-    public String toString() {
+    public String toDisplay() {
         return String.format("""
             [Application Id: %s]
-            Project (%s): %s
+            Project (%s):
             Application Status: %s
-            """, id , projectId, projectName, status);
+            """, id , projectId, status);
     }
 
 }

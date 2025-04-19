@@ -2,31 +2,31 @@ package com.example.app.models;
 
 public class Enquiry implements BaseEntity {
 
-    private static int counter = 1; // for manual ID generation
-
-    private int id;
+    private Integer id;
     private String question;
     private String response;
-    private String projectName;
-    private int projectId;
-    private int enquirerId;
-    private int replierId;
+    private Integer projectId;
+    private Integer enquirerId;
+    private Integer replierId;
 
     public Enquiry() {
-        this.id = counter++;
     }
 
-    public Enquiry(String question, int projectId, int enquirerId, String projectName) {
-        this.id = counter++;
+    public Enquiry(String question, Integer projectId, Integer enquirerId) {
         this.question = question;
         this.projectId = projectId;
         this.enquirerId = enquirerId;
-        this.projectName = projectName;
+
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getQuestion() {
@@ -45,49 +45,41 @@ public class Enquiry implements BaseEntity {
         this.response = response;
     }
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
 
-    public int getEnquirerId() {
+    public Integer getEnquirerId() {
         return enquirerId;
     }
 
-    public void setEnquirerId(int enquirerId) {
+    public void setEnquirerId(Integer enquirerId) {
         this.enquirerId = enquirerId;
     }
 
-    public int getReplierId() {
+    public Integer getReplierId() {
         return replierId;
     }
 
-    public void setReplierId(int replierId) {
+    public void setReplierId(Integer replierId) {
         this.replierId = replierId;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
     }
 
     @Override
     public String toString() {
-        return String.format("""
-                Enquiry For Project: %s
-                Question: %s
-                Response: %s
-                Project ID: %d
-                """,
-                projectName,
-                question,
-                response != null ? response : "N/A",
-                projectId);
+//        return String.format("""
+//                Enquiry For Project: %s
+//                Question: %s
+//                Response: %s
+//                Project ID: %d
+//                """,
+//                projectName,
+//                question,
+//                response != null ? response : "N/A",
+//                projectId);
     }
 }

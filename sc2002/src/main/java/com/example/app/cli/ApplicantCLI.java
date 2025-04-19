@@ -2,7 +2,7 @@ package com.example.app.cli;
 
 import com.example.app.models.Application;
 import com.example.app.models.Enquiry;
-import com.example.app.models.FlatType;
+import com.example.app.enums.FlatType;
 import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
 import com.example.app.utils.Console;

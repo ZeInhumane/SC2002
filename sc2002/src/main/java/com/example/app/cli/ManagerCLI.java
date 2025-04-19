@@ -1,5 +1,9 @@
 package com.example.app.cli;
 
+import com.example.app.enums.ApplicationStatus;
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
+import com.example.app.enums.RegistrationStatus;
 import com.example.app.models.*;
 import com.example.app.service.ManagerService;
 import com.example.app.utils.Console;

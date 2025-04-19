@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.app.models.Application;
-import com.example.app.models.ApplicationStatus;
+import com.example.app.enums.ApplicationStatus;
 import com.example.app.repository.ApplicationRepository;
 
 public class ApplicationService {

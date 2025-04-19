@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import com.example.app.models.Applicant;
 import com.example.app.models.Application;
-import com.example.app.models.ApplicationStatus;
+import com.example.app.enums.ApplicationStatus;
 import com.example.app.models.Enquiry;
-import com.example.app.models.FlatType;
-import com.example.app.models.MaritalStatus;
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
 
 public class ApplicantService {

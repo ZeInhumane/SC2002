@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.app.models.Applicant;
-import com.example.app.models.ApplicationStatus;
+import com.example.app.enums.ApplicationStatus;
 import com.example.app.models.Enquiry;
-import com.example.app.models.FlatType;
+import com.example.app.enums.FlatType;
 import com.example.app.models.Manager;
-import com.example.app.models.MaritalStatus;
+import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Officer;
 import com.example.app.models.Project;
 import com.example.app.models.Registration;
-import com.example.app.models.RegistrationStatus;
+import com.example.app.enums.RegistrationStatus;
 import com.example.app.models.User;
 import com.example.app.models.Application;
 
@@ -28,7 +28,7 @@ public class ManagerService {
     static ApplicationService applicationService = new ApplicationService();
     static EnquiryService enquiryService = new EnquiryService();
     static RegistrationService registrationService = new RegistrationService();
-    static UserManagementService userManagementService = new UserManagementService();
+    static UserService userService = new UserService();
 
     private Manager admin;
 
@@ -138,7 +138,7 @@ public class ManagerService {
         List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
         for (Application app : applications) {
             int userId = app.getUserId();
-            User user = userManagementService.findById(userId);
+            User user = userService.findById(userId);
             if (user instanceof Applicant applicant) {
                 applicant.setApplicationId(-1); 
             }
@@ -149,7 +149,7 @@ public class ManagerService {
         List<Registration> registrations = registrationService.getRegistrationsByProjectId(projectId);
         for (Registration reg : registrations) {
             int userId = reg.getUserId();
-            User user = userManagementService.findById(userId);
+            User user = userService.findById(userId);
             if (user instanceof Officer officer) {
                 officer.setRegisteredProject(-1);
             }
@@ -160,7 +160,7 @@ public class ManagerService {
         List<Enquiry> enquiries = enquiryService.getEnquiriesByProjectId(projectId);
         for (Enquiry enquiry : enquiries) {
             int enquirerId = enquiry.getEnquirerId();
-            User user = userManagementService.findById(enquirerId);
+            User user = userService.findById(enquirerId);
             if (user instanceof Applicant applicant) {
                 applicant.getPastEnquiries().remove(enquiry.getId());
             }
@@ -195,7 +195,7 @@ public class ManagerService {
         projectService.addOfficer(userId,projectId);
 
         // Change officer current portfolio project to this one
-        userManagementService.assignProjectToOfficer(userId, projectId);
+        userService.assignProjectToOfficer(userId, projectId);
     }
 
     public void rejectRegistration(int registrationId) {

@@ -1,24 +1,24 @@
 package com.example.app.models;
 
+import com.example.app.enums.MaritalStatus;
+import com.example.app.enums.Role;
+
 public class User implements BaseEntity{
 
-    private static int idCounter = 1;
-    private int id;
-
-    private String nric;
+    private Integer id;
     private String name;
     private String password;
     private String email;
-    private MaritalStatus maritalStatus;
-    private int age;
     private Role role;
+    private String nric;
+    private Integer age;
+    private MaritalStatus maritalStatus;
 
     public User() {
-        this.id = idCounter++;
     }
 
-    public User(String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
-        this(); // auto-generate ID
+    public User(Integer id, String name, String password, String email, Role role, String nric, Integer age, MaritalStatus maritalStatus) {
+        this.id = id;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -28,11 +28,14 @@ public class User implements BaseEntity{
         this.maritalStatus = maritalStatus;
     }
 
-    // Getters and Setters
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
     @Override
-    public int getId() {
-        return id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNric() {
@@ -83,7 +86,7 @@ public class User implements BaseEntity{
         this.maritalStatus = maritalStatus;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
