@@ -10,8 +10,8 @@ public class Officer extends Applicant{
 
     public Officer() { }
 
-    public Officer(Integer id, String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType, Integer registeredProject) {
-        super(id, username, password, email, role, nric, age, maritalStatus, flatType);
+    public Officer(Integer id, String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType, Integer applicationId, Integer registeredProject) {
+        super(id, username, password, email, role, nric, age, maritalStatus, flatType, applicationId);
         this.registeredProject = registeredProject;
     }
 

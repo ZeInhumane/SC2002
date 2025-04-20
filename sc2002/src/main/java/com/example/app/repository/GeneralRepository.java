@@ -16,10 +16,17 @@ public class GeneralRepository<T extends BaseEntity> {
         this.filePath = filePath;
     }
 
-    public void save(T entity) throws IOException {
+    public T save(T entity) throws IOException {
+        if (entity.getId() == null) {
+            // Create new ID random number
+            Random random = new Random();
+            int id = random.nextInt(1000000); // Generate a random ID
+            entity.setId(id);
+        }
         HashMap<Integer, T> all = findAllAsMap();
         all.put(entity.getId(), entity); // prevents ID overlap by updating
         overwriteFile(all);
+        return entity;
     }
 
     public List<T> findAll() throws IOException {

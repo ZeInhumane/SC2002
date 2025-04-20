@@ -1,4 +1,5 @@
 package com.example.app.service;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -23,64 +24,47 @@ public class ProjectService {
     }
 
 
+    public Project findById(int id) throws IOException {
+        return projectRepository.findById(id);
+    }
+
     // Get projects meant for manager
-    public Collection<Project> findAll() {
+    public List<Project> findAll() throws IOException {
         return projectRepository.findAll();
     }
 
-    public Collection<Project> findByManagerId(int managerId) {
+    public List<Project> findByManagerId(int managerId) throws IOException {
         return projectRepository.findByManagerId(managerId);
     }
 
 
     // Get projects meant for applicant and officer
-    public Collection<Project> findByMaritalStatusAndVisibility(MaritalStatus userStatus, boolean visibility) {
+    public List<Project> findByMaritalStatusAndVisibility(MaritalStatus userStatus, boolean visibility) throws IOException {
         return projectRepository.findByMaritalStatusAndVisibility(userStatus, visibility);
     }
 
-    
-    // Check if the person can eligible for a flat type 
-    // Can be used to display and alter the application button if no option is there 
-    // User should not choose what flat to apply
-    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) {
-        List<FlatType> eligible = new ArrayList<>();
 
-        Project project = projectRepository.findById(userAge);
-
-
-        for (FlatType type : project.getFlats().keySet()) {
-            if (project.hasFlatLeft(type)) {
-                if (userStatus == MaritalStatus.SINGLE && userAge >= 35 && type == FlatType._2ROOM) {
-                    eligible.add(type);
-                } else if (userStatus == MaritalStatus.MARRIED && userAge >= 21 &&
-                        (type == FlatType._2ROOM || type == FlatType._3ROOM)) {
-                    eligible.add(type);
-                }
-            }
-        }
-
-        return eligible;
+    // Get projects meant for applicant and officer without constraint of marital status
+    public List<Project> findByVisibility(boolean visibility) throws Exception {
+        return projectRepository.findByVisibility(visibility);
     }
 
-    public Project findById(int projectId) {
-        return projectRepository.findById(projectId);
-    }
 
 
     // For officer to decremeent flat count if applicant book
-    public void decrementFlatCount(int projectId, FlatType flatType) {
-        Project project = findById(projectId);
+    public void decrementFlatCount(int projectId, FlatType flatType) throws IOException {
+        Project project = projectRepository.findById(projectId);
         project.decrementFlatCount(flatType);
     }
 
-    public boolean isOfficerFor(int userId, int projectId) {
+    public boolean isOfficerFor(int userId, int projectId) throws IOException {
         Project project = projectRepository.findById(projectId);
         return project.getOfficers().contains(userId);
     }
 
 
     // Check if project can be applied for date
-    public boolean isProjectStillApplying(int projectId) {
+    public boolean isProjectStillApplying(int projectId) throws IOException {
         Project project = projectRepository.findById(projectId);
         if (project == null) {
             return false;
@@ -94,18 +78,6 @@ public class ProjectService {
         return now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0;
     }
 
-
-    // For manager to add officer to flat project
-    public void addOfficer(int userId, int projectId) {
-        Project project = findById(projectId);
-        project.addOfficer(userId);
-    }
-
-    // For manager to remove officer to flat project
-    public void removeeOfficer(int userId, int projectId) {
-        Project project = findById(projectId);
-        project.removeOfficer(userId);
-    }
 
 
     // Create Project For managers 

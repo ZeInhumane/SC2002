@@ -46,7 +46,7 @@ public class ApplicantCLI {
 
     // View projects eligible to applicant based on marital status and visibility
     protected void viewProjects() {
-        Collection<Project> projects = appService.viewProjects();
+        Collection<Project> projects = appService.viewPublicProjects();
         if (projects.isEmpty()) {
             System.out.println("No available projects at the moment.");
             return;
@@ -130,7 +130,7 @@ public class ApplicantCLI {
 
     // Submit enquiry
     protected void submitEnquiry() {
-        Collection<Project> projects = appService.viewProjects();
+        Collection<Project> projects = appService.viewPublicProjects();
         if (projects.isEmpty()) {
             System.out.println("No projects available to submit enquiry.");
             return;

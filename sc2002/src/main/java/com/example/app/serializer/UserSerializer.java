@@ -28,6 +28,7 @@ public class UserSerializer implements Serializer<User>{
         if (user instanceof Officer officer) {
             return base + "," +
                     (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
+                    (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
                     (officer.getRegisteredProject() != null ? officer.getRegisteredProject() : "");
         }
         else if (user instanceof Manager manager) {
@@ -35,7 +36,8 @@ public class UserSerializer implements Serializer<User>{
                     (manager.getCurrentProjectId() != null ? manager.getCurrentProjectId() : "");
         }
         else if (user instanceof Applicant applicant) {
-            return base + "," + (applicant.getFlatType() != null ? applicant.getFlatType() : "");
+            return base + "," + (applicant.getFlatType() != null ? applicant.getFlatType() : "") + "," +
+                    (applicant.getApplicationId() != null ? applicant.getApplicationId() : "");
         }
         else {
             return base;
@@ -51,7 +53,9 @@ public class UserSerializer implements Serializer<User>{
         switch (role) {
             case OFFICER -> {
                 FlatType flatType = parts[8].isEmpty() ? null : FlatType.valueOf(parts[8].trim());
+                Integer applicationId = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
                 Integer registeredProject = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
+
                 return new Officer(
                         Integer.valueOf(parts[0].trim()),
                         parts[1].trim(),
@@ -62,6 +66,7 @@ public class UserSerializer implements Serializer<User>{
                         Integer.parseInt(parts[6].trim()),
                         MaritalStatus.valueOf(parts[7].trim()),
                         flatType,
+                        applicationId,
                         registeredProject
                 );
             }
@@ -81,6 +86,7 @@ public class UserSerializer implements Serializer<User>{
             }
             case APPLICANT -> {
                 FlatType flatType = parts[8].isEmpty() ? null : FlatType.valueOf(parts[8].trim());
+                Integer applicationId = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
                 return new Applicant(
                         Integer.valueOf(parts[0].trim()),
                         parts[1].trim(),
@@ -90,7 +96,8 @@ public class UserSerializer implements Serializer<User>{
                         parts[5].trim(),
                         Integer.parseInt(parts[6].trim()),
                         MaritalStatus.valueOf(parts[7].trim()),
-                        flatType
+                        flatType,
+                        applicationId
                 );
             }
             default -> {

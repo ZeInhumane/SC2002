@@ -1,9 +1,6 @@
 package com.example.app.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
@@ -18,23 +15,25 @@ public class Project implements BaseEntity {
     private Date applicationCloseDate;
     private String neighborhood;
     private Integer managerId;
-    private MaritalStatus group;
     private Boolean visibility;
+
+    private Set<MaritalStatus> groups;
     private Map<FlatType, Integer> flatCount;
 
 
     public Project() {
+        this.groups = new HashSet<>();
+        this.flatCount = new HashMap<>();
     }
 
     public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
-            Integer managerId, MaritalStatus group, Boolean visibility, Map<FlatType, Integer> flatCount) {
-        this();
+            Integer managerId, Boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flatCount) {
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
         this.applicationCloseDate = applicationCloseDate;
         this.neighborhood = neighborhood;
         this.managerId = managerId;
-        this.group = group;
+        this.groups = groups;
         this.visibility = visibility;
         this.flatCount = flatCount;
     }
@@ -81,12 +80,20 @@ public class Project implements BaseEntity {
         this.neighborhood = neighborhood;
     }
 
-    public MaritalStatus getGroup() {
-        return group;
+    public void addMaritalStatus(MaritalStatus group) {
+        this.groups.add(group);
     }
 
-    public void setGroup(MaritalStatus group) {
-        this.group = group;
+    public void removeMaritalStatus(MaritalStatus group) {
+        this.groups.remove(group);
+    }
+
+    public Set<MaritalStatus> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<MaritalStatus> groups) {
+        this.groups = groups;
     }
 
     public Boolean getVisibility() {
@@ -131,13 +138,14 @@ public class Project implements BaseEntity {
     }
 
     @Override
-    public String toString() {
+    public String toDisplay() {
         return String.format("""
                 ----------------------------------------
                 [Project Id: %s]
                 ~~~~~~~~~~~~~~~~~
                 Name: %s (Application Period: %s to %s)
-                Neighborhood: %s  For Group: %s People
+                Neighborhood: %s
+                For Group: %s
                 Flats: %s
                 Visibility: %s
                 ManagerId: %s
@@ -148,13 +156,23 @@ public class Project implements BaseEntity {
                 formatDate(applicationOpenDate),
                 formatDate(applicationCloseDate),
                 neighborhood,
-                group,
+                formatGroup(),
                 formatFlats(),
                 visibility ? "ON" : "OFF", managerId);
     }
 
     private String formatDate(Date date) {
         return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+
+    private String formatGroup() {
+        if (groups == null || groups.isEmpty())
+            return "None";
+        StringBuilder sb = new StringBuilder();
+        for (MaritalStatus group : groups) {
+            sb.append(group).append(", ");
+        }
+        return sb.substring(0, sb.length() - 2);
     }
 
     private String formatFlats() {

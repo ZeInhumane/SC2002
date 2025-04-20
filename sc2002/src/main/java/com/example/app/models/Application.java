@@ -9,16 +9,18 @@ public class Application implements BaseEntity {
     private Integer userId;
     private Integer projectId;
     private ApplicationStatus status;
+    private Boolean requestWithdrawal;
     private FlatType flatType;
 
     public Application() {
     }
 
-    public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status, FlatType flatType) {
+    public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status, Boolean requestWithdrawal, FlatType flatType) {
         this.id = id;
         this.userId = userId;
         this.projectId = projectId;
         this.status = status;
+        this.requestWithdrawal = requestWithdrawal;
         this.flatType = flatType;
     }
 
@@ -56,6 +58,14 @@ public class Application implements BaseEntity {
         this.status = status;
     }
 
+    public boolean isRequestWithdrawal() {
+        return requestWithdrawal;
+    }
+
+    public void setRequestWithdrawal(boolean requestWithdrawal) {
+        this.requestWithdrawal = requestWithdrawal;
+    }
+
     public FlatType getFlatType() {
         return flatType;
     }
@@ -70,7 +80,9 @@ public class Application implements BaseEntity {
             [Application Id: %s]
             Project (%s):
             Application Status: %s
-            """, id , projectId, status);
+            Request Withdrawal: %s
+            Flat Type: %s
+            """, id , projectId, status, requestWithdrawal, flatType != null ? flatType.name() : "None");
     }
 
 }

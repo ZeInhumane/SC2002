@@ -93,4 +93,23 @@ public class User implements BaseEntity{
     public void setAge(int age) {
         this.age = age;
     }
+
+    @Override
+    public String toDisplay() {
+        return String.format("""
+                [User ID: %d]
+                Name: %s
+                NRIC: %s
+                Age: %d
+                Marital Status: %s
+                Email: %s
+                """,
+                id,
+                name,
+                nric,
+                age,
+                maritalStatus,
+                email
+        );
+    }
 }

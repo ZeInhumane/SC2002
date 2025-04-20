@@ -1,16 +1,17 @@
 package com.example.app.service;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import com.example.app.enums.FlatType;
-import com.example.app.models.ProjectAssignable;
 import com.example.app.models.User;
+import com.example.app.repository.RepositoryDependency;
 import com.example.app.repository.UserRepository;
 
 public class UserService {
-    private static UserRepository userRepository = new UserRepository();
+    private static final UserRepository userRepository = RepositoryDependency.getUserRepository();
 
-    public User login(String nirc, String password) throws Exception {
+    public User login(String nirc, String password) throws IOException {
         User user = userRepository.findByNric(nirc);
         if (user == null) {
             System.out.println("User not found");
@@ -25,9 +26,17 @@ public class UserService {
         }
     }
 
-    public User changePassword(User user, String newPassword) throws Exception {
+    public User changePassword(User user, String newPassword) throws IOException {
         user.setPassword(newPassword);
         userRepository.save(user);
         return user;
+    }
+
+    public User findById(int id) throws IOException {
+        return userRepository.findById(id);
+    }
+
+    public User save(User user) throws IOException {
+        return userRepository.save(user);
     }
 }

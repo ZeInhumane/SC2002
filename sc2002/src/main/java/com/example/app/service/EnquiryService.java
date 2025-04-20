@@ -1,5 +1,6 @@
 package com.example.app.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.app.models.Enquiry;
@@ -13,51 +14,53 @@ public class EnquiryService {
 
     }
 
-    
     // Allow user to add Enquiry
-    public int submitEnquiry(String question, int projectId, int userId, String projectName) {
-        Enquiry newEnquiry = new Enquiry(question, projectId, userId,  projectName);
-        Enquiry enquiry = enquiryRepository.save(newEnquiry);
-        return enquiry.getId();
+    public Enquiry submitEnquiry(String question, Integer projectId, Integer userId) throws IOException {
+        Enquiry newEnquiry = new Enquiry(null, question, projectId, userId);
+        return enquiryRepository.save(newEnquiry);
     }
 
     // Allow user to edit Enquiry
-    // Change is refelcted in hashmap
-    public void editEnquiry(int id, String question) {
+    // Change is reflected in hashmap
+    public void editEnquiryQuestion(Integer id, String question) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryRepository.findById(id);
         enquiry.setQuestion(question);
+        enquiryRepository.save(enquiry);
+    }
+
+    public void editEnquiryResponse(Integer id, String response) throws IOException, NullPointerException {
+        Enquiry enquiry = enquiryRepository.findById(id);
+        enquiry.setResponse(response);
+        enquiryRepository.save(enquiry);
     }
 
     // Delete enquiry
-    public void deleteEnquiry(int id) {
+    public void deleteEnquiry(Integer id) throws IOException {
         enquiryRepository.deleteById(id);
     }
 
-    // Delete all enquiries related to a project
-    public void deleteEnquiriesByProjectId(int projectId) {
-        List<Enquiry> enquiries = enquiryRepository.findByProjectId(projectId);
-        for (Enquiry enquiry : enquiries) {
-            enquiryRepository.deleteById(enquiry.getId());
-        }
-    }
-
     // Get project based enquiries
-    public List<Enquiry> getEnquiriesByProjectId(int projectId) {
+    public List<Enquiry> getEnquiriesByProjectId(int projectId) throws IOException {
         return enquiryRepository.findByProjectId(projectId);
     }
 
+    // Get project based enquiries
+    public List<Enquiry> getEnquiriesByUserId(int userId) throws IOException {
+        return enquiryRepository.findByProjectId(userId);
+    }
+
     //Get single enquiry
-    public Enquiry getEnquiry(int id) {
+    public Enquiry getEnquiry(Integer id) throws IOException{
         return enquiryRepository.findById(id);
     }
 
     // Reply enquiry based on enquiry id
-    // Save user respnse and responder id
-    public void replyEnquiry(int id, String reply, int replierId) {
+    // Save user response and responder id
+    public void replyEnquiry(Integer id, Integer replierId, String reply) throws IOException, NullPointerException {
         Enquiry enquiry = getEnquiry(id);
         enquiry.setResponse(reply);
         enquiry.setReplierId(replierId);
-    } 
+    }
     
 }
 

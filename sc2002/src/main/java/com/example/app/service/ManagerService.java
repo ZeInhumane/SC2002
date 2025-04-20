@@ -60,7 +60,7 @@ public class ManagerService {
 
     // view applications relating to project 
     public List<Application> getApplicationsByProjectId(int projectId) {
-        return applicationService.getApplicationsByProjectId(projectId);
+        return applicationService.findByProjectId(projectId);
     }
 
 
@@ -135,7 +135,7 @@ public class ManagerService {
     // Delete Project and clean up related records from users
     public void deleteProject(int projectId) {
         // 1. Delete related applications and remove from applicants
-        List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
+        List<Application> applications = applicationService.findByProjectId(projectId);
         for (Application app : applications) {
             int userId = app.getUserId();
             User user = userService.findById(userId);
@@ -206,7 +206,7 @@ public class ManagerService {
     // Edit application status
     public boolean approveApplication(int applicationId, boolean success) {
         ApplicationStatus status = success ? ApplicationStatus.SUCCESSFUL : ApplicationStatus.UNSUCCESSFUL;
-        applicationService.changeStatus(applicationId, status);
+        applicationService.updateStatus(applicationId, status);
         return success;
     }    
 

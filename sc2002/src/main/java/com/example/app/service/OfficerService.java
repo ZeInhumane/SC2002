@@ -1,5 +1,6 @@
 package com.example.app.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,30 +15,20 @@ import com.example.app.models.Registration;
 import com.example.app.models.User;
 import com.example.app.models.Project;
 
-public class OfficerService extends ApplicantService {
+public class OfficerService extends ApplicantService implements AdminService {
 
     static RegistrationService registrationService = new RegistrationService();
     static UserService userService = new UserService();
 
-    public OfficerService(Officer user) {
-        super(user);
-    }
-
-
     // Check if is applicant for HDB (Before Officer Application)
-    public boolean isApplicantFor(int projectId) {
-        return applicationService.isApplicantFor(user.getId(), projectId);
-    }
-
-    // Check if Project is still running
-    public boolean isProjectStillApplying(int projectId) {
-        return projectService.isProjectStillApplying(projectId);
+    public boolean isApplicantFor(Officer officer, int projectId) throws IOException {
+        return applicationService.isCurrentlyApplyFor(officer.getId(), projectId);
     }
 
     // Checks if cannot register as officer (An applicant for the hdb or has a
-    // projhect somewhere before deadline)
-    public boolean isNotRegisterableAsOfficer(int projectId) {
-        Officer officer = (Officer) user;
+    // project somewhere before deadline)
+    public boolean isNotRegisterableAsOfficer(Officer officer, int projectId) {
+
         int oldProjectId = officer.getRegisteredProject();
 
         boolean isAlreadyApplicant = isApplicantFor(projectId);

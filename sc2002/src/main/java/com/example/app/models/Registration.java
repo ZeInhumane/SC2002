@@ -33,13 +33,12 @@ public class Registration implements BaseEntity{
     public RegistrationStatus getStatus() { return status; }
     public void setStatus(RegistrationStatus status) { this.status = status; }
 
-//    @Override
-//    public String toDisplay() {
-//         Implement later
-//        return String.format("""
-//                [Registration Id: %s]
-//                Project (%s): %s
-//                Application Status: %s
-//                """, id , projectId, projectName, status);
-//    }
+    @Override
+    public String toDisplay() {
+        return String.format("""
+                [Registration Id: %s]
+                Project (%s): %s
+                Application Status: %s
+                """, id , projectId, status);
+    }
 }

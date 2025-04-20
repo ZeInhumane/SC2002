@@ -6,14 +6,16 @@ import com.example.app.enums.Role;
 public class Applicant extends User {
 
     private FlatType flatType;
+    private Integer applicationId;
 
     public Applicant() {
         super();
     }
 
-    public Applicant(Integer id, String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType) {
+    public Applicant(Integer id, String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType, Integer applicationId) {
         super(id, name, password, email, role, nric, age, maritalStatus);
         this.flatType = flatType;
+        this.applicationId = applicationId;
     }
 
     public FlatType getFlatType() {
@@ -22,6 +24,14 @@ public class Applicant extends User {
 
     public void setFlatType(FlatType flatType) {
         this.flatType = flatType;
+    }
+
+    public Integer getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Integer applicationId) {
+        this.applicationId = applicationId;
     }
 
     @Override
@@ -33,6 +43,7 @@ public class Applicant extends User {
                 Age: %d
                 Marital Status: %s
                 Email: %s
+                Application ID: %d
                 Flat Type: %s
                 """,
                 getId(),
@@ -41,7 +52,7 @@ public class Applicant extends User {
                 getAge(),
                 getMaritalStatus(),
                 getEmail(),
-//                applicationId,
+                applicationId,
                 flatType != null ? flatType.name() : "None"
         );
     }

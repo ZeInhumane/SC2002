@@ -1,8 +1,10 @@
 package com.example.app.service;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.app.enums.FlatType;
 import com.example.app.models.Application;
 import com.example.app.enums.ApplicationStatus;
 import com.example.app.repository.ApplicationRepository;
@@ -16,70 +18,55 @@ public class ApplicationService {
 
     // Apply for a project using id for that user
     // Return application Id for user to save
-    public int applyForProject(int userId ,int projectId, String projectName) {
+    public Application applyForProject(Integer userId, Integer projectId, FlatType flatType) throws IOException {
         Application apply = new Application(
-            userId, projectId, ApplicationStatus.PENDING, projectName
+            null, userId, projectId, ApplicationStatus.PENDING, false, flatType
         );
 
-        Application application = applicationRepository.save(apply);
-        return application.getId();
-    } 
+        return applicationRepository.save(apply);
+    }
 
     // Get Applied project by user Id
-    public int getAppliedProjectId(int userId) {
-        Application userApplication =  applicationRepository.findOneByUserId(userId);
-        return userApplication.getProjectId();
-    } 
-
-    // Get available statuses
-    // Meant to give options to change
-    // ["PENDING", "BOOKED", "SUCCESSFUL", "UNSUCCESSFUL"]
-    public List<String> getPossibleStatuses() {
-        return Arrays.stream(ApplicationStatus.values())
-                    .map(Enum::name)
-                    .collect(Collectors.toList());
+    // Can include past applications
+    public List<Application> findByUserId(int userId) throws IOException {
+        return applicationRepository.findByUserId(userId);
     }
+
+    // Get applied project by user Id and status
+    public List<Application> findByUserIdAndStatus(int userId) throws IOException {
+        return applicationRepository.findByUserId(userId);
+    }
+
+    public List<Application> getRequestWithdrawalByProjectId(int projectId) throws IOException {
+        return applicationRepository.findByProjectIdAndRequestWithdrawal(projectId, true);
+    }
+
+
+    public Application findById(int id) throws IOException {
+        return applicationRepository.findById(id);
+    }
+
 
     // Change status by finding application 
     // Used by officer
-    public void changeStatus(int id, ApplicationStatus status) {
+    public void updateStatus(int id, ApplicationStatus status) throws IOException, NullPointerException {
         Application application = applicationRepository.findById(id);
         application.setStatus(status);
     }
 
-    // Withdraw Application 
-    // Can be used as a withdraw from BTO as application is always there
-    public void deleteApplication(int id) {
-        applicationRepository.deleteById(id);
-    }
 
-    // Delete all applications related to a project
-    public void deleteApplicationsByProjectId(int projectId) {
-        List<Application> applications = applicationRepository.findByProjectId(projectId);
-        for (Application application : applications) {
-            applicationRepository.deleteById(application.getId());
-        }
-    }
-
-
-    // Get all applications relating to a project 
+    // Get all applications relating to a project
     // Meant for officer and manager
-    public List<Application> getApplicationsByProjectId(int projectId) {
+    public List<Application> findByProjectId(int projectId) throws IOException {
         return applicationRepository.findByProjectId(projectId);
     }
 
-    // Get application by application Id
-    public Application getApplicationById(int id) {
-        return applicationRepository.findById(id);
-    }
 
     // Meant for officer to check if a user is an applicant for a specific project
-    public boolean isApplicantFor(int userId, int projectId) { 
-        List<Application> applications = applicationRepository.findByProjectId(projectId);
-        return applications.stream().anyMatch(app -> app.getUserId() == userId);
+    public boolean isCurrentlyApplyFor(int userId, int projectId) throws IOException {
+        List<Application> applications = applicationRepository.findByUserIdAndStatus(userId, ApplicationStatus.PENDING);
+        return applications.stream().anyMatch(app -> app.getProjectId() == projectId);
     }
-
-    
 
 }
 

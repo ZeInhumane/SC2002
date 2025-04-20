@@ -4,6 +4,7 @@ public enum ApplicationStatus {
     PENDING,
     BOOKED,
     SUCCESSFUL,
-    UNSUCCESSFUL
+    UNSUCCESSFUL,
+    WITHDRAWN
 }
 

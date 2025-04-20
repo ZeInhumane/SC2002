@@ -12,8 +12,8 @@ import com.example.app.serializer.SerializerDependency;
 
 public class ApplicationRepository extends GeneralRepository<Application> {
 
-    public ApplicationRepository(Serializer<Application> serializer, String filePath) {
-        super(SerializerDependency.getApplicationSerializer(), filePath);
+    public ApplicationRepository() {
+        super(SerializerDependency.getApplicationSerializer(), "applications.txt");
     }
 
 
@@ -35,10 +35,18 @@ public class ApplicationRepository extends GeneralRepository<Application> {
                 .collect(Collectors.toList());
     }
 
+    public List<Application> findByProjectIdAndRequestWithdrawal(Integer projectId, boolean requestWithdrawal) throws IOException {
+        return this.findAll().stream()
+                .filter(a -> Objects.equals(a.getProjectId(), projectId) && Objects.equals(a.isRequestWithdrawal(), requestWithdrawal))
+                .collect(Collectors.toList());
+    }
+
     public List<Application> findByStatus(ApplicationStatus status) throws IOException {
         return this.findAll().stream()
                 .filter(a -> Objects.equals(a.getStatus(), status))
                 .collect(Collectors.toList());
     }
+
+
 
 }

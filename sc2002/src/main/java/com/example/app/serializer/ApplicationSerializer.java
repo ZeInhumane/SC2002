@@ -8,11 +8,12 @@ public class ApplicationSerializer implements Serializer<Application> {
 
     @Override
     public String serialize(Application application) {
-        return String.format("%d,%d,%d,%s,%s",
+        return String.format("%d,%d,%d,%s,%s,%s",
                 application.getId(),
                 application.getUserId(),
                 application.getProjectId(),
                 application.getStatus().toString(),
+                application.isRequestWithdrawal() ? "true" : "false",
                 application.getFlatType().toString()
         );
     }
@@ -25,7 +26,8 @@ public class ApplicationSerializer implements Serializer<Application> {
             Integer.parseInt(parts[1].trim()),
             Integer.parseInt(parts[2].trim()),
             ApplicationStatus.valueOf(parts[3].trim()),
-            FlatType.valueOf(parts[4].trim())
+            Boolean.parseBoolean(parts[4].trim()),
+            FlatType.valueOf(parts[5].trim())
         );
     }
 }

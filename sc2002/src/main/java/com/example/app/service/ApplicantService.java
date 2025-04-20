@@ -1,57 +1,49 @@
 package com.example.app.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.example.app.models.Applicant;
-import com.example.app.models.Application;
+import com.example.app.models.*;
 import com.example.app.enums.ApplicationStatus;
-import com.example.app.models.Enquiry;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
-import com.example.app.models.Project;
 
-public class ApplicantService {
+public class ApplicantService extends UserService{
 
     static ProjectService projectService = new ProjectService();
     static ApplicationService applicationService = new ApplicationService();
     static EnquiryService enquiryService = new EnquiryService();
 
-    protected Applicant user;
-
-    public ApplicantService(Applicant user) {
-        this.user = user;
+    public Collection<Project> viewPublicProjects(Applicant applicant) throws IOException, NullPointerException {
+        return projectService.findByMaritalStatusAndVisibility(applicant.getMaritalStatus(), true);
     }
 
-    public Applicant getUser() {
-        return user;
+    public Project viewAppliedProjects(Applicant applicant) throws IOException, NullPointerException {
+
+        Application application = applicationService.findById(applicant.getApplicationId());
+        if (application == null) {
+            return null;
+        }
+        return projectService.findById(application.getProjectId());
     }
 
-    // Returns List of projects open to user group and "on" visibility
-    public Collection<Project> viewProjects() {
-        return projectService.findByMaritalStatusAndVisibility(user.getMaritalStatus(), true);
-    }
-
-    public List<FlatType> getEligibleFlatTypesForProject(int projectId) {
+    public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId) throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
         }
 
-        return project.getFlats().keySet().stream()
-                .filter(flat -> {
-                    if (user.getMaritalStatus() == MaritalStatus.SINGLE && user.getAge() >= 35) {
-                        return flat == FlatType._2ROOM;
-                    } else if (user.getMaritalStatus() == MaritalStatus.MARRIED && user.getAge() >= 21) {
-                        return flat == FlatType._2ROOM || flat == FlatType._3ROOM;
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
+        List<FlatType> eligible = getEligibleFlatTypes(applicant.getMaritalStatus(), applicant.getAge());
+
+        eligible.removeIf(flatType -> !project.getFlats().containsKey(flatType));
+        return eligible;
     }
 
-    public void applyForProject(int projectId, FlatType preferredFlatType) {
+    public void applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " does not exist.");
@@ -61,87 +53,93 @@ public class ApplicantService {
             throw new IllegalArgumentException("Selected flat type is not offered in the chosen project.");
         }
 
-        List<FlatType> eligibleTypes = getEligibleFlatTypesForProject(projectId);
+        List<FlatType> eligibleTypes = getEligibleFlatTypesForProject(applicant, projectId);
         if (!eligibleTypes.contains(preferredFlatType)) {
             throw new IllegalArgumentException("You are not eligible for the selected flat type.");
         }
 
-        if (user.getApplicationId() != -1) {
-            applicationService.deleteApplication(user.getApplicationId());
+        if (!isAbleToApply(applicant)) {
+            throw new IllegalArgumentException("You are not eligible to apply for a new project.");
         }
 
-        int applicationId = applicationService.applyForProject(user.getId(), projectId, project.getProjectName());
-        user.setApplicationId(applicationId);
-        user.setFlatType(preferredFlatType);
+        Application application = applicationService.applyForProject(applicant.getId(), projectId, preferredFlatType);
+        applicant.setApplicationId(application.getId());
+        applicant.setFlatType(preferredFlatType);
+        this.save(applicant);
     }
 
     // Get current application safely
-    public Application viewCurrentApplication() {
-        if (user.getApplicationId() == -1)
+    public Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException {
+        if (applicant.getApplicationId() == null)
             return null;
-        try {
-            return applicationService.getApplicationById(user.getApplicationId());
-        } catch (IllegalArgumentException e) {
-            // Application not found, possibly deleted
-            return null;
-        }
+        return applicationService.findById(applicant.getApplicationId());
     }
 
     // Can only apply if no app exists or the last one failed
-    public boolean isAbleToApply() {
-        Application current = viewCurrentApplication();
-        return current == null || current.getStatus() == ApplicationStatus.UNSUCCESSFUL;
+    public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
+        Application current = viewCurrentApplication(applicant);
+        return current == null || current.getStatus() == ApplicationStatus.UNSUCCESSFUL || current.getStatus() == ApplicationStatus.WITHDRAWN;
     }
 
-    public boolean isOfficerFor(int projectId) {
-        return projectService.isOfficerFor(user.getId(), projectId);
+    public void withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
+        Application application = viewCurrentApplication(applicant);
+        if (application == null) {
+            throw new IllegalArgumentException("No application found to withdraw.");
+        }
+
+        application.setStatus(ApplicationStatus.WITHDRAWN);
+        applicationService.updateStatus(application.getId(), ApplicationStatus.WITHDRAWN);
+        applicant.setApplicationId(null);
+        this.save(applicant);
     }
 
     // Submit enquiry (stores ID back to user profile)
-    public int submitEnquiry(String question, int projectId) {
-        Project project = projectService.findById(projectId);
-        if (project == null) {
-                throw new IllegalArgumentException("Project ID " + projectId + " not found.");
-        }
+    public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
 
-        int enquiryId = enquiryService.submitEnquiry(question, projectId, user.getId(), project.getProjectName());
-        user.addToPastEnquiries(enquiryId);
-        return enquiryId;
+        return enquiryService.submitEnquiry(question, projectId, applicant.getId());
     }
 
     // View one enquiry
-    public Enquiry getPastEnquiry(int enquiryId) {
-        Enquiry e = enquiryService.getEnquiry(enquiryId);
-        if (e == null || !user.getPastEnquiries().contains(enquiryId)) {
-            throw new IllegalArgumentException("Enquiry not found or does not belong to this user.");
-        }
-        return e;
-    }
-
-    // List all enquiries for this applicant
-    public List<Enquiry> getAllPastEnquiries() {
-        return user.getPastEnquiries().stream()
-                .map(enquiryService::getEnquiry)
-                .collect(Collectors.toList()); //  this was missing
+    public List<Enquiry> getAllPastEnquiries(Applicant applicant) throws IOException, NullPointerException {
+        return enquiryService.getEnquiriesByUserId(applicant.getId());
     }
 
     // Edit enquiry (if it belongs to this user)
-    public void updateEnquiry(int enquiryId, String newQuestion) {
-        if (!user.getPastEnquiries().contains(enquiryId)) {
+    public void updateEnquiry(int enquiryId, String newQuestion) throws IOException, NullPointerException {
+
+        Enquiry enquiry = enquiryService.getEnquiry(enquiryId);
+
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), user.getId())) {
             throw new IllegalArgumentException("You do not have permission to edit this enquiry.");
         }
 
-        enquiryService.editEnquiry(enquiryId, newQuestion);
+        enquiryService.editEnquiryQuestion(enquiryId, newQuestion);
     }
 
     // Delete enquiry (if it belongs to this user)
-    public void deleteEnquiry(int enquiryId) {
-        if (!user.getPastEnquiries().contains(enquiryId)) {
+    public void deleteEnquiry(Applicant applicant, int enquiryId) throws IOException, NullPointerException {
+
+        Enquiry enquiry = enquiryService.getEnquiry(enquiryId);
+
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId())) {
             throw new IllegalArgumentException("You do not have permission to delete this enquiry.");
         }
 
         enquiryService.deleteEnquiry(enquiryId);
-        user.removeFromPastEnquiries(enquiryId);
+
     }
+
+    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) {
+        List<FlatType> eligible = new ArrayList<>();
+        if (userStatus == MaritalStatus.SINGLE && userAge >= 35) {
+            eligible.add(FlatType._2ROOM);
+        } else if (userStatus == MaritalStatus.MARRIED && userAge >= 21) {
+            eligible.add(FlatType._2ROOM);
+            eligible.add(FlatType._3ROOM);
+        }
+
+        return eligible;
+    }
+
 
 }

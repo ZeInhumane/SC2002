@@ -12,11 +12,11 @@ public class Enquiry implements BaseEntity {
     public Enquiry() {
     }
 
-    public Enquiry(String question, Integer projectId, Integer enquirerId) {
+    public Enquiry(Integer id, String question, Integer projectId, Integer enquirerId) {
+        this.id = id;
         this.question = question;
         this.projectId = projectId;
         this.enquirerId = enquirerId;
-
     }
 
     @Override
@@ -70,16 +70,15 @@ public class Enquiry implements BaseEntity {
     }
 
     @Override
-    public String toString() {
-//        return String.format("""
-//                Enquiry For Project: %s
-//                Question: %s
-//                Response: %s
-//                Project ID: %d
-//                """,
+    public String toDisplay() {
+        return String.format("""
+                Question: %s
+                Response: %s
+                Project ID: %d
+                """,
 //                projectName,
-//                question,
-//                response != null ? response : "N/A",
-//                projectId);
+                question,
+                response != null ? response : "N/A",
+                projectId);
     }
 }

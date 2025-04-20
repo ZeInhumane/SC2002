@@ -17,7 +17,7 @@ public class ProjectRepository extends GeneralRepository<Project> {
 
     public List<Project> findByMaritalStatusAndVisibility(MaritalStatus status, boolean visibility) throws IOException {
         return this.findAll().stream()
-                .filter(p -> Objects.equals(p.getGroup(), status) && Objects.equals(p.getVisibility(), visibility))
+                .filter(p -> p.getGroups().contains(status) && Objects.equals(p.getVisibility(), visibility))
                 .collect(Collectors.toList());
     }
 
