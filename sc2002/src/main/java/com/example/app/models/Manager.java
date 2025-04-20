@@ -9,7 +9,6 @@ import java.util.List;
 public class Manager extends User {
 
     private Integer currentProjectId;
-    private List<Integer> pastProjects = new ArrayList<>();
 
     public Manager() { }
 
@@ -25,27 +24,5 @@ public class Manager extends User {
     public void setCurrentProjectId(Integer currentProjectId) {
         this.currentProjectId = currentProjectId;
     }
-
-    public List<Integer> getPastProjects() {
-        return pastProjects;
-    }
-
-    public void setPastProjects(List<Integer> pastProjects) {
-        this.pastProjects = pastProjects;
-    }
-
-    public void addProject(int projectId) {
-        if (!pastProjects.contains(projectId)) {
-            pastProjects.add(projectId);
-        }
-    }
-
-    public void removeProject(Integer projectId) {
-        if (currentProjectId.equals(projectId)) {
-            currentProjectId = null;
-        }
-        pastProjects.remove(projectId);
-    }
-    
 
 }

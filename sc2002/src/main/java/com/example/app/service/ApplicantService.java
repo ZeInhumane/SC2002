@@ -93,6 +93,7 @@ public class ApplicantService extends UserService{
         this.save(applicant);
     }
 
+
     // Submit enquiry (stores ID back to user profile)
     public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
 
@@ -105,11 +106,11 @@ public class ApplicantService extends UserService{
     }
 
     // Edit enquiry (if it belongs to this user)
-    public void updateEnquiry(int enquiryId, String newQuestion) throws IOException, NullPointerException {
+    public void updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
 
         Enquiry enquiry = enquiryService.getEnquiry(enquiryId);
 
-        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), user.getId())) {
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId())) {
             throw new IllegalArgumentException("You do not have permission to edit this enquiry.");
         }
 

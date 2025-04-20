@@ -1,6 +1,7 @@
 package com.example.app.service;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import com.example.app.models.Registration;
@@ -16,14 +17,10 @@ public class RegistrationService {
     }
 
     // Applicant can add registration as Officer
-    public int registerAsOfficerForProject(int userId, int projectId, String projectName) {
-        Registration register = new Registration(
-            userId, projectId, RegistrationStatus.PENDING, projectName
-        );
+    public Registration registerForProject(int userId, int projectId, String projectName) throws IOException {
+        Registration register = new Registration(null, userId, projectId, RegistrationStatus.PENDING);
 
-        Registration registration = registrationRepository.save(register);
-
-        return registration.getId();
+        return registrationRepository.save(register);
     } 
 
 
@@ -34,30 +31,26 @@ public class RegistrationService {
     }
 
     // Get registration by project Id 
-    public List<Registration>  getRegistrationsByProjectId(int projectId) {
+    public List<Registration>  getRegistrationsByProjectId(int projectId) throws IOException {
         return registrationRepository.findByProjectId(projectId);
     }    
 
     // Get all registrations for a project 
-    public List<Registration> findByProjectId(int projectId) {
+    public List<Registration> findByProjectId(int projectId) throws IOException {
         return registrationRepository.findByProjectId(projectId);
     }
 
-    // Withdraw Registration 
-    // Can be used as a withdraw from BTO as application is always there
-    public void deleteRegistration(int id) {
+    // Get all registrations for a user
+    public void deleteRegistration(int id) throws IOException {
         registrationRepository.deleteById(id);
     }
 
     // Approve registration to become officer
     // Meant for maanagers
-    public void approveOfficerRegistration(int registerId) {
-        registrationRepository.findById(registerId).setStatus(RegistrationStatus.APPROVED);
-    }
-
-    // Delete Officer registration
-    public void deleteOfficerRegistration(int registerId) {
-        registrationRepository.deleteById(registerId);
+    public void changeStatus(int registerId, RegistrationStatus status) throws IOException {
+        Registration registration = registrationRepository.findById(registerId);
+        registration.setStatus(status);
+        registrationRepository.save(registration);
     }
 
 }

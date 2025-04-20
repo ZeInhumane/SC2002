@@ -1,5 +1,6 @@
 package com.example.app.cli;
 
+import com.example.app.RuntimeData;
 import com.example.app.models.Enquiry;
 import com.example.app.enums.FlatType;
 import com.example.app.models.Project;
@@ -7,6 +8,7 @@ import com.example.app.models.Registration;
 import com.example.app.service.OfficerService;
 import com.example.app.utils.Console;
 
+import java.io.IOException;
 import java.util.List;
 
 public class OfficerCLI extends ApplicantCLI {
@@ -18,7 +20,7 @@ public class OfficerCLI extends ApplicantCLI {
     }
 
     @Override
-    public void run() {
+    public void run() throws IOException {
         while (true) {
             System.out.println("\n=== Officer Menu (includes Applicant features) ===");
             System.out.println("1) View Available Projects");
@@ -135,14 +137,14 @@ public class OfficerCLI extends ApplicantCLI {
         }
 
         int projectId = Console.readInt("Enter Project ID to register for: ");
-        if (officerService.isNotRegisterableAsOfficer(projectId)) {
+        if (officerService.isNotRegisterableAsOfficer(RuntimeData.getCurrentOfficer(), projectId)) {
             System.out.println(
                     "You cannot register for this project. You're either an applicant or already handling another.");
             return;
         }
 
         try {
-            officerService.registerAsOfficer(projectId);
+            officerService.registerAsOfficer(RuntimeData.getCurrentOfficer(), projectId);
             System.out.println("Registered as officer for project ID: " + projectId);
         } catch (Exception e) {
             System.out.println("Failed to register: " + e.getMessage());

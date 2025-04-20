@@ -23,8 +23,6 @@ public class ManagerCLI {
     public void run() {
         while (true) {
 
-            // Re check current project handling
-            managerService.reassignManaging();
             System.out.println("\n=== HDB Manager Menu ===");
             System.out.println("1) View Projects");
             System.out.println("2) Create Project");
@@ -164,7 +162,7 @@ public class ManagerCLI {
 
         // Create the project
         try {
-            managerService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats);
+            managerService.createProject(manager, projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats);
             System.out.println("Project created successfully.");
         } catch (Exception e) {
             System.out.println("Failed to create project: " + e.getMessage());
@@ -300,10 +298,11 @@ public class ManagerCLI {
             System.out.println("- " + status);
         }
 
-        String groupInput = Console.readLine("Eligible Group [%s]: ".formatted(project.getGroup()));
-        MaritalStatus group;
+        String groupInput = Console.readLine("Eligible Group [%s]: ".formatted(project.formatGroup()));
+
+        List<MaritalStatus> group;
         try {
-            group = groupInput.isBlank() ? project.getGroup() : MaritalStatus.valueOf(groupInput.toUpperCase());
+            group = groupInput.isBlank() ? project.getGroups() : MaritalStatus.valueOf(groupInput.toUpperCase());
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid group.");
             return;

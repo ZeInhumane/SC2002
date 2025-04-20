@@ -38,8 +38,7 @@ public class OfficerService extends ApplicantService implements AdminService {
     }
 
     // Register for project
-    public void registerAsOfficer(int projectId) {
-        Officer officer = (Officer) user; // Cast explicitly since user is declared as Applicant
+    public void registerAsOfficer(Officer officer, int projectId) throws IOException {
 
         Project project = projectService.findById(projectId);
         if (project == null) {
@@ -51,7 +50,7 @@ public class OfficerService extends ApplicantService implements AdminService {
         }
 
         // Override the registration to the latest one
-        int registrationId = registrationService.registerAsOfficerForProject(officer.getId(), projectId,
+        int registrationId = registrationService.registerForProject(officer.getId(), projectId,
                 project.getProjectName());
         officer.setRegisteredProject(registrationId);
 

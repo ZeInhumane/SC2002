@@ -1,12 +1,6 @@
 package com.example.app.service;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Calendar;
-
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
@@ -57,11 +51,6 @@ public class ProjectService {
         project.decrementFlatCount(flatType);
     }
 
-    public boolean isOfficerFor(int userId, int projectId) throws IOException {
-        Project project = projectRepository.findById(projectId);
-        return project.getOfficers().contains(userId);
-    }
-
 
     // Check if project can be applied for date
     public boolean isProjectStillApplying(int projectId) throws IOException {
@@ -81,30 +70,30 @@ public class ProjectService {
 
 
     // Create Project For managers 
-    public int createProject(
-        String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, MaritalStatus group, Map<FlatType, Integer> flats, int managerId
-    ) {
-        Project project = new Project(projectName, stripTime(applicationOpenDate), stripTime(applicationCloseDate), neighborhood,  managerId,  group,  true,  flats);
-        return projectRepository.save(project).getId();
+    public Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException {
+        Project project = new Project(null, projectName, stripTime(applicationOpenDate), stripTime(applicationCloseDate), neighborhood, managerId, visibility, groups,  flats);
+        return projectRepository.save(project);
     }
 
     // Allow managers to edit project
     // Can set visibility
-    public void editProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, MaritalStatus group, Map<FlatType, Integer> flats, boolean visibility) {
+    public Project editProject(Integer projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException {
         Project project = projectRepository.findById(projectId);
 
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
         }
 
-        // Update editable fields
         project.setProjectName(projectName);
-        project.setApplicationOpenDate(applicationOpenDate);
-        project.setApplicationCloseDate(applicationCloseDate);
+        project.setApplicationOpenDate(stripTime(applicationOpenDate));
+        project.setApplicationCloseDate(stripTime(applicationCloseDate));
         project.setNeighborhood(neighborhood);
-        project.setGroup(group);
-        project.setFlats(flats);  
+        project.setManagerId(managerId);
         project.setVisibility(visibility);
+        project.setGroups(groups);
+        project.setFlats(flats);
+        return projectRepository.save(project);
+
     }
 
 

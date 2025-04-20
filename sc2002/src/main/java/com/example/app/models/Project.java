@@ -161,11 +161,11 @@ public class Project implements BaseEntity {
                 visibility ? "ON" : "OFF", managerId);
     }
 
-    private String formatDate(Date date) {
+    public  String formatDate(Date date) {
         return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
-    private String formatGroup() {
+    public String formatGroup() {
         if (groups == null || groups.isEmpty())
             return "None";
         StringBuilder sb = new StringBuilder();
@@ -175,7 +175,7 @@ public class Project implements BaseEntity {
         return sb.substring(0, sb.length() - 2);
     }
 
-    private String formatFlats() {
+    public String formatFlats() {
         if (flatCount == null || flatCount.isEmpty())
             return "None";
         StringBuilder sb = new StringBuilder();

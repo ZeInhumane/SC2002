@@ -1,12 +1,16 @@
 package com.example.app.cli;
 
+import com.example.app.RuntimeData;
+import com.example.app.enums.Role;
 import com.example.app.models.Application;
 import com.example.app.models.Enquiry;
 import com.example.app.enums.FlatType;
+import com.example.app.models.Officer;
 import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
 import com.example.app.utils.Console;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,7 +21,7 @@ public class ApplicantCLI {
         this.appService = appService;
     }
 
-    public void run() {
+    public void run() throws IOException {
         while (true) {
             System.out.println("\n=== Applicant Menu ===");
             System.out.println("1) View Available Projects");
@@ -45,8 +49,8 @@ public class ApplicantCLI {
     }
 
     // View projects eligible to applicant based on marital status and visibility
-    protected void viewProjects() {
-        Collection<Project> projects = appService.viewPublicProjects();
+    protected void viewProjects() throws IOException {
+        Collection<Project> projects = appService.viewPublicProjects(RuntimeData.getCurrentApplicant());
         if (projects.isEmpty()) {
             System.out.println("No available projects at the moment.");
             return;
@@ -60,10 +64,10 @@ public class ApplicantCLI {
     }
 
     // Apply for Project
-    protected void applyForProject() {
+    protected void applyForProject() throws IOException {
         
         // Check if user already has an application that is pending/successful/booked
-        if (!appService.isAbleToApply()) {
+        if (!appService.isAbleToApply(RuntimeData.getCurrentApplicant())) {
             System.out.println("You already have an active or successful application.");
             return;
         }
@@ -76,14 +80,14 @@ public class ApplicantCLI {
 
         List<FlatType> eligibleTypes;
         try {
-            eligibleTypes = appService.getEligibleFlatTypesForProject(projectId);
+            eligibleTypes = appService.getEligibleFlatTypesForProject(RuntimeData.getCurrentApplicant(), projectId);
         } catch (Exception e) {
             System.out.println(" " + e.getMessage());
             return;
         }
 
         // If you are not an officer for (just checks if id is in user)
-        if (appService.isOfficerFor(projectId)) {
+        if (RuntimeData.getCurrentApplicant().getRole() == Role.OFFICER && RuntimeData.getCurrentOfficer().getRegisteredProject() == projectId) {
             System.out.println("You are an officer for this project and hence cannot apply");
             return;
         }
@@ -110,7 +114,7 @@ public class ApplicantCLI {
         FlatType selectedType = eligibleTypes.get(choice - 1);
 
         try {
-            appService.applyForProject(projectId, selectedType);
+            appService.applyForProject(RuntimeData.getCurrentApplicant(), projectId, selectedType);
             System.out.println(" Application submitted with preferred flat type: " + selectedType);
         } catch (Exception e) {
             System.out.println(" Failed to apply: " + e.getMessage());
@@ -119,8 +123,8 @@ public class ApplicantCLI {
 
 
     // View applicants current application
-    protected void viewCurrentApplication() {
-        Application app = appService.viewCurrentApplication();
+    protected void viewCurrentApplication() throws IOException {
+        Application app = appService.viewCurrentApplication(RuntimeData.getCurrentApplicant());
         if (app == null) {
             System.out.println("No application found.");
         } else {
@@ -129,8 +133,8 @@ public class ApplicantCLI {
     }
 
     // Submit enquiry
-    protected void submitEnquiry() {
-        Collection<Project> projects = appService.viewPublicProjects();
+    protected void submitEnquiry() throws IOException {
+        Collection<Project> projects = appService.viewPublicProjects(RuntimeData.getCurrentApplicant());
         if (projects.isEmpty()) {
             System.out.println("No projects available to submit enquiry.");
             return;
@@ -143,7 +147,7 @@ public class ApplicantCLI {
         int projectId = Console.readInt("Enter Project ID for enquiry: ");
         String question = Console.readLine("Enter your enquiry: ");
         try {
-            int enquiryId = appService.submitEnquiry(question, projectId);
+            Enquiry enquiryId = appService.submitEnquiry(RuntimeData.getCurrentApplicant(), question, projectId);
             System.out.println("Enquiry submitted (ID: " + enquiryId + ")");
         } catch (Exception e) {
             System.out.println("Failed to submit enquiry: " + e.getMessage());
@@ -151,8 +155,8 @@ public class ApplicantCLI {
     }
 
     // View applicant enquiruies
-    protected void viewMyEnquiries() {
-        List<Enquiry> enquiries = appService.getAllPastEnquiries();
+    protected void viewMyEnquiries() throws IOException {
+        List<Enquiry> enquiries = appService.getAllPastEnquiries(RuntimeData.getCurrentApplicant());
         if (enquiries.isEmpty()) {
             System.out.println("No enquiries submitted.");
         } else {
@@ -163,8 +167,8 @@ public class ApplicantCLI {
     }
 
     // Edit applicant enquiries
-    protected void editEnquiry() {
-        List<Enquiry> enquiries = appService.getAllPastEnquiries();
+    protected void editEnquiry() throws IOException {
+        List<Enquiry> enquiries = appService.getAllPastEnquiries(RuntimeData.getCurrentApplicant());
         if (enquiries.isEmpty()) {
             System.out.println("You have no enquiries to edit.");
             return;
@@ -179,7 +183,7 @@ public class ApplicantCLI {
         String updated = Console.readLine("Enter new question: ");
 
         try {
-            appService.updateEnquiry(id, updated);
+            appService.updateEnquiry(RuntimeData.getCurrentApplicant(), id, updated);
             System.out.println("Enquiry updated.");
         } catch (Exception e) {
             System.out.println("Could not update: " + e.getMessage());
@@ -188,8 +192,8 @@ public class ApplicantCLI {
 
 
     // Delete Enquiry
-    protected void deleteEnquiry() {
-        List<Enquiry> enquiries = appService.getAllPastEnquiries();
+    protected void deleteEnquiry() throws IOException {
+        List<Enquiry> enquiries = appService.getAllPastEnquiries(RuntimeData.getCurrentApplicant());
         if (enquiries.isEmpty()) {
             System.out.println("You have no enquiries to delete.");
             return;
@@ -202,7 +206,7 @@ public class ApplicantCLI {
 
         int id = Console.readInt("Enter Enquiry ID to delete: ");
         try {
-            appService.deleteEnquiry(id);
+            appService.deleteEnquiry(RuntimeData.getCurrentApplicant(), id);
             System.out.println("Enquiry deleted.");
         } catch (Exception e) {
             System.out.println("Could not delete: " + e.getMessage());
@@ -210,10 +214,10 @@ public class ApplicantCLI {
     }
 
     // reuse existing display method
-    protected void handleEnquiry() {
+    protected void handleEnquiry() throws IOException {
         viewMyEnquiries();
 
-        if (appService.getAllPastEnquiries().isEmpty())
+        if (appService.getAllPastEnquiries(RuntimeData.getCurrentApplicant()).isEmpty())
             return;
 
         System.out.println("1) Edit Enquiry");

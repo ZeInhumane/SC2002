@@ -1,9 +1,7 @@
 package com.example.app.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 import com.example.app.models.Applicant;
 import com.example.app.enums.ApplicationStatus;
@@ -19,130 +17,115 @@ import com.example.app.models.User;
 import com.example.app.models.Application;
 
 
-import java.util.Comparator;
-
-
-public class ManagerService {
+public class ManagerService extends UserService{
     
     static ProjectService projectService = new ProjectService();
     static ApplicationService applicationService = new ApplicationService();
     static EnquiryService enquiryService = new EnquiryService();
     static RegistrationService registrationService = new RegistrationService();
-    static UserService userService = new UserService();
-
-    private Manager admin;
-
-    public  ManagerService(Manager admin) {
-        this.admin = admin;
-    }
-    
 
     // Allow manager to create project
-    public void createProject(
+    public Project createProject(
+        Manager manager,
         String projectName, 
         Date applicationOpenDate, 
         Date applicationCloseDate, 
-        String neighborhood, 
-        MaritalStatus group, 
+        String neighborhood,
+        boolean visibility,
+        Set<MaritalStatus> groups,
         Map<FlatType, Integer> flats
-    ) 
-    {
-        int projectId = projectService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats, admin.getId());
-        admin.addProject(projectId);
+    ) throws IOException {
+        return projectService.createProject(
+            projectName,
+            applicationOpenDate,
+            applicationCloseDate,
+            neighborhood,
+            manager.getId(),
+            visibility,
+            groups,
+            flats
+        );
     }
 
     // Check project ownership
-    public boolean isProjectBelongToManager(int projectId) {
+    public boolean isProjectBelongToManager(Manager manager, int projectId) throws IOException {
         Project project = projectService.findById(projectId);
         if (project == null) return false;
-        return project.getManagerId() == admin.getId();
+        return Objects.equals(project.getManagerId(), manager.getId());
     }
 
     // view applications relating to project 
-    public List<Application> getApplicationsByProjectId(int projectId) {
+    public List<Application> getApplicationsByProjectId(int projectId) throws IOException {
         return applicationService.findByProjectId(projectId);
     }
 
 
-    // Reassign the managers current project handling to another project if date limit is over or if manager has no project yet 
-    public void reassignManaging() {
-        int currentId = admin.getCurrentProjectId();
-
-        // Case 1: Still managing current project
-        if (projectService.isProjectStillApplying(currentId)) {
-            return;
-        }
-
-        // Case 2: Not managing, find next project that has started today or earlier
-        Collection<Project> myProjects = viewMyProjects();
-        Date today = projectService.stripTime(new Date());
-
-        Project nextProject = myProjects.stream()
-            .filter(p -> {
-                Date projectDate = projectService.stripTime(p.getApplicationOpenDate());
-                return !projectDate.after(today); // projectDate <= today
-            })
-            .min(Comparator.comparing(p -> projectService.stripTime(p.getApplicationOpenDate())))
-            .orElse(null);
-
-        if (nextProject != null) {
-            admin.setCurrentProjectId(nextProject.getId());
-        } else {
-            admin.setCurrentProjectId(-1); // reset if none found
-        }
-    }
 
 
    // Returns List of projects open to user group and "on" visibility
-    public Collection<Project> viewProjects() {
+    public Collection<Project> viewProjects() throws IOException {
         return projectService.findAll();        
     }
 
     // View my projects
-    public Collection<Project> viewMyProjects() {
-        return projectService.findByManagerId(admin.getId());        
+    public Collection<Project> viewMyProjects(Manager manager) throws IOException {
+        return projectService.findByManagerId(manager.getId());
     }
 
     // View project he is currently handling
-    public Project viewHandlingProject() {
-        return projectService.findById(admin.getCurrentProjectId());
+    public Project viewHandlingProject(Manager manager) throws IOException {
+        return projectService.findById(manager.getCurrentProjectId());
     }
 
 
     // Allow manager to edit project
     // Can retrieve entire project and then edit with fill ins 
     public void editProject(
+        Manager manager,
         int projectId,
         String projectName, 
         Date applicationOpenDate, 
         Date applicationCloseDate, 
         String neighborhood, 
-        MaritalStatus group, 
-        Map<FlatType, Integer> flats,
-        boolean visibility
-    ) 
-    {
-        projectService.editProject(projectId, projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats, visibility);
+        boolean visibility,
+        Set<MaritalStatus> groups,
+        Map<FlatType, Integer> flats
+    ) throws IOException {
+        Project project = projectService.editProject(
+            projectId,
+            projectName,
+            applicationOpenDate,
+            applicationCloseDate,
+            neighborhood,
+            manager.getId(),
+            visibility,
+            groups,
+            flats
+        );
     }
 
 
     // Toggle Visibility for project
-    public void toggleVisibility(int projectId) {
+    public void toggleVisibility(Manager manager, int projectId) throws IOException {
+
+        if (!isProjectBelongToManager(manager, projectId)) {
+            throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
+        }
+
         Project project = projectService.findById(projectId);
         project.setVisibility(!project.getVisibility());
     }
 
     // Delete Project and clean up related records from users
-    public void deleteProject(int projectId) {
+    public void deleteProject(int projectId) throws IOException {
         // 1. Delete related applications and remove from applicants
         List<Application> applications = applicationService.findByProjectId(projectId);
         for (Application app : applications) {
             int userId = app.getUserId();
-            User user = userService.findById(userId);
+            User user = this.findById(userId);
             if (user instanceof Applicant applicant) {
                 applicant.setApplicationId(-1); 
             }
-            applicationService.deleteApplication(app.getId());
         }
 
         // 2. Delete related registrations and remove from officers
