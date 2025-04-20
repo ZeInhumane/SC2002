@@ -15,192 +15,25 @@ import com.example.app.models.Registration;
 import com.example.app.models.User;
 import com.example.app.models.Project;
 
-public class OfficerService extends ApplicantService implements AdminService {
+public interface OfficerService extends ApplicantService {
 
-    static RegistrationService registrationService = new RegistrationService();
-    static UserService userService = new UserService();
+    boolean isRegistrable(Officer officer, int projectId) throws IOException, NullPointerException;
 
-    // Check if is applicant for HDB (Before Officer Application)
-    public boolean isApplicantFor(Officer officer, int projectId) throws IOException {
-        return applicationService.isCurrentlyApplyFor(officer.getId(), projectId);
-    }
+    List<Project> getRegistrableProjects(Officer officer) throws IOException, NullPointerException;
 
-    // Checks if cannot register as officer (An applicant for the hdb or has a
-    // project somewhere before deadline)
-    public boolean isNotRegisterableAsOfficer(Officer officer, int projectId) {
+    Officer registerForProject(Officer officer, int projectId) throws IOException, NullPointerException;
 
-        int oldProjectId = officer.getRegisteredProject();
+    Registration viewCurrentRegistration(Officer officer) throws IOException, NullPointerException;
 
-        boolean isAlreadyApplicant = isApplicantFor(projectId);
-        boolean isAlreadyHandling = oldProjectId != -1 && isProjectStillApplying(oldProjectId);
+    Project viewCurrentProject(Officer officer) throws IOException, NullPointerException;
 
-        return isAlreadyApplicant || isAlreadyHandling;
-    }
+    List<Enquiry> getHandlingEnquiries(Officer officer) throws IOException, NullPointerException;
 
-    // Register for project
-    public void registerAsOfficer(Officer officer, int projectId) throws IOException {
+    Enquiry replyEnquiry(Officer officer, int enquiryId, String message) throws IOException, NullPointerException;
 
-        Project project = projectService.findById(projectId);
-        if (project == null) {
-            throw new IllegalArgumentException("Project ID " + projectId + " not found.");
-        }
+    List<Application> getHandlingApplications(Officer officer) throws IOException, NullPointerException;
 
-        if (officer.getRegisteredProject() != -1) {
-            registrationService.deleteOfficerRegistration(officer.getRegisteredProject());
-        }
+    void bookFlatForApplicant(String nric) throws IOException, NullPointerException;
 
-        // Override the registration to the latest one
-        int registrationId = registrationService.registerForProject(officer.getId(), projectId,
-                project.getProjectName());
-        officer.setRegisteredProject(registrationId);
-
-    }
-
-    // Retrieve curren registration even if it is turned off
-    public Registration viewCurrentRegistration() {
-        Officer officer = (Officer) user; // Cast explicitly since user is declared as Applicant
-        return registrationService.getRegistrationByRegistrationId(officer.getRegisteredProject());
-    }
-
-    // get Enquiries regarding a project
-    public List<Enquiry> getProjectEnquiries() {
-
-        Officer officer = (Officer) user;
-        int projectId = officer.getRegisteredProject();
-        if (projectId == -1) {
-            throw new IllegalStateException("Officer is not assigned to any project.");
-        }
-
-        return enquiryService.getEnquiriesByProjectId(projectId);
-    }
-
-    // get Enquiry using enquiry id
-    public Enquiry getEnquiry(int id) {
-        return enquiryService.getEnquiry(id);
-    }
-
-    // reply Enquiry
-    public void replyEnquiry(int id, String reply) {
-        enquiryService.replyEnquiry(id, reply, user.getId());
-    }
-
-    public List<Project> getRegisterableProjects() {
-        Collection<Project> allProjects = projectService.findByMaritalStatusAndVisibility(user.getMaritalStatus(),
-                true);
-        return allProjects.stream()
-                .filter(p -> !isNotRegisterableAsOfficer(p.getId()))
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getAllApplicationsForHandledProject() {
-        Officer officer = (Officer) user;
-        int projectId = officer.getRegisteredProject();
-
-        if (projectId == -1) {
-            throw new IllegalStateException("Officer is not assigned to any project.");
-        }
-
-        List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
-
-        return applications.stream()
-                .map(app -> {
-                    User u = userService.findById(app.getUserId());
-                    if (u instanceof Applicant applicant) {
-                        return String.format(
-                                "Name: %s | NRIC: %s | Status: %s | Flat Type: %s",
-                                applicant.getName(),
-                                applicant.getNric(),
-                                app.getStatus(),
-                                applicant.getFlatType() != null ? applicant.getFlatType() : "(none)");
-                    }
-                    return null;
-                })
-                .filter(s -> s != null)
-                .toList();
-    }
-
-    public void bookFlatForApplicant(String applicantNric, FlatType chosenFlatType) {
-        User user = userService.findByNric(applicantNric);
-        if (!(user instanceof Applicant applicant)) {
-            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
-        }
-        Application app = applicationService.getApplicationById(applicant.getApplicationId());
-        // CHANGE BACK TO SUCCESSFUL
-        if (app == null || app.getStatus() != ApplicationStatus.SUCCESSFUL) {
-            throw new IllegalStateException("Applicant has no successful application.");
-        }
-
-        // Update project flat count
-        projectService.decrementFlatCount(app.getProjectId(), chosenFlatType);
-
-        // Update application status
-        app.setStatus(ApplicationStatus.BOOKED);
-
-        // Assign flat type to applicant
-        applicant.setFlatType(chosenFlatType);
-    }
-
-    public String generateBookingReceipt(String applicantNric) {
-        User user = userService.findByNric(applicantNric);
-        if (!(user instanceof Applicant applicant)) {
-            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
-        }
-
-        Application app = applicationService.getApplicationById(applicant.getApplicationId());
-        if (app == null || app.getStatus() != ApplicationStatus.BOOKED) {
-            throw new IllegalStateException("Applicant has not booked a flat.");
-        }
-
-        Project project = projectService.findById(app.getProjectId());
-
-        return String.format("""
-                === Booking Receipt ===
-                Name: %s
-                NRIC: %s
-                Age: %d
-                Marital Status: %s
-                Booked Flat Type: %s
-                Project Name: %s
-                Neighborhood: %s
-                """,
-                applicant.getName(),
-                applicant.getNric(),
-                applicant.getAge(),
-                applicant.getMaritalStatus(),
-                applicant.getFlatType(),
-                project.getProjectName(),
-                project.getNeighborhood());
-    }
-
-    public List<String> getAllBookingsForHandledProject() {
-        Officer officer = (Officer) user;
-        int projectId = officer.getRegisteredProject();
-
-        if (projectId == -1) {
-            throw new IllegalStateException("Officer is not assigned to any project.");
-        }
-
-        List<Application> applications = applicationService.getApplicationsByProjectId(projectId);
-        return applications.stream()
-                .filter(app -> app.getStatus() == ApplicationStatus.BOOKED)
-                .map(app -> {
-                    User u = userService.findById(app.getUserId());
-                    if (u instanceof Applicant applicant) {
-                        return String.format("""
-                                Name: %s | NRIC: %s | Age: %d | Marital Status: %s | Flat Type: %s | Project: %s (%s)
-                                """,
-                                applicant.getName(),
-                                applicant.getNric(),
-                                applicant.getAge(),
-                                applicant.getMaritalStatus(),
-                                applicant.getFlatType(),
-                                projectService.findById(projectId).getProjectName(),
-                                projectService.findById(projectId).getNeighborhood());
-                    }
-                    return null;
-                })
-                .filter(s -> s != null)
-                .toList();
-    }
-
+    String generateBookingReceipt(String nric) throws IOException, NullPointerException;
 }

@@ -6,61 +6,36 @@ import java.util.List;
 import com.example.app.models.Enquiry;
 import com.example.app.repository.EnquiryRepository;
 
-public class EnquiryService {
+public interface EnquiryService {
 
-    private static EnquiryRepository enquiryRepository = new EnquiryRepository();
+    // Get single enquiry
+    Enquiry findById(Integer id) throws IOException;
 
-    public EnquiryService() {
+    // Get all enquiries for manager
+    List<Enquiry> findAll() throws IOException;
 
-    }
+    // For officer or manager to get all enquiries
+    List<Enquiry> findByProjectId(int projectId) throws IOException;
 
-    // Allow user to add Enquiry
-    public Enquiry submitEnquiry(String question, Integer projectId, Integer userId) throws IOException {
-        Enquiry newEnquiry = new Enquiry(null, question, projectId, userId);
-        return enquiryRepository.save(newEnquiry);
-    }
+    // For officer or manager to manage their responded enquiries
+    List<Enquiry> findByReplierId(int replierId) throws IOException;
 
-    // Allow user to edit Enquiry
-    // Change is reflected in hashmap
-    public void editEnquiryQuestion(Integer id, String question) throws IOException, NullPointerException {
-        Enquiry enquiry = enquiryRepository.findById(id);
-        enquiry.setQuestion(question);
-        enquiryRepository.save(enquiry);
-    }
+    // For applicant to manage their submitted enquiries
+    List<Enquiry> findByEnquirerId(int enquirerId) throws IOException;
 
-    public void editEnquiryResponse(Integer id, String response) throws IOException, NullPointerException {
-        Enquiry enquiry = enquiryRepository.findById(id);
-        enquiry.setResponse(response);
-        enquiryRepository.save(enquiry);
-    }
+    // For applicant to add enquiry
+    Enquiry submitEnquiry(String question, Integer projectId, Integer userId) throws IOException;
 
-    // Delete enquiry
-    public void deleteEnquiry(Integer id) throws IOException {
-        enquiryRepository.deleteById(id);
-    }
+    // For applicant to edit enquiry
+    Enquiry updateEnquiryQuestion(Integer id, String question) throws IOException, NullPointerException;
 
-    // Get project based enquiries
-    public List<Enquiry> getEnquiriesByProjectId(int projectId) throws IOException {
-        return enquiryRepository.findByProjectId(projectId);
-    }
+    // For officer or manager to add response
+    // Only for enquiry that has not been responded
+    Enquiry replyEnquiry(Integer id, Integer replierId, String response) throws IOException, NullPointerException;
 
-    // Get project based enquiries
-    public List<Enquiry> getEnquiriesByUserId(int userId) throws IOException {
-        return enquiryRepository.findByProjectId(userId);
-    }
+    // for applicant to delete enquiry
+    void deleteEnquiry(Integer id) throws IOException;
 
-    //Get single enquiry
-    public Enquiry getEnquiry(Integer id) throws IOException{
-        return enquiryRepository.findById(id);
-    }
 
-    // Reply enquiry based on enquiry id
-    // Save user response and responder id
-    public void replyEnquiry(Integer id, Integer replierId, String reply) throws IOException, NullPointerException {
-        Enquiry enquiry = getEnquiry(id);
-        enquiry.setResponse(reply);
-        enquiry.setReplierId(replierId);
-    }
-    
 }
 

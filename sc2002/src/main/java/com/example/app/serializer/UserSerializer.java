@@ -29,11 +29,11 @@ public class UserSerializer implements Serializer<User>{
             return base + "," +
                     (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
                     (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
-                    (officer.getRegisteredProject() != null ? officer.getRegisteredProject() : "");
+                    (officer.getRegisteredId() != null ? officer.getRegisteredId() : "") + "," +
+                    (officer.getProjectId() != null ? officer.getProjectId() : "");
         }
         else if (user instanceof Manager manager) {
-            return base + "," +
-                    (manager.getCurrentProjectId() != null ? manager.getCurrentProjectId() : "");
+            return base;
         }
         else if (user instanceof Applicant applicant) {
             return base + "," + (applicant.getFlatType() != null ? applicant.getFlatType() : "") + "," +
@@ -54,7 +54,8 @@ public class UserSerializer implements Serializer<User>{
             case OFFICER -> {
                 FlatType flatType = parts[8].isEmpty() ? null : FlatType.valueOf(parts[8].trim());
                 Integer applicationId = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
-                Integer registeredProject = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
+                Integer registeredId = parts[10].isEmpty() ? null : Integer.valueOf(parts[10].trim());
+                Integer projectId = parts[11].isEmpty() ? null : Integer.valueOf(parts[11].trim());
 
                 return new Officer(
                         Integer.valueOf(parts[0].trim()),
@@ -67,11 +68,11 @@ public class UserSerializer implements Serializer<User>{
                         MaritalStatus.valueOf(parts[7].trim()),
                         flatType,
                         applicationId,
-                        registeredProject
+                        registeredId,
+                        projectId
                 );
             }
             case MANAGER -> {
-                Integer currentProjectId = parts[8].isEmpty() ? null : Integer.valueOf(parts[8].trim());
                 Manager manager = new Manager(
                         Integer.valueOf(parts[0].trim()),
                         parts[1].trim(),
@@ -80,8 +81,7 @@ public class UserSerializer implements Serializer<User>{
                         role,
                         parts[5].trim(),
                         Integer.parseInt(parts[6].trim()),
-                        MaritalStatus.valueOf(parts[7].trim()),
-                        currentProjectId
+                        MaritalStatus.valueOf(parts[7].trim())
                 );
             }
             case APPLICANT -> {

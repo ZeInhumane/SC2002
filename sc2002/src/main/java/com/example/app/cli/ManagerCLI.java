@@ -1,5 +1,6 @@
 package com.example.app.cli;
 
+import com.example.app.RuntimeData;
 import com.example.app.enums.ApplicationStatus;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
@@ -147,7 +148,7 @@ public class ManagerCLI {
         }
 
         // Check if date overlaps with any other project
-        if (managerService.hasDateOverlap(applicationOpenDate, applicationCloseDate)) {
+        if (managerService.hasDateOverlap(RuntimeData.getCurrentManager(), applicationOpenDate, applicationCloseDate)) {
             System.out.println("You already have a project with an overlapping application period. Please choose a different date range.");
             return;
         }
@@ -162,7 +163,7 @@ public class ManagerCLI {
 
         // Create the project
         try {
-            managerService.createProject(manager, projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats);
+            managerService.createProject(RuntimeData.getCurrentManager(), projectName, applicationOpenDate, applicationCloseDate, neighborhood, group, flats);
             System.out.println("Project created successfully.");
         } catch (Exception e) {
             System.out.println("Failed to create project: " + e.getMessage());

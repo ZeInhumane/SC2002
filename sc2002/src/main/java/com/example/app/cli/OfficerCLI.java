@@ -124,7 +124,7 @@ public class OfficerCLI extends ApplicantCLI {
     }
 
     private void registerAsOfficer() {
-        List<Project> registerableProjects = officerService.getRegisterableProjects();
+        List<Project> registerableProjects = officerService.getRegistrableProjects();
 
         if (registerableProjects.isEmpty()) {
             System.out.println("No projects available for officer registration.");
