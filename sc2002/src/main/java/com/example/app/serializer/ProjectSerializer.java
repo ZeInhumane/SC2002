@@ -38,8 +38,7 @@ public class ProjectSerializer implements Serializer<Project> {
 
     @Override
     public Project deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",");
-
+        String[] parts = inputLine.split(",", -1);
         Integer id = Integer.parseInt(parts[0].trim());
         String projectName = parts[1].trim();
         Date applicationOpenDate;

@@ -1,90 +1,77 @@
 package com.example.app.repository;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.app.enums.FlatType;
+import com.example.app.enums.MaritalStatus;
+import com.example.app.models.Project;
 import org.junit.jupiter.api.Test;
 
-import com.example.app.models.MaritalStatus;
-import com.example.app.models.Project;
+import java.io.IOException;
+import java.util.*;
 
-public class ProjectRepositoryTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private ProjectRepository projectRepo;
+public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
 
-    @BeforeEach
-    public void setup() {
-        projectRepo = new ProjectRepository();
+    private final ProjectRepository projectRepository = RepositoryDependency.getProjectRepository();
+
+    @Override
+    protected GeneralRepository<Project> getRepository() {
+        return projectRepository;
+    }
+
+    @Override
+    protected List<Project> createSampleEntities() {
+        Set<MaritalStatus> groups1 = new HashSet<>(Set.of(MaritalStatus.SINGLE, MaritalStatus.MARRIED));
+        Map<FlatType, Integer> flats1 = new HashMap<>(Map.of(FlatType._2ROOM, 10, FlatType._3ROOM, 5));
+
+        Set<MaritalStatus> groups2 = new HashSet<>(Set.of(MaritalStatus.SINGLE));
+        Map<FlatType, Integer> flats2 = new HashMap<>(Map.of(FlatType._2ROOM, 8));
+
+        Set<MaritalStatus> groups3 = new HashSet<>();
+        Map<FlatType, Integer> flats3 = new HashMap<>(Map.of(FlatType._3ROOM, 12));
+
+        Calendar calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, 30);
+        Date futureDate = calendar.getTime();
+
+        Project project1 = new Project(null, "Sunshine Grove", today, futureDate, "Tampines", 101, true, groups1, flats1);
+        Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, groups2, flats2);
+        Project project3 = new Project(null, "Skyline Heights", today, futureDate, "Jurong", 103, true, groups3, flats3);
+
+        return List.of(project1, project2, project3);
+    }
+
+    @Override
+    protected List<Project> saveSampleEntities() throws IOException {
+        List<Project> projects = createSampleEntities();
+        for (Project p : projects) {
+            projectRepository.save(p);
+        }
+        return projects;
+    }
+
+    // Optional: Test domain logic inside Project
+    @Test
+    public void testDecrementFlatCount() throws IOException {
+        Project project = saveSampleEntities().get(0);
+        assertTrue(project.hasFlatLeft(FlatType._3ROOM));
+        assertDoesNotThrow(() -> project.decrementFlatCount(FlatType._3ROOM));
     }
 
     @Test
-    public void testSaveAndFindById() {
+    public void testDecrementFlatCount_noFlatsLeft() {
         Project project = new Project();
-        project.setProjectName("Green Haven");
-        project.setGroup(MaritalStatus.MARRIED);
-        project.setVisibility(true);
+        Map<FlatType, Integer> flats = new HashMap<>();
+        flats.put(FlatType._2ROOM, 0);
+        project.setFlats(flats);
 
-        projectRepo.save(project);
-        Project fetched = projectRepo.findById(project.getId());
-
-        assertNotNull(fetched);
-        assertEquals("Green Haven", fetched.getProjectName());
+        assertThrows(IllegalStateException.class, () -> project.decrementFlatCount(FlatType._2ROOM));
     }
 
     @Test
-    public void testFindByMaritalStatusAndVisibility() {
-        Project marriedVisible = new Project();
-        marriedVisible.setProjectName("SkyView");
-        marriedVisible.setGroup(MaritalStatus.MARRIED);
-        marriedVisible.setVisibility(true);
-
-        Project singleVisible = new Project();
-        singleVisible.setProjectName("SoloPlace");
-        singleVisible.setGroup(MaritalStatus.SINGLE);
-        singleVisible.setVisibility(true);
-
-        Project marriedHidden = new Project();
-        marriedHidden.setProjectName("SecretMarried");
-        marriedHidden.setGroup(MaritalStatus.MARRIED);
-        marriedHidden.setVisibility(false);
-
-        projectRepo.save(marriedVisible);
-        projectRepo.save(singleVisible);
-        projectRepo.save(marriedHidden);
-
-        List<Project> result = projectRepo.findByMaritalStatusAndVisibility(MaritalStatus.MARRIED, true);
-        assertEquals(1, result.size());
-        assertEquals("SkyView", result.get(0).getProjectName());
-    }
-
-    @Test
-    public void testFindByVisibility() {
-        Project visible1 = new Project();
-        visible1.setProjectName("Open1");
-        visible1.setVisibility(true);
-
-        Project visible2 = new Project();
-        visible2.setProjectName("Open2");
-        visible2.setVisibility(true);
-
-        Project hidden = new Project();
-        hidden.setProjectName("HiddenGem");
-        hidden.setVisibility(false);
-
-        projectRepo.save(visible1);
-        projectRepo.save(visible2);
-        projectRepo.save(hidden);
-
-        List<Project> visibleProjects = projectRepo.findByVisibility(true);
-        assertEquals(2, visibleProjects.size());
-        assertTrue(visibleProjects.stream().anyMatch(p -> p.getProjectName().equals("Open1")));
-        assertTrue(visibleProjects.stream().anyMatch(p -> p.getProjectName().equals("Open2")));
-
-        List<Project> hiddenProjects = projectRepo.findByVisibility(false);
-        assertEquals(1, hiddenProjects.size());
-        assertEquals("HiddenGem", hiddenProjects.get(0).getProjectName());
+    public void testDecrementFlatCount_flatTypeNotPresent() {
+        Project project = new Project(); // no flats at all
+        assertThrows(IllegalArgumentException.class, () -> project.decrementFlatCount(FlatType._2ROOM));
     }
 }

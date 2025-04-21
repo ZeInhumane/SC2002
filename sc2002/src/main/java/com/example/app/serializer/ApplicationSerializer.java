@@ -20,7 +20,7 @@ public class ApplicationSerializer implements Serializer<Application> {
 
     @Override
     public Application deserialize(String data) throws RuntimeException {
-        String[] parts = data.split(",");
+        String[] parts = data.split(",", -1);
         return new Application(
             Integer.parseInt(parts[0].trim()),
             Integer.parseInt(parts[1].trim()),

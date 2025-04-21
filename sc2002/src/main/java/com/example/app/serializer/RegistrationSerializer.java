@@ -22,7 +22,7 @@ public class RegistrationSerializer implements Serializer<Registration> {
 
     @Override
     public Registration deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",");
+        String[] parts = inputLine.split(",", -1);
         if (parts.length != 4) {
             return null;
         }

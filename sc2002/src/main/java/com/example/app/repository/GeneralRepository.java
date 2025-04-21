@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.example.app.Settings;
 import com.example.app.models.BaseEntity;
 import com.example.app.serializer.Serializer;
 
@@ -13,7 +14,19 @@ public class GeneralRepository<T extends BaseEntity> {
 
     public GeneralRepository(Serializer<T> serializer, String filePath) {
         this.serializer = serializer;
-        this.filePath = filePath;
+        this.filePath = Settings.DB_PATH + filePath;
+
+        // Ensure file exists
+        File file = new File(this.filePath);
+        try {
+            File parent = file.getParentFile();
+            if (parent != null) {
+                parent.mkdirs(); // create directories if needed
+            }
+            file.createNewFile(); // create file if not exists
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize repository file: " + this.filePath, e);
+        }
     }
 
     public T save(T entity) throws IOException {
@@ -51,6 +64,12 @@ public class GeneralRepository<T extends BaseEntity> {
         HashMap<Integer, T> all = findAllAsMap();
         all.remove(id);
         overwriteFile(all);
+    }
+
+    public void deleteAll() throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write("");
+        }
     }
 
     private HashMap<Integer, T> findAllAsMap() throws IOException {

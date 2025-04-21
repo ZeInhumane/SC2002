@@ -7,8 +7,8 @@ public class EnquirySerializer implements Serializer<Enquiry> {
     @Override
     public String serialize(Enquiry enquiry) {
 
-        Integer questionCommas = enquiry.getQuestion().split(",").length;
-        Integer responseCommas = enquiry.getResponse() == null ? 0 : enquiry.getResponse().split(",").length;
+        Integer questionCommas = enquiry.getQuestion().split(",", -1).length;
+        Integer responseCommas = enquiry.getResponse() == null ? 0 : enquiry.getResponse().split(",", -1).length;
         return String.format("%d,%d,%d,%d,%s,%s,%d,%s",
                 enquiry.getId(),
                 enquiry.getEnquirerId(),
@@ -23,7 +23,7 @@ public class EnquirySerializer implements Serializer<Enquiry> {
 
     @Override
     public Enquiry deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",");
+        String[] parts = inputLine.split(",", -1);
         Enquiry enquiry = new Enquiry();
         enquiry.setId(Integer.parseInt(parts[0]));
         enquiry.setEnquirerId(Integer.parseInt(parts[1]));

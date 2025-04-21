@@ -28,6 +28,7 @@ public class Project implements BaseEntity {
 
     public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
             Integer managerId, Boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flatCount) {
+        this.id = id;
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
         this.applicationCloseDate = applicationCloseDate;
@@ -80,11 +81,11 @@ public class Project implements BaseEntity {
         this.neighborhood = neighborhood;
     }
 
-    public void addMaritalStatus(MaritalStatus group) {
+    public void addMaritalStatus(MaritalStatus group) throws UnsupportedOperationException{
         this.groups.add(group);
     }
 
-    public void removeMaritalStatus(MaritalStatus group) {
+    public void removeMaritalStatus(MaritalStatus group) throws UnsupportedOperationException {
         this.groups.remove(group);
     }
 
@@ -112,7 +113,7 @@ public class Project implements BaseEntity {
         this.managerId = managerId;
     }
 
-    public void decrementFlatCount(FlatType flatType) {
+    public void decrementFlatCount(FlatType flatType) throws UnsupportedOperationException {
         if (!flatCount.containsKey(flatType)) {
             throw new IllegalArgumentException("Flat type " + flatType + " is not available in this project.");
         }
@@ -121,7 +122,6 @@ public class Project implements BaseEntity {
         if (currentCount <= 0) {
             throw new IllegalStateException("No flats of type " + flatType + " are left to allocate.");
         }
-
         flatCount.put(flatType, currentCount - 1);
     }
 

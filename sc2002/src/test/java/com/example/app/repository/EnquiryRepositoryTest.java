@@ -1,84 +1,86 @@
 package com.example.app.repository;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.app.models.Enquiry;
 import org.junit.jupiter.api.Test;
 
-import com.example.app.models.Enquiry;
+import java.io.IOException;
+import java.util.List;
 
-public class EnquiryRepositoryTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private EnquiryRepository enquiryRepo;
+public class EnquiryRepositoryTest extends GeneralRepositoryTestBase<Enquiry> {
 
-    @BeforeEach
-    public void setup() {
-        enquiryRepo = new EnquiryRepository();
+    private final EnquiryRepository enquiryRepository = new EnquiryRepository();
 
-        // Populate with sample data
-        enquiryRepo.save(new Enquiry("Q1", "R1", 101, 1, 10));
-        enquiryRepo.save(new Enquiry("Q2", "R2", 102, 2, 10));
-        enquiryRepo.save(new Enquiry("Q3", "R3", 101, 3, 11));
-        enquiryRepo.save(new Enquiry("Q4", "R4", 103, 1, 12));
+    @Override
+    protected GeneralRepository<Enquiry> getRepository() {
+        return enquiryRepository;
+    }
+
+    @Override
+    protected List<Enquiry> createSampleEntities() {
+        return List.of(
+                new Enquiry(null, "When is the project open? I have heard they are open next month, but I am not quite sure,,,", 101, 1),
+                new Enquiry(null, "How many units left?", 101, 2),
+                new Enquiry(null, "Is this project near MRT?", 102, 1)
+        );
+    }
+
+    @Override
+    protected List<Enquiry> saveSampleEntities() throws IOException {
+        List<Enquiry> enquiries = createSampleEntities();
+        for (Enquiry e : enquiries) {
+            enquiryRepository.save(e);
+        }
+
+        // Simulate replies (optional)
+        enquiries.get(0).setResponse("It opens next month.");
+        enquiries.get(0).setReplierId(10);
+        enquiryRepository.save(enquiries.get(0));
+
+        enquiries.get(1).setResponse("Only 5 left.");
+        enquiries.get(1).setReplierId(10);
+        enquiryRepository.save(enquiries.get(1));
+
+        return enquiries;
     }
 
     @Test
-    public void testFindByEnquirerId() {
-        List<Enquiry> result = enquiryRepo.findByEnquirerId(1);
-        assertEquals(2, result.size());
-        assertTrue(result.stream().allMatch(e -> e.getEnquirerId() == 1));
+    public void testFindByEnquirerId() throws IOException {
+        saveSampleEntities();
+
+        List<Enquiry> byUser1 = enquiryRepository.findByEnquirerId(1);
+        assertEquals(2, byUser1.size());
+
+        List<Enquiry> byUser2 = enquiryRepository.findByEnquirerId(2);
+        assertEquals(1, byUser2.size());
+
+        List<Enquiry> notFound = enquiryRepository.findByEnquirerId(999);
+        assertTrue(notFound.isEmpty());
     }
 
     @Test
-    public void testFindByReplierId() {
-        List<Enquiry> result = enquiryRepo.findByReplierId(10);
-        assertEquals(2, result.size());
-        assertTrue(result.stream().allMatch(e -> e.getReplierId() == 10));
+    public void testFindByReplierId() throws IOException {
+        saveSampleEntities();
+
+        List<Enquiry> byReplier10 = enquiryRepository.findByReplierId(10);
+        assertEquals(2, byReplier10.size());
+
+        List<Enquiry> byReplier999 = enquiryRepository.findByReplierId(999);
+        assertTrue(byReplier999.isEmpty());
     }
 
     @Test
-    public void testFindByProjectId() {
-        List<Enquiry> result = enquiryRepo.findByProjectId(101);
-        assertEquals(2, result.size());
-        assertTrue(result.stream().allMatch(e -> e.getProjectId() == 101));
-    }
+    public void testFindByProjectId() throws IOException {
+        saveSampleEntities();
 
-    @Test
-    public void testEnquiryConstructorAndGetters() {
-        Enquiry enquiry = new Enquiry("When is the launch?", "Next month", 105, 5, 6);
+        List<Enquiry> forProject101 = enquiryRepository.findByProjectId(101);
+        assertEquals(2, forProject101.size());
 
-        assertEquals("When is the launch?", enquiry.getQuestion());
-        assertEquals("Next month", enquiry.getResponse());
-        assertEquals(105, enquiry.getProjectId());
-        assertEquals(5, enquiry.getEnquirerId());
-        assertEquals(6, enquiry.getReplierId());
-        assertTrue(enquiry.getId() > 0); // ID should be auto-generated
-    }
+        List<Enquiry> forProject102 = enquiryRepository.findByProjectId(102);
+        assertEquals(1, forProject102.size());
 
-    @Test
-    public void testSetters() {
-        Enquiry enquiry = new Enquiry();
-
-        enquiry.setQuestion("Updated question?");
-        enquiry.setResponse("Updated response.");
-        enquiry.setProjectId(200);
-        enquiry.setEnquirerId(3);
-        enquiry.setReplierId(4);
-
-        assertEquals("Updated question?", enquiry.getQuestion());
-        assertEquals("Updated response.", enquiry.getResponse());
-        assertEquals(200, enquiry.getProjectId());
-        assertEquals(3, enquiry.getEnquirerId());
-        assertEquals(4, enquiry.getReplierId());
-    }
-
-    @Test
-    public void testAutoIncrementedId() {
-        Enquiry e1 = new Enquiry();
-        Enquiry e2 = new Enquiry();
-
-        assertTrue(e2.getId() > e1.getId());
+        List<Enquiry> forProject999 = enquiryRepository.findByProjectId(999);
+        assertTrue(forProject999.isEmpty());
     }
 }

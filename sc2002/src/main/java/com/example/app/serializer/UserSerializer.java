@@ -9,6 +9,8 @@ import com.example.app.models.Manager;
 import com.example.app.models.Officer;
 import com.example.app.models.User;
 
+import java.util.Arrays;
+
 public class UserSerializer implements Serializer<User>{
 
     @Override
@@ -46,7 +48,7 @@ public class UserSerializer implements Serializer<User>{
 
     @Override
     public User deserialize(String inputLine) throws RuntimeException{
-        String[] parts = inputLine.split(",");
+        String[] parts = inputLine.split(",", -1);
 
         Role role = Role.valueOf(parts[4].trim());
 
@@ -73,7 +75,7 @@ public class UserSerializer implements Serializer<User>{
                 );
             }
             case MANAGER -> {
-                Manager manager = new Manager(
+                return new Manager(
                         Integer.valueOf(parts[0].trim()),
                         parts[1].trim(),
                         parts[2].trim(),
@@ -113,6 +115,5 @@ public class UserSerializer implements Serializer<User>{
                 );
             }
         }
-        return null;
     }
 }
