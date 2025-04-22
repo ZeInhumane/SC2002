@@ -4,7 +4,6 @@ import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.Role;
 
 public class Applicant extends User {
-
     private FlatType flatType;
     private Integer applicationId;
 
@@ -35,7 +34,7 @@ public class Applicant extends User {
     }
 
     @Override
-    public String toDisplay() {
+    public String toString() {
         return String.format("""
                 [Applicant ID: %d]
                 Name: %s

@@ -5,9 +5,6 @@ import java.util.*;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
-import com.example.app.repository.ProjectRepository;
-
-
 
 public interface ProjectService {
 

@@ -7,7 +7,6 @@ import com.example.app.models.Applicant;
 import com.example.app.models.Application;
 import com.example.app.models.Enquiry;
 import com.example.app.models.Project;
-import com.example.app.repository.UserRepository;
 import com.example.app.service.ApplicantService;
 import com.example.app.service.ApplicationService;
 import com.example.app.service.EnquiryService;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantService {
-
     static ProjectService projectService = new ProjectServiceImpl();
     static ApplicationService applicationService = new ApplicationServiceImpl();
     static EnquiryService enquiryService = new EnquiryServiceImpl();
@@ -27,7 +25,6 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     public Project viewAppliedProjects(Applicant applicant) throws IOException, NullPointerException {
-
         Application application = applicationService.findById(applicant.getApplicationId());
         if (application == null) {
             return null;
@@ -35,7 +32,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return projectService.findById(application.getProjectId());
     }
 
-    public Applicant applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
+    public Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " does not exist.");
@@ -46,21 +43,21 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         }
 
         List<FlatType> eligibleTypes = getEligibleFlatTypesForProject(applicant, projectId);
+        System.err.println("Eligible types: " + eligibleTypes);
+        System.err.println(preferredFlatType);
         if (!eligibleTypes.contains(preferredFlatType)) {
             throw new IllegalArgumentException("You are not eligible for the selected flat type.");
         }
 
         if (!isAbleToApply(applicant)) {
-            throw new IllegalArgumentException("You are not eligible to apply for a new project.");
+            throw new IllegalArgumentException("You are not eligible to apply for this project.");
         }
-
         Application application = applicationService.applyForProject(applicant.getId(), projectId, preferredFlatType);
         applicant.setApplicationId(application.getId());
         applicant.setFlatType(preferredFlatType);
-        return (Applicant) this.save(applicant);
+        this.save(applicant);
+        return application;
     }
-
-
 
     public Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException{
         if (applicant.getApplicationId() == null) {
@@ -97,10 +94,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return applicationService.save(application);
     }
 
-
     // Submit enquiry (stores ID back to user profile)
     public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
-
         return enquiryService.submitEnquiry(question, projectId, applicant.getId());
     }
 
@@ -111,10 +106,9 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     // Edit enquiry (if it belongs to this user)
     public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
-
         Enquiry enquiry = enquiryService.findById(enquiryId);
 
-        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId())) {
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId()) || !enquiry.getResponse().isEmpty()) {
             throw new IllegalArgumentException("You do not have permission to edit this enquiry.");
         }
 

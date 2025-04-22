@@ -1,5 +1,6 @@
 package com.example.app.service.impl;
 
+import com.example.app.RuntimeData;
 import com.example.app.models.User;
 import com.example.app.repository.RepositoryDependency;
 import com.example.app.repository.UserRepository;
@@ -10,19 +11,19 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = RepositoryDependency.getUserRepository();
 
+    // singleton pattern
+    private static UserServiceImpl instance;
+    protected UserServiceImpl() {}
+    public static UserServiceImpl getInstance() {
+        return instance == null ? instance = new UserServiceImpl() : instance;
+    }
+
     public User login(String nirc, String password) throws IOException {
         User user = userRepository.findByNric(nirc);
-        if (user == null) {
-            System.out.println("User not found");
-            return user;
-        }
         if (user.getPassword().equals(password)) {
-            System.out.println("Login successful");
+            RuntimeData.setCurrentUser(user);
             return user;
-        } else {
-            System.out.println("Invalid password");
-            return null;
-        }
+        } else return null;
     }
 
     public User changePassword(User user, String newPassword) throws IOException {

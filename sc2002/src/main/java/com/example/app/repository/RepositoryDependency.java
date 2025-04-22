@@ -1,7 +1,6 @@
 package com.example.app.repository;
 
 public class RepositoryDependency {
-
     private static final UserRepository userRepository = new UserRepository();
     private static final RegistrationRepository registrationRepository = new RegistrationRepository();
     private static final ProjectRepository projectRepository = new ProjectRepository();

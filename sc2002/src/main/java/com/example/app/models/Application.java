@@ -75,7 +75,7 @@ public class Application implements BaseEntity {
     }
 
     @Override
-    public String toDisplay() {
+    public String toString() {
         return String.format("""
             [Application Id: %s]
             Project (%s):

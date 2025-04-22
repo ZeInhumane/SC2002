@@ -3,7 +3,6 @@ package com.example.app.service;
 import java.io.IOException;
 import java.util.*;
 
-import com.example.app.enums.ApplicationStatus;
 import com.example.app.models.*;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;

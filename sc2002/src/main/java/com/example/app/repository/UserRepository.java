@@ -7,7 +7,6 @@ import com.example.app.serializer.SerializerDependency;
 
 
 public class UserRepository extends GeneralRepository<User> {
-
     public UserRepository() {
         super(SerializerDependency.getUserSerializer(), "users.txt");
     }

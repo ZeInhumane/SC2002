@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.example.app.models.Registration;
 import com.example.app.enums.RegistrationStatus;
-import com.example.app.repository.RegistrationRepository;
 
 public interface RegistrationService {
 

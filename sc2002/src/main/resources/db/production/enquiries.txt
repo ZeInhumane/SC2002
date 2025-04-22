@@ -1,3 +1,4 @@
-221459,2,101,1,How many units left?,10,1,Only 5 left.
-813249,1,101,5,When is the project open? I have heard they are open next month, but I am not quite sure,,,,10,1,It opens next month.
-950464,1,102,1,Is this project near MRT?,,1,
+762441,1,101,2,When is the project open? I have heard they are open next month, but I am not quite sure...,10,1,It opens next month.
+107225,2,101,1,How many units left?,10,1,Only 5 left.
+961413,1,102,1,Is this project near MRT?,,1,
+680021,889297,44739,2,hello, im testing,,0,

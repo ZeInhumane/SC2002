@@ -26,8 +26,8 @@ public class ProjectRepository extends GeneralRepository<Project> {
             MaritalStatus status, boolean visibility, Date date) throws IOException {
         return this.findAll().stream()
                 .filter(p -> p.getGroups().contains(status) && Objects.equals(p.getVisibility(), visibility)
-                        && p.getApplicationOpenDate().compareTo(date) >= 0
-                        && p.getApplicationCloseDate().compareTo(date) <= 0)
+                        && p.getApplicationOpenDate().compareTo(date) <= 0
+                        && p.getApplicationCloseDate().compareTo(date) >= 0)
                 .collect(Collectors.toList());
     }
 

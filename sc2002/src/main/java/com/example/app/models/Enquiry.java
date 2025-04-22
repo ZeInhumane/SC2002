@@ -70,7 +70,7 @@ public class Enquiry implements BaseEntity {
     }
 
     @Override
-    public String toDisplay() {
+    public String toString() {
         return String.format("""
                 Question: %s
                 Response: %s

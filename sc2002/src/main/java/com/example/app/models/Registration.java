@@ -34,7 +34,7 @@ public class Registration implements BaseEntity{
     public void setStatus(RegistrationStatus status) { this.status = status; }
 
     @Override
-    public String toDisplay() {
+    public String toString() {
         return String.format("""
                 [Registration Id: %s]
                 Project (%s):

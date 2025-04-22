@@ -6,7 +6,6 @@ import com.example.app.models.Applicant;
 import com.example.app.models.Manager;
 import com.example.app.models.Officer;
 import com.example.app.models.User;
-import com.example.app.serializer.UserSerializer;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

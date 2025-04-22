@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.app.models.Enquiry;
-import com.example.app.repository.EnquiryRepository;
 
 public interface EnquiryService {
-
     // Get single enquiry
     Enquiry findById(Integer id) throws IOException;
 
@@ -35,7 +33,5 @@ public interface EnquiryService {
 
     // for applicant to delete enquiry
     void deleteEnquiry(Integer id) throws IOException;
-
-
 }
 

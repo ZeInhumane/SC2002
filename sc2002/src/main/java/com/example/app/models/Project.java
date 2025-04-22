@@ -138,7 +138,7 @@ public class Project implements BaseEntity {
     }
 
     @Override
-    public String toDisplay() {
+    public String toString() {
         return String.format("""
                 ----------------------------------------
                 [Project Id: %s]

@@ -1,18 +1,11 @@
 package com.example.app.service;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import com.example.app.models.Applicant;
 import com.example.app.models.Application;
-import com.example.app.enums.ApplicationStatus;
 import com.example.app.models.Enquiry;
-import com.example.app.enums.FlatType;
 import com.example.app.models.Officer;
 import com.example.app.models.Registration;
-import com.example.app.models.User;
 import com.example.app.models.Project;
 
 public interface OfficerService extends ApplicantService {

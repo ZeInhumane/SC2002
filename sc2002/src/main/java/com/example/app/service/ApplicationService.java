@@ -1,16 +1,11 @@
 package com.example.app.service;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import com.example.app.enums.FlatType;
 import com.example.app.models.Application;
 import com.example.app.enums.ApplicationStatus;
-import com.example.app.repository.ApplicationRepository;
 
 public interface ApplicationService {
-
     // Apply for a flat
     Application applyForProject(int applicantId, int projectId, FlatType flatType) throws IOException;
 
