@@ -3,6 +3,7 @@ package com.example.app.serializer;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.RegistrationStatus;
+import com.example.app.exceptions.DataParsingException;
 import com.example.app.models.Project;
 import com.example.app.models.Registration;
 
@@ -13,12 +14,14 @@ import java.util.*;
 
 public class ProjectSerializer implements Serializer<Project> {
 
+    private StringSerializer stringSerializer = SerializerDependency.getStringSerializer();
+
     @Override
     public String serialize(Project project) {
         StringBuilder result = new StringBuilder();
         result.append(String.format("%d,%s,%s,%s,%s,%d,%b",
                 project.getId(),
-                project.getProjectName(),
+                stringSerializer.serialize(project.getProjectName()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationOpenDate()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()),
                 project.getNeighborhood(),
@@ -37,32 +40,31 @@ public class ProjectSerializer implements Serializer<Project> {
     }
 
     @Override
-    public Project deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",", -1);
-        Integer id = Integer.parseInt(parts[0].trim());
-        String projectName = parts[1].trim();
+    public Project deserialize(LinkedList<String> parts) throws DataParsingException {
+        Integer id = Integer.parseInt(parts.removeFirst());
+        String projectName = stringSerializer.deserialize(parts);
         Date applicationOpenDate;
         Date applicationCloseDate;
         try {
-            applicationOpenDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[2].trim());
-            applicationCloseDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[3].trim());
+            applicationOpenDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts.removeFirst().trim());
+            applicationCloseDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts.removeFirst().trim());
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
-        String neighborhood = parts[4].trim();
-        Integer managerId = Integer.parseInt(parts[5].trim());
-        Boolean visibility = Boolean.parseBoolean(parts[6].trim());
-        int groupCount = Integer.parseInt(parts[7].trim());
+        String neighborhood = parts.removeFirst().trim();
+        Integer managerId = Integer.parseInt(parts.removeFirst().trim());
+        Boolean visibility = Boolean.parseBoolean(parts.removeFirst().trim());
+        int groupCount = Integer.parseInt(parts.removeFirst().trim());
         Set<MaritalStatus> group = new HashSet<>();
         for (int i = 0; i < groupCount; i++) {
-            group.add(MaritalStatus.valueOf(parts[8 + i].trim()));
+            group.add(MaritalStatus.valueOf(parts.removeFirst().trim()));
         }
-        int flatCountEntries = Integer.parseInt(parts[8 + groupCount].trim());
+        int flatCountEntries = Integer.parseInt(parts.removeFirst().trim());
         Map<FlatType, Integer> flatCount = new HashMap<>();
 
         for (int i = 0; i < flatCountEntries; i++) {
-            String[] flatParts = parts[9 + groupCount + i].split(":");
+            String[] flatParts = parts.removeFirst().split(":");
             FlatType flatType = FlatType.valueOf(flatParts[0].trim());
             Integer count = Integer.parseInt(flatParts[1].trim());
             flatCount.put(flatType, count);

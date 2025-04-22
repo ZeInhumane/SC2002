@@ -3,16 +3,18 @@ package com.example.app.serializer;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.RegistrationStatus;
 import com.example.app.enums.Role;
+import com.example.app.exceptions.DataParsingException;
 import com.example.app.models.Registration;
 import com.example.app.models.User;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class RegistrationSerializer implements Serializer<Registration> {
 
     @Override
     public String serialize(Registration registration) {
-        return String.format("%d, %d, %d, %s",
+        return String.format("%d,%d,%d,%s",
                 registration.getId(),
                 registration.getUserId(),
                 registration.getProjectId(),
@@ -21,16 +23,12 @@ public class RegistrationSerializer implements Serializer<Registration> {
     }
 
     @Override
-    public Registration deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",", -1);
-        if (parts.length != 4) {
-            return null;
-        }
+    public Registration deserialize(LinkedList<String> parts) throws DataParsingException {
         return new Registration(
-                Integer.parseInt(parts[0].trim()),
-                Integer.parseInt(parts[1].trim()),
-                Integer.parseInt(parts[2].trim()),
-                RegistrationStatus.valueOf(parts[3].trim())
+                Integer.parseInt(parts.removeFirst().trim()),
+                Integer.parseInt(parts.removeFirst().trim()),
+                Integer.parseInt(parts.removeFirst().trim()),
+                RegistrationStatus.valueOf(parts.removeFirst().trim())
         );
     }
 }

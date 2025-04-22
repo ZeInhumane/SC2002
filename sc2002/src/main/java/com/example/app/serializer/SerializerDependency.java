@@ -2,6 +2,7 @@ package com.example.app.serializer;
 
 public class SerializerDependency {
 
+    private static final StringSerializer stringSerializer = new StringSerializer();
     private static final UserSerializer userSerializer = new UserSerializer();
     private static final RegistrationSerializer registrationSerializer = new RegistrationSerializer();
     private static final ProjectSerializer projectSerializer = new ProjectSerializer();
@@ -26,5 +27,9 @@ public class SerializerDependency {
 
     public static ApplicationSerializer getApplicationSerializer() {
         return applicationSerializer;
+    }
+
+    public static StringSerializer getStringSerializer() {
+        return stringSerializer;
     }
 }

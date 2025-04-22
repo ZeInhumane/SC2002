@@ -35,9 +35,9 @@ public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
         calendar.add(Calendar.DAY_OF_MONTH, 30);
         Date futureDate = calendar.getTime();
 
-        Project project1 = new Project(null, "Sunshine Grove", today, futureDate, "Tampines", 101, true, groups1, flats1);
+        Project project1 = new Project(null, "Sunshine, Grove", today, futureDate, "Tampines", 101, true, groups1, flats1);
         Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, groups2, flats2);
-        Project project3 = new Project(null, "Skyline Heights", today, futureDate, "Jurong", 103, true, groups3, flats3);
+        Project project3 = new Project(null, "Skyline Heights,", today, futureDate, "Jurong", 103, true, groups3, flats3);
 
         return List.of(project1, project2, project3);
     }

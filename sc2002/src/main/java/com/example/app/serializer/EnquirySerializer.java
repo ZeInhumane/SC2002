@@ -1,52 +1,38 @@
 package com.example.app.serializer;
 
+import com.example.app.exceptions.DataParsingException;
 import com.example.app.models.Enquiry;
 
+import java.util.LinkedList;
+import java.util.Optional;
+
 public class EnquirySerializer implements Serializer<Enquiry> {
+
+    private StringSerializer stringSerializer = SerializerDependency.getStringSerializer();
 
     @Override
     public String serialize(Enquiry enquiry) {
 
-        Integer questionCommas = enquiry.getQuestion().split(",", -1).length;
         Integer responseCommas = enquiry.getResponse() == null ? 0 : enquiry.getResponse().split(",", -1).length;
-        return String.format("%d,%d,%d,%d,%s,%s,%d,%s",
+        return String.format("%d,%d,%d,%s,%s,%s",
                 enquiry.getId(),
                 enquiry.getEnquirerId(),
                 enquiry.getProjectId(),
-                questionCommas,
-                enquiry.getQuestion(),
+                stringSerializer.serialize(enquiry.getQuestion()),
                 enquiry.getReplierId() == null ? "" : enquiry.getReplierId().toString(),
-                responseCommas,
-                enquiry.getResponse( ) == null ? "" : enquiry.getResponse()
+                stringSerializer.serialize(enquiry.getResponse())
         );
     }
 
     @Override
-    public Enquiry deserialize(String inputLine) throws RuntimeException {
-        String[] parts = inputLine.split(",", -1);
+    public Enquiry deserialize(LinkedList<String> parts) throws DataParsingException {
         Enquiry enquiry = new Enquiry();
-        enquiry.setId(Integer.parseInt(parts[0]));
-        enquiry.setEnquirerId(Integer.parseInt(parts[1]));
-        enquiry.setProjectId(Integer.parseInt(parts[2]));
-        int questionCommas = Integer.parseInt(parts[3]);
-        StringBuilder question = new StringBuilder();
-        for (int i = 4; i < 4 + questionCommas; i++) {
-            question.append(parts[i]);
-            if (i != 4 + questionCommas - 1) {
-                question.append(",");
-            }
-        }
-        enquiry.setQuestion(question.toString());
-        enquiry.setReplierId(parts[4 + questionCommas].isEmpty() ? null : Integer.parseInt(parts[4 + questionCommas]));
-        int responseCommas = Integer.parseInt(parts[5 + questionCommas]);
-        StringBuilder response = new StringBuilder();
-        for (int i = 6 + questionCommas; i < 6 + questionCommas + responseCommas; i++) {
-            response.append(parts[i]);
-            if (i != 6 + questionCommas + responseCommas - 1) {
-                response.append(",");
-            }
-        }
-        enquiry.setResponse(response.toString());
+        enquiry.setId(Integer.parseInt(parts.removeFirst().trim()));
+        enquiry.setEnquirerId(Integer.parseInt(parts.removeFirst().trim()));
+        enquiry.setProjectId(Integer.parseInt(parts.removeFirst().trim()));
+        enquiry.setQuestion(stringSerializer.deserialize(parts));
+        enquiry.setReplierId(parseIntOrNull(parts.removeFirst()));
+        enquiry.setResponse(stringSerializer.deserialize(parts));
         return enquiry;
     }
 

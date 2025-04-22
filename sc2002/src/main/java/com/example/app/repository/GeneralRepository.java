@@ -47,7 +47,8 @@ public class GeneralRepository<T extends BaseEntity> {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                result.add(serializer.deserialize(line));
+                LinkedList<String> parts = new LinkedList<>(Arrays.asList(line.split(",", -1)));
+                result.add(serializer.deserialize(parts));
             }
         }
         return result;
