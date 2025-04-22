@@ -20,7 +20,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
 
     // Allow manager to create project
     public Project createProject(Manager manager, String projectName, Date applicationOpenDate,
-            Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
+            Date applicationCloseDate, String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
 
         // Check if the project dates overlap with existing projects
@@ -29,7 +29,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         }
 
         return projectService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood,
-                manager.getId(), visibility, groups, flats);
+                manager.getId(), visibility, officerLimit, officers, groups, flats);
     }
 
     // Allow manager to edit project
@@ -97,10 +97,11 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
             throw new IllegalArgumentException("User ID " + registration.getUserId() + " not found.");
         }
 
-        registrationService.changeStatus(registrationId, status);
         if (status == RegistrationStatus.APPROVED) {
+            projectService.addOfficer(registration.getProjectId(), officer.getId());
             officer.setProjectId(registration.getProjectId());
         }
+        registrationService.changeStatus(registrationId, status);
         officerService.save(officer);
     }
 

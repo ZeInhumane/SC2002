@@ -33,13 +33,15 @@ public interface ProjectService {
 
     // for manager to create a new project
     Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
-            int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
+            int managerId, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
             throws IOException;
 
     // for manager to update project
     Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate,
             String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException;
+
+    Project addOfficer(int projectId, int officerId) throws IOException;
 
     Project decrementFlatCount(int projectId, FlatType flatType) throws IOException;
 

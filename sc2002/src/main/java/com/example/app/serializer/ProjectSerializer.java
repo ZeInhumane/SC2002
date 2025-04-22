@@ -30,11 +30,17 @@ public class ProjectSerializer implements Serializer<Project> {
     @Override
     public String serialize(Project project) {
         StringBuilder result = new StringBuilder();
-        result.append(String.format("%d,%s,%s,%s,%s,%d,%b", project.getId(),
+        result.append(String.format("%d,%s,%s,%s,%s,%d,%b,%d", project.getId(),
                 stringSerializer.serialize(project.getProjectName()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationOpenDate()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()), project.getNeighborhood(),
-                project.getManagerId(), project.getVisibility()));
+                project.getManagerId(), project.getVisibility(), project.getOfficerLimit()));
+
+        result.append(",").append(project.getOfficers().size());
+        for (Integer officerId : project.getOfficers()) {
+            result.append(",").append(officerId);
+        }
+
         result.append(",").append(project.getGroups().size());
         for (MaritalStatus group : project.getGroups()) {
             result.append(",").append(group.toString());
@@ -69,6 +75,13 @@ public class ProjectSerializer implements Serializer<Project> {
         String neighborhood = parts.removeFirst().trim();
         Integer managerId = Integer.parseInt(parts.removeFirst().trim());
         Boolean visibility = Boolean.parseBoolean(parts.removeFirst().trim());
+        Integer officerLimit = Integer.parseInt(parts.removeFirst().trim());
+        int officerCount = Integer.parseInt(parts.removeFirst().trim());
+        Set<Integer> officers = new HashSet<>();
+        for (int i = 0; i < officerCount; i++) {
+            officers.add(Integer.parseInt(parts.removeFirst().trim()));
+        }
+
         int groupCount = Integer.parseInt(parts.removeFirst().trim());
         Set<MaritalStatus> group = new HashSet<>();
         for (int i = 0; i < groupCount; i++) {
@@ -85,6 +98,6 @@ public class ProjectSerializer implements Serializer<Project> {
         }
 
         return new Project(id, projectName, applicationOpenDate, applicationCloseDate, neighborhood, managerId,
-                visibility, group, flatCount);
+                visibility, officerLimit, officers, group, flatCount);
     }
 }

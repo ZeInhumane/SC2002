@@ -58,10 +58,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     // Create Project For managers
     public Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate,
-            String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups,
+            String neighborhood, int managerId, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
         Project project = new Project(null, projectName, stripTime(applicationOpenDate),
-                stripTime(applicationCloseDate), neighborhood, managerId, visibility, groups, flats);
+                stripTime(applicationCloseDate), neighborhood, managerId, visibility, officerLimit, officers, groups, flats);
         return projectRepository.save(project);
     }
 
@@ -81,6 +81,26 @@ public class ProjectServiceImpl implements ProjectService {
         project.setVisibility(visibility);
         project.setGroups(groups);
         project.setFlats(flats);
+
+        return projectRepository.save(project);
+    }
+
+    public Project addOfficer(int projectId, int officerId) throws IOException {
+        Project project = projectRepository.findById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
+        }
+
+        Set<Integer> officers = project.getOfficers();
+        if (officers == null) {
+            officers = new HashSet<>();
+        }
+
+        if (officers.size() >= project.getOfficerLimit()) {
+            throw new IllegalArgumentException("Officer limit reached for this project.");
+        }
+        officers.add(officerId);
+        project.setOfficers(officers);
 
         return projectRepository.save(project);
     }

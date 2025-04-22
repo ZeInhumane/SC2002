@@ -21,6 +21,9 @@ public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
 
     @Override
     protected List<Project> createSampleEntities() {
+
+        Set<Integer> officers = new HashSet<>(Set.of(1, 2, 3));
+
         Set<MaritalStatus> groups1 = new HashSet<>(Set.of(MaritalStatus.SINGLE, MaritalStatus.MARRIED));
         Map<FlatType, Integer> flats1 = new HashMap<>(Map.of(FlatType._2ROOM, 10, FlatType._3ROOM, 5));
 
@@ -35,10 +38,10 @@ public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
         calendar.add(Calendar.DAY_OF_MONTH, 60);
         Date futureDate = calendar.getTime();
 
-        Project project1 = new Project(null, "Sunshine, Grove", today, futureDate, "Tampines", 101, true, groups1,
+        Project project1 = new Project(null, "Sunshine, Grove", today, futureDate, "Tampines", 101, true, 10, officers, groups1,
                 flats1);
-        Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, groups2, flats2);
-        Project project3 = new Project(null, "Skyline Heights,", today, futureDate, "Jurong", 103, true, groups3,
+        Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, 3, officers, groups2, flats2);
+        Project project3 = new Project(null, "Skyline Heights,", today, futureDate, "Jurong", 103, true, 4, officers, groups3,
                 flats3);
 
         return List.of(project1, project2, project3);
