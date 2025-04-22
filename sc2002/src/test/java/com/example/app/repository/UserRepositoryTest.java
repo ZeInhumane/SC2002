@@ -25,9 +25,12 @@ public class UserRepositoryTest extends GeneralRepositoryTestBase<User> {
     @Override
     protected List<User> createSampleEntities() {
 
-        Applicant testApplicant = new Applicant(null, "Alice", "pass123", "alice@example.com", Role.APPLICANT, "S1234567A", 25, MaritalStatus.SINGLE, null, null);
-        Manager testManager = new Manager(null, "Bob", "pass456", "bob@example.com",Role.MANAGER, "S7654321B", 30,MaritalStatus.MARRIED);
-        Officer testOfficer = new Officer(null, "Charlie", "pass789", "charlie@example.com", Role.OFFICER, "S9999999C", 28, MaritalStatus.SINGLE, null, null, null, null);
+        Applicant testApplicant = new Applicant(null, "Alice", "pass123", null, Role.APPLICANT,
+                "S1234567A", 25, MaritalStatus.SINGLE, null, null);
+        Manager testManager = new Manager(null, "Bob", "pass456", "bob@example.com", Role.MANAGER, "S7654321B", 30,
+                MaritalStatus.MARRIED);
+        Officer testOfficer = new Officer(null, "Charlie", "pass789", "charlie@example.com", Role.OFFICER, "S9999999C",
+                28, MaritalStatus.SINGLE, null, null, null, null);
         return List.of(testApplicant, testManager, testOfficer);
     }
 
@@ -45,11 +48,11 @@ public class UserRepositoryTest extends GeneralRepositoryTestBase<User> {
         // Save sample users
         saveSampleEntities();
         // Look up Charlie by NRIC
-        User found = userRepository.findByNric("S9999999C");
+        User found = userRepository.findByNric("S1234567A");
 
         assertNotNull(found);
-        assertEquals("Charlie", found.getName());
-        assertEquals("S9999999C", found.getNric());
-        assertEquals(Role.OFFICER, found.getRole());
+        assertEquals("Alice", found.getName());
+        assertEquals("S1234567A", found.getNric());
+        assertEquals(Role.APPLICANT, found.getRole());
     }
 }

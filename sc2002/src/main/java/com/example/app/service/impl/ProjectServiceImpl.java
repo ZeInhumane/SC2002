@@ -32,9 +32,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     // Get projects meant for applicant
     public List<Project> getPublicProjects(MaritalStatus userStatus, boolean visibility, Date date) throws IOException {
-        return projectRepository.findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(userStatus, visibility, date);
+        return projectRepository.findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(userStatus,
+                visibility, date);
     }
-
 
     // Get projects meant for applicant and officer without constraint of marital status
     public List<Project> findByVisibility(boolean visibility) throws Exception {
@@ -56,15 +56,18 @@ public class ProjectServiceImpl implements ProjectService {
         return now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0;
     }
 
-
-
     // Create Project For managers
-    public Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException {
-        Project project = new Project(null, projectName, stripTime(applicationOpenDate), stripTime(applicationCloseDate), neighborhood, managerId, visibility, groups,  flats);
+    public Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, int managerId, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException {
+        Project project = new Project(null, projectName, stripTime(applicationOpenDate),
+                stripTime(applicationCloseDate), neighborhood, managerId, visibility, officerLimit, officers, groups, flats);
         return projectRepository.save(project);
     }
 
-    public Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException {
+    public Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException {
         Project project = projectRepository.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
@@ -78,6 +81,26 @@ public class ProjectServiceImpl implements ProjectService {
         project.setVisibility(visibility);
         project.setGroups(groups);
         project.setFlats(flats);
+
+        return projectRepository.save(project);
+    }
+
+    public Project addOfficer(int projectId, int officerId) throws IOException {
+        Project project = projectRepository.findById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project with ID " + projectId + " not found.");
+        }
+
+        Set<Integer> officers = project.getOfficers();
+        if (officers == null) {
+            officers = new HashSet<>();
+        }
+
+        if (officers.size() >= project.getOfficerLimit()) {
+            throw new IllegalArgumentException("Officer limit reached for this project.");
+        }
+        officers.add(officerId);
+        project.setOfficers(officers);
 
         return projectRepository.save(project);
     }

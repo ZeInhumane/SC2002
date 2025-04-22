@@ -8,9 +8,11 @@ import java.util.List;
 
 public class Manager extends User {
 
-    public Manager() { }
+    public Manager() {
+    }
 
-    public Manager(Integer id, String username, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus) {
+    public Manager(Integer id, String username, String password, String email, Role role, String nric, int age,
+            MaritalStatus maritalStatus) {
         super(id, username, password, email, role, nric, age, maritalStatus);
     }
 

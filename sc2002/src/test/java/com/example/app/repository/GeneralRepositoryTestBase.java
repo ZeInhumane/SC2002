@@ -15,6 +15,7 @@ public abstract class GeneralRepositoryTestBase<T extends BaseEntity> {
 
     // Return multiple test entities
     protected abstract List<T> createSampleEntities();
+
     protected abstract List<T> saveSampleEntities() throws IOException;
 
     @BeforeEach

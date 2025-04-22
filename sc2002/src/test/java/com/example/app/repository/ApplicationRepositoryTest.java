@@ -21,13 +21,11 @@ public class ApplicationRepositoryTest extends GeneralRepositoryTestBase<Applica
 
     @Override
     protected List<Application> createSampleEntities() {
-        return List.of(
-                new Application(null, 1, 100, ApplicationStatus.PENDING, false, FlatType._3ROOM),
+        return List.of(new Application(null, 1, 100, ApplicationStatus.PENDING, false, FlatType._3ROOM),
                 new Application(null, 2, 100, ApplicationStatus.WITHDRAWN, true, FlatType._3ROOM),
                 new Application(null, 1, 101, ApplicationStatus.BOOKED, false, FlatType._2ROOM),
                 new Application(null, 3, 100, ApplicationStatus.PENDING, true, FlatType._2ROOM),
-                new Application(null, 2, 101, ApplicationStatus.SUCCESSFUL, false, FlatType._3ROOM)
-        );
+                new Application(null, 2, 101, ApplicationStatus.SUCCESSFUL, false, FlatType._3ROOM));
     }
 
     @Override

@@ -81,7 +81,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     // Can only apply if no app exists or the last one failed
     public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
         Application application = viewCurrentApplication(applicant);
-        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL || application.getStatus() == ApplicationStatus.WITHDRAWN;
+        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL
+                || application.getStatus() == ApplicationStatus.WITHDRAWN;
     }
 
     public Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
@@ -128,8 +129,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     }
 
-
-    public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId) throws IOException, NullPointerException {
+    public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
+            throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");

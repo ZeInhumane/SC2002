@@ -35,18 +35,23 @@ public class RegistrationRepositoryTest extends GeneralRepositoryTestBase<Regist
         projectRepository.deleteAll();
 
         // Save users
-        user1 = userRepository.save(new Applicant(null, "Alice", "pass123", "alice@example.com", Role.APPLICANT, "S1234567A", 25, MaritalStatus.SINGLE, null, null));
-        user2 = userRepository.save(new Applicant(null, "Bob", "pass456", "bob@example.com", Role.APPLICANT, "S7654321B", 30, MaritalStatus.MARRIED, null, null));
+        user1 = userRepository.save(new Applicant(null, "Alice", "pass123", "alice@example.com", Role.APPLICANT,
+                "S1234567A", 25, MaritalStatus.SINGLE, null, null));
+        user2 = userRepository.save(new Applicant(null, "Bob", "pass456", "bob@example.com", Role.APPLICANT,
+                "S7654321B", 30, MaritalStatus.MARRIED, null, null));
 
         // Sample group and flat data
+        Set<Integer> officers = Set.of(1, 2, 3);
         Set<MaritalStatus> groups = Set.of(MaritalStatus.SINGLE, MaritalStatus.MARRIED);
         Map<FlatType, Integer> flats = Map.of(FlatType._3ROOM, 10, FlatType._2ROOM, 5);
         Date open = new Date();
         Date close = new Date(open.getTime() + 7 * 24 * 60 * 60 * 1000L); // +7 days
 
         // Save projects
-        project1 = projectRepository.save(new Project(null, "AI Research", open, close, "Punggol", 123, true, groups, flats));
-        project2 = projectRepository.save(new Project(null, "Blockchain Project", open, close, "Tampines", 456, true, groups, flats));
+        project1 = projectRepository
+                .save(new Project(null, "AI Research", open, close, "Punggol", 123, true, 4, officers, groups, flats));
+        project2 = projectRepository
+                .save(new Project(null, "Blockchain Project", open, close, "Tampines", 456, true, 10, officers, groups, flats));
     }
 
     @Override
@@ -56,11 +61,9 @@ public class RegistrationRepositoryTest extends GeneralRepositoryTestBase<Regist
 
     @Override
     protected List<Registration> createSampleEntities() {
-        return List.of(
-                new Registration(null, user1.getId(), project1.getId(), RegistrationStatus.PENDING),
+        return List.of(new Registration(null, user1.getId(), project1.getId(), RegistrationStatus.PENDING),
                 new Registration(null, user2.getId(), project1.getId(), RegistrationStatus.APPROVED),
-                new Registration(null, user1.getId(), project2.getId(), RegistrationStatus.REJECTED)
-        );
+                new Registration(null, user1.getId(), project2.getId(), RegistrationStatus.REJECTED));
     }
 
     @Override

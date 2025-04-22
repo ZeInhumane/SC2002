@@ -1,4 +1,5 @@
 package com.example.app.service;
+
 import java.io.IOException;
 import java.util.List;
 import com.example.app.enums.FlatType;
@@ -28,4 +29,3 @@ public interface ApplicationService {
 
     Application save(Application application) throws IOException;
 }
-

@@ -1,6 +1,5 @@
 package com.example.app.service;
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -25,6 +24,5 @@ public interface RegistrationService {
 
     // Get all registrations for a user
     void deleteById(int id) throws IOException;
-
 
 }

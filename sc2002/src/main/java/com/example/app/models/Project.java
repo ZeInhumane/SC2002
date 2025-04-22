@@ -17,25 +17,29 @@ public class Project implements BaseEntity {
     private Integer managerId;
     private Boolean visibility;
 
+    private Integer officerLimit;
+    private Set<Integer> officers;
     private Set<MaritalStatus> groups;
     private Map<FlatType, Integer> flatCount;
-
 
     public Project() {
         this.groups = new HashSet<>();
         this.flatCount = new HashMap<>();
     }
 
-    public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
-            Integer managerId, Boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flatCount) {
+    public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, Integer managerId, Boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flatCount) {
         this.id = id;
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
         this.applicationCloseDate = applicationCloseDate;
         this.neighborhood = neighborhood;
         this.managerId = managerId;
-        this.groups = groups;
         this.visibility = visibility;
+        this.officerLimit = officerLimit;
+        this.groups = groups;
+        this.officers = officers;
         this.flatCount = flatCount;
     }
 
@@ -45,7 +49,7 @@ public class Project implements BaseEntity {
     }
 
     @Override
-    public void setId(Integer id){
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -81,7 +85,37 @@ public class Project implements BaseEntity {
         this.neighborhood = neighborhood;
     }
 
-    public void addMaritalStatus(MaritalStatus group) throws UnsupportedOperationException{
+    public Integer getOfficerLimit() {
+        return officerLimit;
+    }
+
+    public void setOfficerLimit(Integer officerLimit) {
+        this.officerLimit = officerLimit;
+    }
+
+    public void addOfficer(Integer officerId) throws OfficerAlreadyInsideException, OfficerLimitExceededException {
+        if (officers.contains(officerId)) {
+            throw new OfficerAlreadyInsideException("Officer " + officerId + " is already inside the project.");
+        }
+        if (officers.size() >= officerLimit) {
+            throw new OfficerLimitExceededException("Officer limit exceeded for project " + id);
+        }
+        officers.add(officerId);
+    }
+
+    public void removeOfficer(Integer officerId) {
+        officers.remove(officerId);
+    }
+
+    public Set <Integer> getOfficers() {
+        return officers;
+    }
+
+    public void setOfficers(Set<Integer> officers) {
+        this.officers = officers;
+    }
+
+    public void addMaritalStatus(MaritalStatus group) throws UnsupportedOperationException {
         this.groups.add(group);
     }
 
@@ -161,7 +195,7 @@ public class Project implements BaseEntity {
                 visibility ? "ON" : "OFF", managerId);
     }
 
-    public  String formatDate(Date date) {
+    public String formatDate(Date date) {
         return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 

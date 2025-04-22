@@ -8,27 +8,15 @@ import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.RegistrationStatus;
 
+public interface ManagerService extends UserService {
 
-public interface ManagerService extends UserService{
-    
-    Project createProject(Manager manager,
-                          String projectName,
-                          Date applicationOpenDate,
-                            Date applicationCloseDate,
-                            String neighborhood,
-                            boolean visibility,
-                            Set<MaritalStatus> groups,
-                            Map<FlatType, Integer> flats) throws IOException;
+    Project createProject(Manager manager, String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
+            throws IOException;
 
-    Project updateProject(Manager manager,
-                            int projectId,
-                            String projectName,
-                            Date applicationOpenDate,
-                            Date applicationCloseDate,
-                            String neighborhood,
-                            boolean visibility,
-                            Set<MaritalStatus> groups,
-                            Map<FlatType, Integer> flats) throws IOException;
+    Project updateProject(Manager manager, int projectId, String projectName, Date applicationOpenDate,
+            Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException;
 
     boolean isProjectBelongToManager(Manager manager, int projectId) throws IOException;
 

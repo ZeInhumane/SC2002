@@ -10,23 +10,37 @@ import com.example.app.models.Officer;
 import com.example.app.models.User;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
-public class UserSerializer implements Serializer<User>{
+/**
+ * Serializer for User objects.
+ * This class implements the Serializer interface and provides methods to serialize and deserialize User objects.
+ *
+ * @see Serializer
+ * @see User
+ */
+public class UserSerializer implements Serializer<User> {
 
+    private StringSerializer stringSerializer = SerializerDependency.getStringSerializer();
+
+    /**
+     * Serializes a User object into a string format.
+     * @param user The User object to serialize.
+     * @return The serialized string representation of the User object.
+     */
     @Override
     public String serialize(User user) {
         // Common fields
         String base = String.format("%d,%s,%s,%s,%s,%s,%d,%s",
                 user.getId(),
-                user.getName(),
-                user.getPassword(),
-                user.getEmail(),
+                stringSerializer.serialize(user.getName()),
+                stringSerializer.serialize(user.getPassword()),
+                stringSerializer.serialize(user.getEmail()),
                 user.getRole(),
-                user.getNric(),
+                stringSerializer.serialize(user.getNric()),
                 user.getAge(),
                 user.getMaritalStatus()
         );
-
         if (user instanceof Officer officer) {
             return base + "," +
                     (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
@@ -46,74 +60,47 @@ public class UserSerializer implements Serializer<User>{
         }
     }
 
+    /**
+     * Deserializes a string representation of a User object into a User object.
+     * @param parts A LinkedList of strings representing the parts of the User object.
+     * @return The deserialized User object.
+     * @throws DataParsingException If there is an error during parsing.
+     */
     @Override
-    public User deserialize(String inputLine) throws RuntimeException{
-        String[] parts = inputLine.split(",", -1);
+    public User deserialize(LinkedList<String> parts) throws DataParsingException {
 
-        Role role = Role.valueOf(parts[4].trim());
+        Integer id = Integer.valueOf(parts.removeFirst().trim());
+        String name = stringSerializer.deserialize(parts);
+        String password = stringSerializer.deserialize(parts);
+        String email = stringSerializer.deserialize(parts);
+        Role role = Role.valueOf(parts.removeFirst().trim());
+        String nric = stringSerializer.deserialize(parts);
+        int age = Integer.parseInt(parts.removeFirst().trim());
+        MaritalStatus maritalStatus = MaritalStatus.valueOf(parts.removeFirst().trim());
 
-        switch (role) {
-            case OFFICER -> {
-                FlatType flatType = parts[8].isEmpty() ? null : FlatType.valueOf(parts[8].trim());
-                Integer applicationId = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
-                Integer registeredId = parts[10].isEmpty() ? null : Integer.valueOf(parts[10].trim());
-                Integer projectId = parts[11].isEmpty() ? null : Integer.valueOf(parts[11].trim());
-
-                return new Officer(
-                        Integer.valueOf(parts[0].trim()),
-                        parts[1].trim(),
-                        parts[2].trim(),
-                        parts[3].trim(),
-                        role,
-                        parts[5].trim(),
-                        Integer.parseInt(parts[6].trim()),
-                        MaritalStatus.valueOf(parts[7].trim()),
-                        flatType,
-                        applicationId,
-                        registeredId,
-                        projectId
-                );
-            }
-            case MANAGER -> {
-                return new Manager(
-                        Integer.valueOf(parts[0].trim()),
-                        parts[1].trim(),
-                        parts[2].trim(),
-                        parts[3].trim(),
-                        role,
-                        parts[5].trim(),
-                        Integer.parseInt(parts[6].trim()),
-                        MaritalStatus.valueOf(parts[7].trim())
-                );
-            }
-            case APPLICANT -> {
-                FlatType flatType = parts[8].isEmpty() ? null : FlatType.valueOf(parts[8].trim());
-                Integer applicationId = parts[9].isEmpty() ? null : Integer.valueOf(parts[9].trim());
-                return new Applicant(
-                        Integer.valueOf(parts[0].trim()),
-                        parts[1].trim(),
-                        parts[2].trim(),
-                        parts[3].trim(),
-                        role,
-                        parts[5].trim(),
-                        Integer.parseInt(parts[6].trim()),
-                        MaritalStatus.valueOf(parts[7].trim()),
-                        flatType,
-                        applicationId
-                );
-            }
-            default -> {
-                return new User(
-                        Integer.valueOf(parts[0].trim()),
-                        parts[1].trim(),
-                        parts[2].trim(),
-                        parts[3].trim(),
-                        role,
-                        parts[5].trim(),
-                        Integer.parseInt(parts[6].trim()),
-                        MaritalStatus.valueOf(parts[7].trim())
-                );
-            }
+        // Shared constructor args
+        if (role == Role.MANAGER) {
+            return new Manager(id, name, password, email, role, nric, age, maritalStatus);
         }
+
+        if (role == Role.APPLICANT) {
+            FlatType flatType = parseEnumOrNull(parts.removeFirst(), FlatType.class);
+            Integer applicationId = parseIntOrNull(parts.removeFirst());
+
+            return new Applicant(id, name, password, email, role, nric, age, maritalStatus, flatType, applicationId);
+        }
+
+        if (role == Role.OFFICER) {
+            FlatType flatType = parseEnumOrNull(parts.removeFirst(), FlatType.class);
+            Integer applicationId = parseIntOrNull(parts.removeFirst());
+            Integer registeredId = parseIntOrNull(parts.removeFirst());
+            Integer projectId = parseIntOrNull(parts.removeFirst());
+
+            return new Officer(id, name, password, email, role, nric, age, maritalStatus, flatType, applicationId,
+                    registeredId, projectId);
+        }
+
+        return new User(id, name, password, email, role, nric, age, maritalStatus);
     }
+
 }
