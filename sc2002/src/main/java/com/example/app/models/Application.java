@@ -15,7 +15,8 @@ public class Application implements BaseEntity {
     public Application() {
     }
 
-    public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status, Boolean requestWithdrawal, FlatType flatType) {
+    public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status,
+            Boolean requestWithdrawal, FlatType flatType) {
         this.id = id;
         this.userId = userId;
         this.projectId = projectId;
@@ -86,4 +87,3 @@ public class Application implements BaseEntity {
     }
 
 }
-

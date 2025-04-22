@@ -2,7 +2,7 @@ package com.example.app.models;
 
 import com.example.app.enums.RegistrationStatus;
 
-public class Registration implements BaseEntity{
+public class Registration implements BaseEntity {
     private Integer id;
     private Integer userId;
     private Integer projectId;
@@ -19,19 +19,38 @@ public class Registration implements BaseEntity{
     }
 
     @Override
-    public Integer getId() { return id; }
+    public Integer getId() {
+        return id;
+    }
 
     @Override
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Integer getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public Integer getUserId() {
+        return userId;
+    }
 
-    public Integer getProjectId() { return projectId; }
-    public void setProjectId(int projectId) { this.projectId = projectId; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public RegistrationStatus getStatus() { return status; }
-    public void setStatus(RegistrationStatus status) { this.status = status; }
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public RegistrationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RegistrationStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toDisplay() {

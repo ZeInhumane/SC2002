@@ -3,7 +3,7 @@ package com.example.app.models;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.Role;
 
-public class User implements BaseEntity{
+public class User implements BaseEntity {
 
     private Integer id;
     private String name;
@@ -17,7 +17,8 @@ public class User implements BaseEntity{
     public User() {
     }
 
-    public User(Integer id, String name, String password, String email, Role role, String nric, Integer age, MaritalStatus maritalStatus) {
+    public User(Integer id, String name, String password, String email, Role role, String nric, Integer age,
+            MaritalStatus maritalStatus) {
         this.id = id;
         this.password = password;
         this.name = name;

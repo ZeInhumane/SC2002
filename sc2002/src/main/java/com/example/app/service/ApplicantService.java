@@ -12,16 +12,18 @@ import com.example.app.enums.ApplicationStatus;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 
-public interface ApplicantService extends UserService{
+public interface ApplicantService extends UserService {
 
     // View public projects based on marital status and visibility and within application period
     List<Project> getViewableProjects(Applicant applicant) throws IOException, NullPointerException;
 
     // Apply for a project
-    Applicant applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException;
+    Applicant applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType)
+            throws IOException, NullPointerException;
 
     // Check types of flat applicant is eligible for
-    List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId) throws IOException, NullPointerException;
+    List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
+            throws IOException, NullPointerException;
 
     // View the project that the applicant has applied for, regardless of status
     Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException;
@@ -43,6 +45,5 @@ public interface ApplicantService extends UserService{
     Enquiry updateEnquiry(Applicant applicant, int enquiryId, String message) throws IOException, NullPointerException;
 
     void deleteEnquiry(Applicant applicant, int enquiryId) throws IOException, NullPointerException;
-
 
 }

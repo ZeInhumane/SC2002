@@ -12,10 +12,22 @@ import com.example.app.models.User;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class UserSerializer implements Serializer<User>{
+/**
+ * Serializer for User objects.
+ * This class implements the Serializer interface and provides methods to serialize and deserialize User objects.
+ *
+ * @see Serializer
+ * @see User
+ */
+public class UserSerializer implements Serializer<User> {
 
     private StringSerializer stringSerializer = SerializerDependency.getStringSerializer();
 
+    /**
+     * Serializes a User object into a string format.
+     * @param user The User object to serialize.
+     * @return The serialized string representation of the User object.
+     */
     @Override
     public String serialize(User user) {
         // Common fields
@@ -29,7 +41,6 @@ public class UserSerializer implements Serializer<User>{
                 user.getAge(),
                 user.getMaritalStatus()
         );
-
         if (user instanceof Officer officer) {
             return base + "," +
                     (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
@@ -49,6 +60,12 @@ public class UserSerializer implements Serializer<User>{
         }
     }
 
+    /**
+     * Deserializes a string representation of a User object into a User object.
+     * @param parts A LinkedList of strings representing the parts of the User object.
+     * @return The deserialized User object.
+     * @throws DataParsingException If there is an error during parsing.
+     */
     @Override
     public User deserialize(LinkedList<String> parts) throws DataParsingException {
 
@@ -79,12 +96,11 @@ public class UserSerializer implements Serializer<User>{
             Integer registeredId = parseIntOrNull(parts.removeFirst());
             Integer projectId = parseIntOrNull(parts.removeFirst());
 
-            return new Officer(id, name, password, email, role, nric, age, maritalStatus,
-                    flatType, applicationId, registeredId, projectId);
+            return new Officer(id, name, password, email, role, nric, age, maritalStatus, flatType, applicationId,
+                    registeredId, projectId);
         }
 
         return new User(id, name, password, email, role, nric, age, maritalStatus);
     }
-
 
 }

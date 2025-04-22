@@ -19,66 +19,33 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     static RegistrationService registrationService = new RegistrationServiceImpl();
 
     // Allow manager to create project
-    public Project createProject(
-            Manager manager,
-            String projectName,
-            Date applicationOpenDate,
-            Date applicationCloseDate,
-            String neighborhood,
-            boolean visibility,
-            Set<MaritalStatus> groups,
-            Map<FlatType, Integer> flats
-    ) throws IOException {
+    public Project createProject(Manager manager, String projectName, Date applicationOpenDate,
+            Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException {
 
         // Check if the project dates overlap with existing projects
         if (hasDateOverlap(manager, applicationOpenDate, applicationCloseDate)) {
             throw new IllegalArgumentException("Project dates overlap with existing projects.");
         }
 
-        return projectService.createProject(
-                projectName,
-                applicationOpenDate,
-                applicationCloseDate,
-                neighborhood,
-                manager.getId(),
-                visibility,
-                groups,
-                flats
-        );
+        return projectService.createProject(projectName, applicationOpenDate, applicationCloseDate, neighborhood,
+                manager.getId(), visibility, groups, flats);
     }
-
 
     // Allow manager to edit project
     // Can retrieve entire project and then edit with fill ins
-    public Project updateProject(
-            Manager manager,
-            int projectId,
-            String projectName,
-            Date applicationOpenDate,
-            Date applicationCloseDate,
-            String neighborhood,
-            boolean visibility,
-            Set<MaritalStatus> groups,
-            Map<FlatType, Integer> flats
-    ) throws IOException {
-        return projectService.updateProject(
-                projectId,
-                projectName,
-                applicationOpenDate,
-                applicationCloseDate,
-                neighborhood,
-                manager.getId(),
-                visibility,
-                groups,
-                flats
-        );
+    public Project updateProject(Manager manager, int projectId, String projectName, Date applicationOpenDate,
+            Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException {
+        return projectService.updateProject(projectId, projectName, applicationOpenDate, applicationCloseDate,
+                neighborhood, manager.getId(), visibility, groups, flats);
     }
-
 
     // Check project ownership
     public boolean isProjectBelongToManager(Manager manager, int projectId) throws IOException {
         Project project = projectService.findById(projectId);
-        if (project == null) return false;
+        if (project == null)
+            return false;
         return Objects.equals(project.getManagerId(), manager.getId());
     }
 
@@ -115,11 +82,13 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         return registrationService.findByProjectId(project.getId());
     }
 
-    public void updateRegistrationStatus(Manager manager, int registrationId, RegistrationStatus status) throws IOException {
+    public void updateRegistrationStatus(Manager manager, int registrationId, RegistrationStatus status)
+            throws IOException {
         Registration registration = registrationService.findById(registrationId);
 
         if (!isProjectBelongToManager(manager, registration.getProjectId())) {
-            throw new IllegalArgumentException("Registration ID " + registrationId + " does not belong to this manager.");
+            throw new IllegalArgumentException(
+                    "Registration ID " + registrationId + " does not belong to this manager.");
         }
 
         Officer officer = (Officer) this.findById(registration.getUserId());
@@ -134,7 +103,6 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         }
         officerService.save(officer);
     }
-
 
     // Delete Project and clean up related records from users
     public void deleteProject(int projectId) throws IOException {
@@ -153,7 +121,6 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         ApplicationStatus status = success ? ApplicationStatus.SUCCESSFUL : ApplicationStatus.UNSUCCESSFUL;
         return applicationService.updateStatus(applicationId, status);
     }
-
 
     public Application updateWithdrawalStatus(int applicationId, boolean success) throws IOException {
         return applicationService.updateWithdrawalStatus(applicationId, success);
@@ -177,12 +144,11 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
 
     public boolean hasDateOverlap(Manager manager, Date start, Date end) throws IOException {
         Collection<Project> myProjects = projectService.findByManagerId(manager.getId());
-        return myProjects.stream()
-                .anyMatch(p -> {
-                    Date pStart = p.getApplicationOpenDate();
-                    Date pEnd = p.getApplicationCloseDate();
-                    return !(end.before(pStart) || start.after(pEnd));
-                });
+        return myProjects.stream().anyMatch(p -> {
+            Date pStart = p.getApplicationOpenDate();
+            Date pEnd = p.getApplicationCloseDate();
+            return !(end.before(pStart) || start.after(pEnd));
+        });
     }
 
 }

@@ -12,21 +12,29 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Serializer for Project objects.
+ * This class implements the Serializer interface and provides methods to serialize and deserialize Project objects.
+ * @see Serializer
+ * @see Project
+ */
 public class ProjectSerializer implements Serializer<Project> {
 
     private StringSerializer stringSerializer = SerializerDependency.getStringSerializer();
 
+    /**
+     * Serializes a Project object into a string format.
+     * @param project The Project object to serialize.
+     * @return The serialized string representation of the Project object.
+     */
     @Override
     public String serialize(Project project) {
         StringBuilder result = new StringBuilder();
-        result.append(String.format("%d,%s,%s,%s,%s,%d,%b",
-                project.getId(),
+        result.append(String.format("%d,%s,%s,%s,%s,%d,%b", project.getId(),
                 stringSerializer.serialize(project.getProjectName()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationOpenDate()),
-                new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()),
-                project.getNeighborhood(),
-                project.getManagerId(),
-                project.getVisibility()));
+                new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()), project.getNeighborhood(),
+                project.getManagerId(), project.getVisibility()));
         result.append(",").append(project.getGroups().size());
         for (MaritalStatus group : project.getGroups()) {
             result.append(",").append(group.toString());
@@ -39,6 +47,12 @@ public class ProjectSerializer implements Serializer<Project> {
         return result.toString();
     }
 
+    /**
+     * Deserializes a string representation of a Project object into a Project object.
+     * @param parts A LinkedList of strings representing the parts of the Project object.
+     * @return The deserialized Project object.
+     * @throws DataParsingException If there is an error during parsing.
+     */
     @Override
     public Project deserialize(LinkedList<String> parts) throws DataParsingException {
         Integer id = Integer.parseInt(parts.removeFirst());
@@ -70,6 +84,7 @@ public class ProjectSerializer implements Serializer<Project> {
             flatCount.put(flatType, count);
         }
 
-        return new Project(id, projectName, applicationOpenDate, applicationCloseDate, neighborhood, managerId, visibility, group, flatCount);
+        return new Project(id, projectName, applicationOpenDate, applicationCloseDate, neighborhood, managerId,
+                visibility, group, flatCount);
     }
 }

@@ -36,6 +36,4 @@ public interface EnquiryService {
     // for applicant to delete enquiry
     void deleteEnquiry(Integer id) throws IOException;
 
-
 }
-

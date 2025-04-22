@@ -20,14 +20,14 @@ public class Project implements BaseEntity {
     private Set<MaritalStatus> groups;
     private Map<FlatType, Integer> flatCount;
 
-
     public Project() {
         this.groups = new HashSet<>();
         this.flatCount = new HashMap<>();
     }
 
-    public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
-            Integer managerId, Boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flatCount) {
+    public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, Integer managerId, Boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flatCount) {
         this.id = id;
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
@@ -45,7 +45,7 @@ public class Project implements BaseEntity {
     }
 
     @Override
-    public void setId(Integer id){
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -81,7 +81,7 @@ public class Project implements BaseEntity {
         this.neighborhood = neighborhood;
     }
 
-    public void addMaritalStatus(MaritalStatus group) throws UnsupportedOperationException{
+    public void addMaritalStatus(MaritalStatus group) throws UnsupportedOperationException {
         this.groups.add(group);
     }
 
@@ -161,7 +161,7 @@ public class Project implements BaseEntity {
                 visibility ? "ON" : "OFF", managerId);
     }
 
-    public  String formatDate(Date date) {
+    public String formatDate(Date date) {
         return new java.text.SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 

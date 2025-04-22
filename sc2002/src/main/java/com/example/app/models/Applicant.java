@@ -1,4 +1,5 @@
 package com.example.app.models;
+
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.Role;
@@ -12,7 +13,8 @@ public class Applicant extends User {
         super();
     }
 
-    public Applicant(Integer id, String name, String password, String email, Role role, String nric, int age, MaritalStatus maritalStatus, FlatType flatType, Integer applicationId) {
+    public Applicant(Integer id, String name, String password, String email, Role role, String nric, int age,
+            MaritalStatus maritalStatus, FlatType flatType, Integer applicationId) {
         super(id, name, password, email, role, nric, age, maritalStatus);
         this.flatType = flatType;
         this.applicationId = applicationId;

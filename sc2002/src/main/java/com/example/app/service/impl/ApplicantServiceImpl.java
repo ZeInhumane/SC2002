@@ -35,7 +35,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return projectService.findById(application.getProjectId());
     }
 
-    public Applicant applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
+    public Applicant applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType)
+            throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " does not exist.");
@@ -60,9 +61,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return (Applicant) this.save(applicant);
     }
 
-
-
-    public Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException{
+    public Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException {
         if (applicant.getApplicationId() == null) {
             return null;
         }
@@ -84,7 +83,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     // Can only apply if no app exists or the last one failed
     public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
         Application application = viewCurrentApplication(applicant);
-        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL || application.getStatus() == ApplicationStatus.WITHDRAWN;
+        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL
+                || application.getStatus() == ApplicationStatus.WITHDRAWN;
     }
 
     public Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
@@ -97,9 +97,9 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return applicationService.save(application);
     }
 
-
     // Submit enquiry (stores ID back to user profile)
-    public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
+    public Enquiry submitEnquiry(Applicant applicant, String question, int projectId)
+            throws IOException, NullPointerException {
 
         return enquiryService.submitEnquiry(question, projectId, applicant.getId());
     }
@@ -110,7 +110,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     // Edit enquiry (if it belongs to this user)
-    public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
+    public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion)
+            throws IOException, NullPointerException {
 
         Enquiry enquiry = enquiryService.findById(enquiryId);
 
@@ -134,8 +135,8 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     }
 
-
-    public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId) throws IOException, NullPointerException {
+    public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
+            throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project with ID " + projectId + " not found.");

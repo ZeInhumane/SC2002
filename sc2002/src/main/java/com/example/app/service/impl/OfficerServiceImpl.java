@@ -17,14 +17,11 @@ import static com.example.app.service.impl.ApplicantServiceImpl.projectService;
 
 public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerService {
 
-
     static RegistrationService registrationService = new RegistrationServiceImpl();
     static UserService userService = new UserServiceImpl();
 
-
     public boolean isHandling(Officer officer, int projectId) throws IOException {
-        return Objects.equals(projectId, officer.getProjectId()) &&
-                projectService.isActive(projectId);
+        return Objects.equals(projectId, officer.getProjectId()) && projectService.isActive(projectId);
     }
 
     // Checks if cannot register as officer (An applicant for the hdb or has a
@@ -43,15 +40,13 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     public List<Project> getRegistrableProjects(Officer officer) throws IOException, NullPointerException {
         Collection<Project> allProjects = this.getViewableProjects(officer);
 
-        return allProjects.stream()
-                .filter(p -> {
-                    try {
-                        return isRegistrable(officer, p.getId());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .collect(Collectors.toList());
+        return allProjects.stream().filter(p -> {
+            try {
+                return isRegistrable(officer, p.getId());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
     }
 
     // Register for project
@@ -111,7 +106,7 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
 
     public void bookFlatForApplicant(String applicantNric) throws IOException {
         Applicant applicant = (Applicant) userService.findByNric(applicantNric);
-        
+
         if (applicant == null) {
             throw new IllegalArgumentException("NRIC does not belong to an applicant.");
         }

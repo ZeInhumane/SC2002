@@ -1,4 +1,5 @@
 package com.example.app.service;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -6,8 +7,6 @@ import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
 import com.example.app.repository.ProjectRepository;
-
-
 
 public interface ProjectService {
 
@@ -33,10 +32,14 @@ public interface ProjectService {
     boolean isActive(int projectId) throws IOException;
 
     // for manager to create a new project
-    Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException;
+    Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood,
+            int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
+            throws IOException;
 
     // for manager to update project
-    Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate, String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) throws IOException;
+    Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate,
+            String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups,
+            Map<FlatType, Integer> flats) throws IOException;
 
     Project decrementFlatCount(int projectId, FlatType flatType) throws IOException;
 

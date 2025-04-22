@@ -19,9 +19,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     // Apply for a project using id for that user
     // Return application Id for user to save
     public Application applyForProject(int userId, int projectId, FlatType flatType) throws IOException {
-        Application apply = new Application(
-                null, userId, projectId, ApplicationStatus.PENDING, false, flatType
-        );
+        Application apply = new Application(null, userId, projectId, ApplicationStatus.PENDING, false, flatType);
 
         return applicationRepository.save(apply);
     }
@@ -44,14 +42,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.save(application);
     }
 
-
-
     public Application withdrawApplication(int id) throws IOException {
         Application application = applicationRepository.findById(id);
         application.setRequestWithdrawal(true);
         return applicationRepository.save(application);
     }
-
 
     public Application updateWithdrawalStatus(int id, boolean status) throws IOException {
         Application application = applicationRepository.findById(id);

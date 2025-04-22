@@ -1,4 +1,5 @@
 package com.example.app.service;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -33,4 +34,3 @@ public interface ApplicationService {
 
     Application save(Application application) throws IOException;
 }
-

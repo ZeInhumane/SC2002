@@ -46,7 +46,6 @@ public class EnquiryServiceImpl implements EnquiryService {
         return enquiryRepository.save(enquiry);
     }
 
-
     public Enquiry replyEnquiry(Integer id, Integer replierId, String reply) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryRepository.findById(id);
         enquiry.setResponse(reply);
