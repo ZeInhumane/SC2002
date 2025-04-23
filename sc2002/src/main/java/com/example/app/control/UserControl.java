@@ -8,8 +8,6 @@ public class UserControl {
         nric = nric.trim().toUpperCase(); // Normalize NRIC input
         password = password.trim(); // Normalize password input
 
-        System.err.println(password);
-
         // Validate NRIC format
         if (!nric.matches("^[ST]\\d{7}[A-Z]$")) {
             System.out.println("Invalid NRIC format. NRIC should start with 'S' or 'T' followed by 7 digits and another letter.");

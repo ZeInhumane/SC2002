@@ -83,7 +83,7 @@ public class Application implements BaseEntity {
             Application Status: %s
             Request Withdrawal: %s
             Flat Type: %s
-            """, id , projectId, status, requestWithdrawal, flatType != null ? flatType.name() : "None");
+            """, id , projectId, status, requestWithdrawal ? "Yes" : "No", flatType != null ? flatType.toString() : "None");
     }
 
 }

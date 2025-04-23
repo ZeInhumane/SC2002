@@ -43,12 +43,12 @@ public class ProjectSerializer implements Serializer<Project> {
 
         result.append(",").append(project.getGroups().size());
         for (MaritalStatus group : project.getGroups()) {
-            result.append(",").append(group.toString());
+            result.append(",").append(group.name());
         }
 
         result.append(",").append(project.getFlats().size());
         for (Map.Entry<FlatType, Integer> entry : project.getFlats().entrySet()) {
-            result.append(String.format(",%s:%d", entry.getKey().toString(), entry.getValue()));
+            result.append(String.format(",%s:%d", entry.getKey().name(), entry.getValue()));
         }
         return result.toString();
     }

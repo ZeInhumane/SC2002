@@ -11,7 +11,7 @@ public class Helper {
                 System.out.println(e);
             }
         } else {
-            System.out.print("\033[H\033[2J");
+            System.out.print("\033[3J\033[2J\033[H");
             System.out.flush();
         }
     }

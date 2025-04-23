@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.app.enums.FlatType;
 import com.example.app.models.Applicant;
+import com.example.app.models.Application;
 import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
 
@@ -44,6 +45,30 @@ public class ApplicantControl {
             applicantService.submitEnquiry(applicant, message, projectId);
         } catch (IOException e) {
             throw new RuntimeException("Error submitting enquiry", e);
+        }
+    }
+
+    public Application getApplication(Applicant applicant) {
+        try {
+            return applicantService.viewCurrentApplication(applicant);
+        } catch (IOException e) {
+            throw new RuntimeException("Error retrieving application", e);
+        }
+    }
+
+    public Project getAppliedProject(Applicant applicant) {
+        try {
+            return applicantService.viewCurrentProject(applicant);
+        } catch (IOException e) {
+            throw new RuntimeException("Error retrieving applied project", e);
+        }
+    }
+
+    public void withdrawApplication(Applicant applicant) {
+        try {
+            applicantService.withdrawApplication(applicant);
+        } catch (IOException e) {
+            throw new RuntimeException("Error withdrawing application", e);
         }
     }
 }

@@ -18,8 +18,9 @@ public class UserServiceImpl implements UserService {
         return instance == null ? instance = new UserServiceImpl() : instance;
     }
 
-    public User login(String nirc, String password) throws IOException {
-        User user = userRepository.findByNric(nirc);
+    public User login(String nric, String password) throws IOException {
+        User user = userRepository.findByNric(nric);
+        if (user == null) return null;
         if (user.getPassword().equals(password)) {
             RuntimeData.setCurrentUser(user);
             return user;

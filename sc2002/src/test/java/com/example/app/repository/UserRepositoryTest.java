@@ -47,7 +47,7 @@ public class UserRepositoryTest extends GeneralRepositoryTestBase<User> {
     public void testFindByNric() throws IOException {
         // Save sample users
         saveSampleEntities();
-        // Look up Charlie by NRIC
+        // Look up Alice by NRIC
         User found = userRepository.findByNric("S1234567A");
 
         assertNotNull(found);

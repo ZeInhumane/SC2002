@@ -43,14 +43,12 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         }
 
         List<FlatType> eligibleTypes = getEligibleFlatTypesForProject(applicant, projectId);
-        System.err.println("Eligible types: " + eligibleTypes);
-        System.err.println(preferredFlatType);
         if (!eligibleTypes.contains(preferredFlatType)) {
             throw new IllegalArgumentException("You are not eligible for the selected flat type.");
         }
 
         if (!isAbleToApply(applicant)) {
-            throw new IllegalArgumentException("You are not eligible to apply for this project.");
+            throw new IllegalArgumentException("You are not eligible to apply for this project, as you already have an active application.");
         }
         Application application = applicationService.applyForProject(applicant.getId(), projectId, preferredFlatType);
         applicant.setApplicationId(application.getId());
@@ -89,6 +87,9 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         Application application = viewCurrentApplication(applicant);
         if (application == null) {
             throw new IllegalArgumentException("No application found to withdraw.");
+        }
+        if (application.isRequestWithdrawal()) {
+            throw new IllegalArgumentException("Application withdrawal has already been requested.");
         }
 
         application.setRequestWithdrawal(true);
@@ -146,7 +147,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         List<FlatType> eligible = new ArrayList<>();
         if (userStatus == MaritalStatus.SINGLE && userAge >= 35) {
             eligible.add(FlatType._2ROOM);
-        } else if (userStatus == MaritalStatus.MARRIED && userAge >= 21) {
+        } else if (userAge >= 21) { // modified to remove MARRIED check
             eligible.add(FlatType._2ROOM);
             eligible.add(FlatType._3ROOM);
         }

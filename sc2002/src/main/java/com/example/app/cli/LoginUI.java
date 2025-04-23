@@ -4,13 +4,12 @@ import com.example.app.cli.utils.*;
 import com.example.app.control.UserControl;
 import com.example.app.RuntimeData;
 
-public class LoginUI implements BaseUI {
+public class LoginUI {
     public void printMenu() {
         System.out.println("1. Login");
         System.out.println("2. Exit");
     }
 
-    @Override
     public void run() {
         Helper.wipeScreen();
         while (true) {

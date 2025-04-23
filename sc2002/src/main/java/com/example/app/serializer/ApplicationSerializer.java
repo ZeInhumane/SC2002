@@ -26,7 +26,7 @@ public class ApplicationSerializer implements Serializer<Application> {
     public String serialize(Application application) {
         return String.format("%d,%d,%d,%s,%s,%s", application.getId(), application.getUserId(),
                 application.getProjectId(), application.getStatus().toString(),
-                application.isRequestWithdrawal() ? "true" : "false", application.getFlatType().toString());
+                application.isRequestWithdrawal() ? "true" : "false", application.getFlatType().name());
     }
 
     /**

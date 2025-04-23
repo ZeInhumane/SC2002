@@ -177,7 +177,8 @@ public class Project implements BaseEntity {
                 ----------------------------------------
                 [Project Id: %s]
                 ~~~~~~~~~~~~~~~~~
-                Name: %s (Application Period: %s to %s)
+                Name: %s 
+                Application Period: %s to %s
                 Neighborhood: %s
                 For Group: %s
                 Flats: %s
@@ -218,5 +219,4 @@ public class Project implements BaseEntity {
         }
         return sb.substring(0, sb.length() - 2);
     }
-
 }
