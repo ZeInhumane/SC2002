@@ -52,7 +52,7 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
 
         Project project = projectService.findById(projectId);
         if (project == null) {
-            throw new IllegalArgumentException("Project ID " + projectId + " not found.");
+            throw new NullPointerException("Project ID " + projectId + " not found.");
         }
 
         // Override the registration to the latest one
@@ -66,7 +66,7 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     public Registration viewCurrentRegistration(Officer officer) throws IOException {
         Registration registration = registrationService.findById(officer.getRegisteredId());
         if (registration == null) {
-            throw new IllegalArgumentException("Registration ID " + officer.getRegisteredId() + " not found.");
+            throw new NullPointerException("Registration ID " + officer.getRegisteredId() + " not found.");
         }
         return registration;
     }
@@ -112,7 +112,7 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         Applicant applicant = (Applicant) userService.findByNric(applicantNric);
 
         if (applicant == null) {
-            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
+            throw new NullPointerException("NRIC does not belong to an applicant.");
         }
 
         Application application = applicationService.findById(applicant.getApplicationId());
@@ -135,7 +135,7 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     }
 
     @Override
-    public String generateBookingReceipt(String applicantNric) throws IOException {
+    public String generateBookingReceipt(String applicantNric) throws IOException, IllegalStateException, NullPointerException {
         Applicant applicant = (Applicant) userService.findByNric(applicantNric);
 
         Application app = applicationService.findById(applicant.getApplicationId());
@@ -144,6 +144,10 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         }
 
         Project project = projectService.findById(app.getProjectId());
+
+        if (project == null) {
+            throw new NullPointerException("Project not found.");
+        }
 
         return String.format("""
                 === Booking Receipt ===

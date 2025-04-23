@@ -53,7 +53,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     @Override
-    public Project toggleVisibility(Manager manager, int projectId) throws IOException {
+    public Project toggleVisibility(Manager manager, int projectId) throws IOException, IllegalStateException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
         }
@@ -82,17 +82,17 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     @Override
-    public List<Registration> getRegistrationsOfCurrentProject(Manager manager) throws IOException {
+    public List<Registration> getRegistrationsOfCurrentProject(Manager manager) throws IOException, NullPointerException {
         Project project = getHandlingProject(manager);
         if (project == null) {
-            throw new IllegalArgumentException("No active project found for this manager.");
+            throw new NullPointerException("No active project found for this manager.");
         }
         return registrationService.findByProjectId(project.getId());
     }
 
     @Override
     public void updateRegistrationStatus(Manager manager, int registrationId, RegistrationStatus status)
-            throws IOException {
+            throws IOException, IllegalStateException, NullPointerException {
         Registration registration = registrationService.findById(registrationId);
 
         if (!isProjectBelongToManager(manager, registration.getProjectId())) {
@@ -121,7 +121,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     @Override
-    public List<Application> getApplicationsOfProject(Manager manager, Integer projectId) throws IOException {
+    public List<Application> getApplicationsOfProject(Manager manager, Integer projectId) throws IOException, IllegalStateException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
         }
@@ -147,7 +147,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
 
     // Get Enquiries
     @Override
-    public List<Enquiry> getEnquiriesOfProject(Manager manager, int projectId) throws IOException {
+    public List<Enquiry> getEnquiriesOfProject(Manager manager, int projectId) throws IOException, IllegalStateException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
         }

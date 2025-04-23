@@ -9,40 +9,130 @@ import com.example.app.enums.FlatType;
 
 public interface ApplicantService extends UserService {
 
-    // View public projects based on marital status and visibility and within application period
+    /**
+     * Get all projects that the applicant can view.
+     * @param applicant the applicant
+     * @return a list of projects that the applicant can view
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     List<Project> getViewableProjects(Applicant applicant) throws IOException, NullPointerException;
 
-    // View currently applied projects
+    /**
+     * Get all projects that the applicant has applied for.
+     * @param applicant the applicant
+     * @return a list of projects that the applicant has applied for
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Project viewAppliedProjects(Applicant applicant) throws IOException, NullPointerException;
 
-    // Check if the applicant is eligible to apply for a new project
+    /**
+     * Check if the applicant is able to apply for a project.
+     * @param applicant the applicant
+     * @return true if the applicant is able to apply, false otherwise
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException;
 
-    // Apply for a project
+    /**
+     * Apply for a project.
+     * @param applicant the applicant
+     * @param projectId the project ID
+     * @param preferredFlatType the preferred flat type
+     * @return the application object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException;
 
-    // View the project that the applicant has applied for, regardless of status
+    /**
+     * View the current project of the applicant, regardless of project status.
+     * @param applicant
+     * @return the project object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException;
 
-    // Check the application status
+    /**
+     * View the current application of the applicant.
+     * @param applicant the applicant
+     * @return the application object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException;
 
-    // Withdraw application
+    /**
+     * With draw an application.
+     * @param applicant the applicant
+     * @return the application object after withdrawal
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null, or the application is null
+     */
     Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException;
 
+    /**
+     * Submit an enquiry.
+     * @param applicant the applicant
+     * @param message the message to be sent
+     * @param projectId the project ID
+     * @return the enquiry object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Enquiry submitEnquiry(Applicant applicant, String message, int projectId) throws IOException, NullPointerException;
 
-    // Get all enquiries made by the applicant
+    /**
+     * Get all enquiries made by the applicant.
+     * @param applicant the applicant
+     * @return a list of enquiries made by the applicant
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     List<Enquiry> getAllEnquiries(Applicant applicant) throws IOException, NullPointerException;
 
+    /**
+     * Update an enquiry (update enquiry question only)
+     * @param applicant the applicant
+     * @param enquiryId the enquiry ID
+     * @param message the new message
+     * @return the updated enquiry object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     Enquiry updateEnquiry(Applicant applicant, int enquiryId, String message) throws IOException, NullPointerException;
 
+    /**
+     * Delete an enquiry.
+     * @param applicant the applicant
+     * @param enquiryId the enquiry ID
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     void deleteEnquiry(Applicant applicant, int enquiryId) throws IOException, NullPointerException;
-    // Check if the applicant is eligible for a specific flat type in a project
+
+    /**
+     * Get all enquiries for a specific project.
+     * @param applicant the applicant
+     * @param projectId the project ID
+     * @return a list of enquiries for the project
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
             throws IOException, NullPointerException;
 
-    // Check types of flat applicant is eligible for
+    /**
+     * Get all eligible flat types for the applicant based on marital status and age.
+     * @param userStatus the marital status of the user
+     * @param userAge the age of the user
+     * @return a list of eligible flat types
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the user status is null
+     */
     List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws
             IOException, NullPointerException;
 }

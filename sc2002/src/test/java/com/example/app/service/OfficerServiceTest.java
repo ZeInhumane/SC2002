@@ -133,4 +133,90 @@ class OfficerServiceTest {
         List<Application> apps = service.getHandlingApplications(officer);
         assertEquals(1, apps.size());
     }
+
+    @Test
+    void bookFlatAfterProjectClosed_shouldStillSucceed() throws IOException {
+        Date now = new Date();
+        Date open = new Date(now.getTime() - 10 * 86400000L);
+        Date close = new Date(now.getTime() - 5 * 86400000L);
+
+        Project project = RepositoryDependency.getProjectRepository().save(new Project(
+                null, "ClosedProj", open, close, "Jurong", 200, false, 2,
+                new HashSet<>(), new HashSet<>(), Map.of(FlatType._3ROOM, 1)));
+
+        Applicant applicant = new Applicant(null, "B", "pw", "b@ntu.sg", Role.APPLICANT, "S0000002B", 36,
+                MaritalStatus.MARRIED, null, null);
+        applicant = (Applicant) RepositoryDependency.getUserRepository().save(applicant);
+
+        Application app = RepositoryDependency.getApplicationRepository().save(
+                new Application(null, applicant.getId(), project.getId(), ApplicationStatus.SUCCESSFUL, false, FlatType._3ROOM));
+        applicant.setApplicationId(app.getId());
+        RepositoryDependency.getUserRepository().save(applicant);
+
+        officer.setProjectId(project.getId());
+        RepositoryDependency.getUserRepository().save(officer);
+
+        service.bookFlatForApplicant(applicant.getNric());
+
+
+        Application updated = RepositoryDependency.getApplicationRepository().findById(app.getId());
+        assertEquals(ApplicationStatus.BOOKED, updated.getStatus());
+
+        String receipt = service.generateBookingReceipt(applicant.getNric());
+
+        Applicant updatedApplicant = (Applicant) RepositoryDependency.getUserRepository().findByNric(applicant.getNric());
+
+        assertEquals(FlatType._3ROOM, updatedApplicant.getFlatType());
+        assertTrue(receipt.contains("Booking Receipt"));
+        assertTrue(receipt.contains("Jurong"));
+    }
+
+    @Test
+    void testOfficerAccessAfterProjectDeleted_returnsNullOrEmptyGracefully() throws IOException {
+        // Create project
+        Project project = RepositoryDependency.getProjectRepository().save(
+                new Project(null, "TempProj",
+                        new Date(System.currentTimeMillis() - 86400000L),
+                        new Date(System.currentTimeMillis() + 86400000L),
+                        "Jurong", 200, true, 2,
+                        new HashSet<>(), new HashSet<>(), Map.of(FlatType._2ROOM, 2)));
+
+        // Create applicant and application
+        final Applicant applicant = (Applicant) RepositoryDependency.getUserRepository().save(
+                new Applicant(null, "App", "pw", "app@ntu.sg", Role.APPLICANT, "S0000123X", 34,
+                        MaritalStatus.SINGLE, null, null));
+        Application application = RepositoryDependency.getApplicationRepository().save(
+                new Application(null, applicant.getId(), project.getId(), ApplicationStatus.SUCCESSFUL, false, FlatType._2ROOM));
+        applicant.setApplicationId(application.getId());
+        RepositoryDependency.getUserRepository().save(applicant);
+
+        // Create enquiry
+        Enquiry enquiry = RepositoryDependency.getEnquiryRepository().save(
+                new Enquiry(null, "Is this project available?", project.getId(), applicant.getId()));
+
+        // Create officer and registration
+        final Officer officer = (Officer) RepositoryDependency.getUserRepository().save(
+                new Officer(null, "O", "pw", "officer@hdb.sg", Role.OFFICER, "S1111111A", 30,
+                        MaritalStatus.SINGLE, null, null, null, null));
+        Registration reg = RepositoryDependency.getRegistrationRepository().save(
+                new Registration(null, officer.getId(), project.getId(), RegistrationStatus.APPROVED));
+        officer.setProjectId(project.getId());
+        officer.setRegisteredId(reg.getId());
+        RepositoryDependency.getUserRepository().save(officer);
+
+        // Delete the project
+        RepositoryDependency.getProjectRepository().deleteById(project.getId());
+
+        assertNull(service.viewCurrentProject(officer));
+        assertFalse(service.getHandlingApplications(officer).isEmpty());
+        assertFalse(service.getHandlingEnquiries(officer).isEmpty());
+
+        // Optionally test replyEnquiry / booking gracefully fails or does nothing
+        assertThrows(NullPointerException.class, () -> service.replyEnquiry(officer, 999, "No such enquiry"));
+        assertThrows(NullPointerException.class, () -> service.bookFlatForApplicant(applicant.getNric()));
+        assertThrows(IllegalStateException.class, (() -> {
+            String receipt = service.generateBookingReceipt(applicant.getNric());
+            assertTrue(receipt == null || receipt.isEmpty());
+        }));
+    }
 }

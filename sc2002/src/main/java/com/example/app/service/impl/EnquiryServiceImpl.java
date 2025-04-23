@@ -56,6 +56,9 @@ public class EnquiryServiceImpl implements EnquiryService {
     @Override
     public Enquiry replyEnquiry(Integer id, Integer replierId, String reply) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryRepository.findById(id);
+        if (enquiry == null) {
+            throw new NullPointerException("Enquiry not found");
+        }
         enquiry.setResponse(reply);
         enquiry.setReplierId(replierId);
         return enquiryRepository.save(enquiry);

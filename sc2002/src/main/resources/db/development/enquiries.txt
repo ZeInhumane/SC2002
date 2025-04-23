@@ -1,4 +1,1 @@
-549261,220156,663131,9,When will I receive the result regarding my application. I first notice that the deadline for application is 30-4-2025!#41!, and I am currently waiting for a period response.a sdfjaksc, ,as, ,as ,df,as ,,,0
-724115,2,101,1,How many units left?,10,1,Only 5 left.
-497885,1,101,2,When is the project open? I have heard they are open next month, but I am not quite sure...,10,1,It opens next month.
-88798,1,102,1,Is this project near MRT?,,0
+60981,887827,139655,1,Is this project available?,,0
