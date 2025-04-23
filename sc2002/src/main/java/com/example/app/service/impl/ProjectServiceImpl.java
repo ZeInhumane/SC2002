@@ -13,35 +13,41 @@ import java.util.*;
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository = RepositoryDependency.getProjectRepository();
 
+    @Override
     public Project findById(int id) throws IOException {
         return projectRepository.findById(id);
     }
 
+    @Override
     public List<Project> findByManagerId(int managerId) throws IOException {
         return projectRepository.findByManagerId(managerId);
     }
 
+    @Override
     public Project findByManagerIdAndIsActive(int managerId) throws IOException {
         return projectRepository.findByManagerIdAndOpenDateGreaterThanAndCloseDateLessThan(managerId, new Date());
     }
 
+    @Override
+    public List<Project> findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(boolean visibility, Date date) throws IOException {
+        return projectRepository.findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(visibility, date);
+    }
+
     // Get projects meant for manager
+    @Override
     public List<Project> findAll() throws IOException {
         return projectRepository.findAll();
     }
 
     // Get projects meant for applicant
+    @Override
     public List<Project> getPublicProjects(MaritalStatus userStatus, boolean visibility, Date date) throws IOException {
         return projectRepository.findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(userStatus,
                 visibility, date);
     }
 
-    // Get projects meant for applicant and officer without constraint of marital status
-    public List<Project> findByVisibility(boolean visibility) throws Exception {
-        return projectRepository.findByVisibility(visibility);
-    }
-
     // Check if project can be applied for date
+    @Override
     public boolean isActive(int projectId) throws IOException {
         Project project = projectRepository.findById(projectId);
         if (project == null) {
@@ -57,6 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     // Create Project For managers
+    @Override
     public Project createProject(String projectName, Date applicationOpenDate, Date applicationCloseDate,
             String neighborhood, int managerId, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
@@ -65,6 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.save(project);
     }
 
+    @Override
     public Project updateProject(int projectId, String projectName, Date applicationOpenDate, Date applicationCloseDate,
             String neighborhood, int managerId, boolean visibility, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
@@ -85,6 +93,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.save(project);
     }
 
+    @Override
     public Project addOfficer(int projectId, int officerId) throws IOException {
         Project project = projectRepository.findById(projectId);
         if (project == null) {
@@ -106,6 +115,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     // For officer to decremeent flat count if applicant book
+    @Override
     public Project decrementFlatCount(int projectId, FlatType flatType) throws IOException {
         Project project = projectRepository.findById(projectId);
         project.decrementFlatCount(flatType);
@@ -113,6 +123,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     // Remove Project for managers
+    @Override
     public void deleteProject(int projectId) throws IOException {
         Project project = projectRepository.findById(projectId);
         if (project == null) {
@@ -122,6 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.deleteById(projectId);
     }
 
+    @Override
     public Project save(Project project) throws IOException {
         return projectRepository.save(project);
     }

@@ -19,6 +19,8 @@ public interface ProjectService {
 
     Project findByManagerIdAndIsActive(int managerId) throws IOException;
 
+    List<Project> findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(boolean visibility, Date date) throws IOException;
+
     // Get all projects for manager view
     List<Project> findAll() throws IOException;
 
