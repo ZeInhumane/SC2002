@@ -26,7 +26,6 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     // project somewhere before deadline)
     @Override
     public boolean isRegistrable(Officer officer, int projectId) throws IOException {
-
         boolean isAlreadyApplicant = officer.getApplicationId() != null && officer.getApplicationId() == projectId;
 
         boolean isAlreadyHandling = officer.getProjectId() != null && projectService.isActive(officer.getProjectId());

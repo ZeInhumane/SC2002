@@ -2,12 +2,8 @@ package com.example.app.serializer;
 
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
-import com.example.app.enums.RegistrationStatus;
 import com.example.app.exceptions.DataParsingException;
 import com.example.app.models.Project;
-import com.example.app.models.Registration;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;

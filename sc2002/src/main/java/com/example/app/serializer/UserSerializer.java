@@ -9,7 +9,6 @@ import com.example.app.models.Manager;
 import com.example.app.models.Officer;
 import com.example.app.models.User;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**

@@ -1,13 +1,8 @@
 package com.example.app.serializer;
 
-import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.RegistrationStatus;
-import com.example.app.enums.Role;
 import com.example.app.exceptions.DataParsingException;
 import com.example.app.models.Registration;
-import com.example.app.models.User;
-
-import java.io.IOException;
 import java.util.LinkedList;
 
 /**

@@ -1,9 +1,6 @@
 package com.example.app.serializer;
 
 import com.example.app.exceptions.DataParsingException;
-import com.example.app.models.BaseEntity;
-import com.example.app.models.User;
-
 import java.util.LinkedList;
 
 /**
