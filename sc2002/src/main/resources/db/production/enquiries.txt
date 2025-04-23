@@ -1,4 +1,4 @@
-961740,2,101,1,How many units left?,10,1,Only 5 left.
+,2,101,1,How many units left?,10,1,Only 5 left.
 620384,1,101,2,When is the project open? I have heard they are open next month, but I am not quite sure...,10,1,It opens next month.
 687990,639717,88819,2,hello, i'm still testing :),,0
 986930,1,102,1,Is this project near MRT?,,0

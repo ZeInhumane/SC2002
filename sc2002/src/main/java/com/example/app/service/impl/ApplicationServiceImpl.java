@@ -18,36 +18,42 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     // Apply for a project using id for that user
     // Return application Id for user to save
+    @Override
     public Application applyForProject(int userId, int projectId, FlatType flatType) throws IOException {
         Application apply = new Application(null, userId, projectId, ApplicationStatus.PENDING, false, flatType);
 
         return applicationRepository.save(apply);
     }
 
+    @Override
     public Application findById(int id) throws IOException {
         return applicationRepository.findById(id);
     }
 
     // Get all applications relating to a project
     // Meant for officer and manager
+    @Override
     public List<Application> findByProjectId(int projectId) throws IOException {
         return applicationRepository.findByProjectId(projectId);
     }
 
     // Change status by finding application
     // Used by officer
+    @Override
     public Application updateStatus(int id, ApplicationStatus status) throws IOException, NullPointerException {
         Application application = applicationRepository.findById(id);
         application.setStatus(status);
         return applicationRepository.save(application);
     }
 
+    @Override
     public Application withdrawApplication(int id) throws IOException {
         Application application = applicationRepository.findById(id);
         application.setRequestWithdrawal(true);
         return applicationRepository.save(application);
     }
 
+    @Override
     public Application updateWithdrawalStatus(int id, boolean status) throws IOException {
         Application application = applicationRepository.findById(id);
         application.setRequestWithdrawal(false);
@@ -57,6 +63,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.save(application);
     }
 
+    @Override
     public Application save(Application application) throws IOException {
         return applicationRepository.save(application);
     }

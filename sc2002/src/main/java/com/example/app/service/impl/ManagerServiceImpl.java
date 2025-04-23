@@ -19,6 +19,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     static RegistrationService registrationService = new RegistrationServiceImpl();
 
     // Allow manager to create project
+    @Override
     public Project createProject(Manager manager, String projectName, Date applicationOpenDate,
             Date applicationCloseDate, String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
@@ -34,6 +35,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
 
     // Allow manager to edit project
     // Can retrieve entire project and then edit with fill ins
+    @Override
     public Project updateProject(Manager manager, int projectId, String projectName, Date applicationOpenDate,
             Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
@@ -42,6 +44,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     // Check project ownership
+    @Override
     public boolean isProjectBelongToManager(Manager manager, int projectId) throws IOException {
         Project project = projectService.findById(projectId);
         if (project == null)
@@ -49,6 +52,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         return Objects.equals(project.getManagerId(), manager.getId());
     }
 
+    @Override
     public Project toggleVisibility(Manager manager, int projectId) throws IOException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
@@ -60,20 +64,24 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     // Returns List of projects open to user group and "on" visibility
+    @Override
     public List<Project> getAllProjects() throws IOException {
         return projectService.findAll();
     }
 
     // View my projects
+    @Override
     public List<Project> getMyProjects(Manager manager) throws IOException {
         return projectService.findByManagerId(manager.getId());
     }
 
     // View project he is currently handling
+    @Override
     public Project getHandlingProject(Manager manager) throws IOException {
         return projectService.findByManagerIdAndIsActive(manager.getId());
     }
 
+    @Override
     public List<Registration> getRegistrationsOfCurrentProject(Manager manager) throws IOException {
         Project project = getHandlingProject(manager);
         if (project == null) {
@@ -82,6 +90,7 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         return registrationService.findByProjectId(project.getId());
     }
 
+    @Override
     public void updateRegistrationStatus(Manager manager, int registrationId, RegistrationStatus status)
             throws IOException {
         Registration registration = registrationService.findById(registrationId);
@@ -106,10 +115,12 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     // Delete Project and clean up related records from users
+    @Override
     public void deleteProject(int projectId) throws IOException {
         projectService.deleteProject(projectId);
     }
 
+    @Override
     public List<Application> getApplicationsOfProject(Manager manager, Integer projectId) throws IOException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
@@ -118,20 +129,24 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     }
 
     // Edit application status
+    @Override
     public Application updateApplicationStatus(int applicationId, boolean success) throws IOException {
         ApplicationStatus status = success ? ApplicationStatus.SUCCESSFUL : ApplicationStatus.UNSUCCESSFUL;
         return applicationService.updateStatus(applicationId, status);
     }
 
+    @Override
     public Application updateWithdrawalStatus(int applicationId, boolean success) throws IOException {
         return applicationService.updateWithdrawalStatus(applicationId, success);
     }
 
+    @Override
     public List<Enquiry> getAllEnquiries() throws IOException {
         return enquiryService.findAll();
     }
 
     // Get Enquiries
+    @Override
     public List<Enquiry> getEnquiriesOfProject(Manager manager, int projectId) throws IOException {
         if (!isProjectBelongToManager(manager, projectId)) {
             throw new IllegalArgumentException("Project ID " + projectId + " does not belong to this manager.");
@@ -139,11 +154,12 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         return enquiryService.findByProjectId(projectId);
     }
 
+    @Override
     public Enquiry replyEnquiry(Manager manager, int enquiryId, String reply) throws IOException {
         return enquiryService.replyEnquiry(enquiryId, manager.getId(), reply);
     }
 
-    public boolean hasDateOverlap(Manager manager, Date start, Date end) throws IOException {
+    private boolean hasDateOverlap(Manager manager, Date start, Date end) throws IOException {
         Collection<Project> myProjects = projectService.findByManagerId(manager.getId());
         return myProjects.stream().anyMatch(p -> {
             Date pStart = p.getApplicationOpenDate();

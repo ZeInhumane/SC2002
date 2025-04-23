@@ -15,7 +15,7 @@ public class UserControl {
         }
 
         try {
-            User user = UserServiceImpl.getInstance().login(nric, password);
+            User user = new UserServiceImpl().login(nric, password);
             if (user != null) {
                 System.out.println("Login successful. Welcome, " + user.getName() + "!");
                 return true;

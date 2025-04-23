@@ -11,13 +11,7 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = RepositoryDependency.getUserRepository();
 
-    // singleton pattern
-    private static UserServiceImpl instance;
-    protected UserServiceImpl() {}
-    public static UserServiceImpl getInstance() {
-        return instance == null ? instance = new UserServiceImpl() : instance;
-    }
-
+    @Override
     public User login(String nric, String password) throws IOException {
         User user = userRepository.findByNric(nric);
         if (user == null) return null;
@@ -27,20 +21,24 @@ public class UserServiceImpl implements UserService {
         } else return null;
     }
 
+    @Override
     public User changePassword(User user, String newPassword) throws IOException {
         user.setPassword(newPassword);
         userRepository.save(user);
         return user;
     }
 
+    @Override
     public User findById(int id) throws IOException {
         return userRepository.findById(id);
     }
 
+    @Override
     public User findByNric(String nric) throws IOException {
         return userRepository.findByNric(nric);
     }
 
+    @Override
     public User save(User user) throws IOException {
         return userRepository.save(user);
     }

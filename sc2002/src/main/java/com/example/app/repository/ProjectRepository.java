@@ -73,6 +73,23 @@ public class ProjectRepository extends GeneralRepository<Project> {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Finds all projects by the visibility and open/close date.
+     * @param visibility the visibility of the project
+     * @param date the date to compare with the open and close dates
+     * @return a list of projects that match the criteria
+     * @throws IOException if there is an error reading the file
+     */
+    public List<Project> findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(boolean visibility, Date date)
+            throws IOException {
+        return this.findAll().stream()
+                .filter(p -> Objects.equals(p.getVisibility(), visibility)
+                        && p.getApplicationOpenDate().compareTo(date) <= 0
+                        && p.getApplicationCloseDate().compareTo(date) >= 0)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Finds all projects by the manager ID.
      *

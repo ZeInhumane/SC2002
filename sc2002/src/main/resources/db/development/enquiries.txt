@@ -1,3 +1,1 @@
-912686,1,101,2,When is the project open? I have heard they are open next month, but I am not quite sure...,10,1,It opens next month.
-184456,2,101,1,How many units left?,10,1,Only 5 left.
-812967,1,102,1,Is this project near MRT?,,0
+539162,123,302106,1,Can I apply?,777691,1,Yes you can.

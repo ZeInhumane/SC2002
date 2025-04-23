@@ -20,10 +20,12 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     static ApplicationService applicationService = new ApplicationServiceImpl();
     static EnquiryService enquiryService = new EnquiryServiceImpl();
 
+    @Override
     public List<Project> getViewableProjects(Applicant applicant) throws IOException, NullPointerException {
         return projectService.getPublicProjects(applicant.getMaritalStatus(), true, new Date());
     }
 
+    @Override
     public Project viewAppliedProjects(Applicant applicant) throws IOException, NullPointerException {
         Application application = applicationService.findById(applicant.getApplicationId());
         if (application == null) {
@@ -32,6 +34,15 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return projectService.findById(application.getProjectId());
     }
 
+    // Can only apply if no app exists or the last one failed
+    @Override
+    public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
+        Application application = viewCurrentApplication(applicant);
+        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL
+                || application.getStatus() == ApplicationStatus.WITHDRAWN;
+    }
+
+    @Override
     public Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
         if (project == null) {
@@ -57,6 +68,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return application;
     }
 
+    @Override
     public Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException{
         if (applicant.getApplicationId() == null) {
             return null;
@@ -70,19 +82,14 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     // Get current application safely
+    @Override
     public Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException {
         if (applicant.getApplicationId() == null)
             return null;
         return applicationService.findById(applicant.getApplicationId());
     }
 
-    // Can only apply if no app exists or the last one failed
-    public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
-        Application application = viewCurrentApplication(applicant);
-        return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL
-                || application.getStatus() == ApplicationStatus.WITHDRAWN;
-    }
-
+    @Override
     public Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
         Application application = viewCurrentApplication(applicant);
         if (application == null) {
@@ -97,20 +104,23 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     // Submit enquiry (stores ID back to user profile)
+    @Override
     public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
         return enquiryService.submitEnquiry(question, projectId, applicant.getId());
     }
 
     // get all enquiries made by the applicant
+    @Override
     public List<Enquiry> getAllEnquiries(Applicant applicant) throws IOException, NullPointerException {
         return enquiryService.findByEnquirerId(applicant.getId());
     }
 
     // Edit enquiry (if it belongs to this user)
+    @Override
     public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryService.findById(enquiryId);
 
-        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId()) || !enquiry.getResponse().isEmpty()) {
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId()) || enquiry.getResponse() != null) {
             throw new IllegalArgumentException("You do not have permission to edit this enquiry.");
         }
 
@@ -118,6 +128,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     // Delete enquiry (if it belongs to this user)
+    @Override
     public void deleteEnquiry(Applicant applicant, int enquiryId) throws IOException, NullPointerException {
 
         Enquiry enquiry = enquiryService.findById(enquiryId);
@@ -130,6 +141,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     }
 
+    @Override
     public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
             throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
@@ -143,7 +155,9 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return eligible;
     }
 
-    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) {
+    @Override
+    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws
+            IOException, NullPointerException {
         List<FlatType> eligible = new ArrayList<>();
         if (userStatus == MaritalStatus.SINGLE && userAge >= 35) {
             eligible.add(FlatType._2ROOM);

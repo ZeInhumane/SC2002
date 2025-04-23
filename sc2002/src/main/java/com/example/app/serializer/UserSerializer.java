@@ -25,6 +25,7 @@ public class UserSerializer implements Serializer<User> {
 
     /**
      * Serializes a User object into a string format.
+     * Remember to cast the User object to the appropriate subclass (e.g., Applicant, Officer) before serialization.
      * @param user The User object to serialize.
      * @return The serialized string representation of the User object.
      */
@@ -41,23 +42,25 @@ public class UserSerializer implements Serializer<User> {
                 user.getAge(),
                 user.getMaritalStatus()
         );
-        if (user instanceof Officer officer) {
-            return base + "," +
-                    (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
-                    (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
-                    (officer.getRegisteredId() != null ? officer.getRegisteredId() : "") + "," +
-                    (officer.getProjectId() != null ? officer.getProjectId() : "");
-        }
-        else if (user instanceof Manager manager) {
-            return base;
-        }
-        else if (user instanceof Applicant applicant) {
-            return base + "," + (applicant.getFlatType() != null ? applicant.getFlatType() : "") + "," +
-                    (applicant.getApplicationId() != null ? applicant.getApplicationId() : "");
-        }
-        else {
-            return base;
-        }
+
+        // Append role-specific data
+        return switch (user.getRole()) {
+            case MANAGER -> base;
+            case APPLICANT -> {
+                Applicant applicant = (Applicant) user;
+                yield base + "," +
+                        (applicant.getFlatType() != null ? applicant.getFlatType() : "") + "," +
+                        (applicant.getApplicationId() != null ? applicant.getApplicationId() : "");
+            }
+            case OFFICER -> {
+                Officer officer = (Officer) user;
+                yield base + "," +
+                        (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
+                        (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
+                        (officer.getRegisteredId() != null ? officer.getRegisteredId() : "") + "," +
+                        (officer.getProjectId() != null ? officer.getProjectId() : "");
+            }
+        };
     }
 
     /**
@@ -77,6 +80,7 @@ public class UserSerializer implements Serializer<User> {
         String nric = stringSerializer.deserialize(parts);
         int age = Integer.parseInt(parts.removeFirst().trim());
         MaritalStatus maritalStatus = MaritalStatus.valueOf(parts.removeFirst().trim());
+
 
         // Shared constructor args
         if (role == Role.MANAGER) {
