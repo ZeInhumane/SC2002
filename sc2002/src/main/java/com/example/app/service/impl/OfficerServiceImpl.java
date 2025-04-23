@@ -1,7 +1,6 @@
 package com.example.app.service.impl;
 
 import com.example.app.enums.ApplicationStatus;
-import com.example.app.enums.FlatType;
 import com.example.app.models.*;
 import com.example.app.service.OfficerService;
 import com.example.app.service.RegistrationService;
@@ -12,8 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.example.app.service.impl.ApplicantServiceImpl.projectService;
 
 public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerService {
 
@@ -27,7 +24,6 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     // Checks if cannot register as officer (An applicant for the hdb or has a
     // project somewhere before deadline)
     public boolean isRegistrable(Officer officer, int projectId) throws IOException {
-
         int currentProjectId = officer.getProjectId();
 
         boolean isAlreadyApplicant = officer.getApplicationId() != null && officer.getApplicationId() == projectId;

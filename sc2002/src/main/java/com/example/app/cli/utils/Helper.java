@@ -15,4 +15,8 @@ public class Helper {
             System.out.flush();
         }
     }
+
+    public static String toHeader(String str) {
+        return "== " + str + " ==";
+    }
 }

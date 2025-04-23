@@ -110,7 +110,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryService.findById(enquiryId);
 
-        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId()) || !enquiry.getResponse().isEmpty()) {
+        if (enquiry == null || !Objects.equals(enquiry.getEnquirerId(), applicant.getId()) || enquiry.getResponse() != null) {
             throw new IllegalArgumentException("You do not have permission to edit this enquiry.");
         }
 

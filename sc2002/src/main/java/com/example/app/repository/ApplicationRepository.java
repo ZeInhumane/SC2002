@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.example.app.models.Application;
 import com.example.app.enums.ApplicationStatus;
-import com.example.app.serializer.Serializer;
 import com.example.app.serializer.SerializerDependency;
 
 /**

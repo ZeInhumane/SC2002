@@ -29,7 +29,7 @@ public class PaginatedUI<T> {
         int page = 0;
         int total = (int) Math.ceil(items.size() / (double) pageSize);
         while (true) {
-            System.out.println("== " + title + " ==\n");
+            System.out.println(title + "\n");
             int start = page * pageSize;
             int end = Math.min(start + pageSize, items.size());
             int count = end - start;

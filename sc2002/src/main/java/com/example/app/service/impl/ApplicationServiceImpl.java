@@ -2,11 +2,9 @@ package com.example.app.service.impl;
 
 import com.example.app.enums.ApplicationStatus;
 import com.example.app.enums.FlatType;
-import com.example.app.models.Applicant;
 import com.example.app.models.Application;
 import com.example.app.repository.ApplicationRepository;
 import com.example.app.repository.RepositoryDependency;
-import com.example.app.repository.UserRepository;
 import com.example.app.service.ApplicationService;
 
 import java.io.IOException;

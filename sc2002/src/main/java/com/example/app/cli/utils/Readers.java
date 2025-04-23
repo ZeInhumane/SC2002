@@ -22,6 +22,11 @@ public class Readers {
         return input;
     }
 
+    public static void readEnter() {
+        System.out.println("Press Enter to continue...");
+        sc.nextLine();
+    }
+
     public static String readPassword() {
         String password;
         while (true) {

@@ -3,9 +3,6 @@ package com.example.app.models;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.Role;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Manager extends User {
 
     public Manager() {

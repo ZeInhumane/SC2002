@@ -39,7 +39,7 @@ public class MenuUI {
     public void run() {
         exit = false;
         while (!exit) {
-            System.out.println("== " + title + " ==");
+            System.out.println(title + "\n");
             options.forEach((num, opt) ->
                 System.out.printf("%d. %s%n", num, opt.label)
             );

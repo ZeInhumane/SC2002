@@ -25,7 +25,6 @@ public class EnquirySerializer implements Serializer<Enquiry> {
      */
     @Override
     public String serialize(Enquiry enquiry) {
-
         Integer responseCommas = enquiry.getResponse() == null ? 0 : enquiry.getResponse().split(",", -1).length;
         return String.format("%d,%d,%d,%s,%s,%s", enquiry.getId(), enquiry.getEnquirerId(), enquiry.getProjectId(),
                 stringSerializer.serialize(enquiry.getQuestion()),
