@@ -48,13 +48,13 @@ public class UserSerializer implements Serializer<User> {
             case APPLICANT -> {
                 Applicant applicant = (Applicant) user;
                 yield base + "," +
-                        (applicant.getFlatType() != null ? applicant.getFlatType() : "") + "," +
+                        (applicant.getFlatType() != null ? applicant.getFlatType().name() : "") + "," +
                         (applicant.getApplicationId() != null ? applicant.getApplicationId() : "");
             }
             case OFFICER -> {
                 Officer officer = (Officer) user;
                 yield base + "," +
-                        (officer.getFlatType() != null ? officer.getFlatType() : "") + "," +
+                        (officer.getFlatType() != null ? officer.getFlatType().name() : "") + "," +
                         (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
                         (officer.getRegisteredId() != null ? officer.getRegisteredId() : "") + "," +
                         (officer.getProjectId() != null ? officer.getProjectId() : "");
