@@ -1,10 +1,10 @@
-package com.example.app.cli;
+package com.example.app.cli.applicant;
 
 import com.example.app.control.ApplicantControl;
 import com.example.app.models.Applicant;
 import com.example.app.RuntimeData;
-import com.example.app.cli.utils.Helper;
-import com.example.app.cli.utils.Readers;
+import com.example.app.cli.utils.*;
+import com.example.app.cli.common.MenuUI;
 import com.example.app.control.UserControl;
 
 public class ApplicantUI {

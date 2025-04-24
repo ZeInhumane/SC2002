@@ -1,38 +1,39 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.control.OfficerControl;
 import com.example.app.models.Application;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.*;
 
 /**
- * Handles viewing and printing successful bookings for the officer's HandlingProject.
+ * Handles viewing and booking pending applications for the officer's HandlingProject.
  */
-public class OfficerSuccessfulBookingsUI {
+public class OfficerPendingBookingsUI {
     private final OfficerControl ctrl;
 
-    public OfficerSuccessfulBookingsUI(OfficerControl ctrl) {
+    public OfficerPendingBookingsUI(OfficerControl ctrl) {
         this.ctrl = ctrl;
     }
 
     public void run() {
-        PaginatedUI<Application> paginator = new PaginatedUI<>(
-            Helper.toHeader("Successful Bookings"),
+        PaginatedUI<Application> paginator = new PaginatedUI<Application>(
+            Helper.toHeader("Pending Bookings"),
             ctrl::getBookingApplications,
             this::handleApplicationSelection,
             5,
-            "No successful bookings found for your handling project."
+            "No pending bookings found for your handling project."
         );
         paginator.run();
     }
 
     private void handleApplicationSelection(Application application) {
         MenuUI subMenu = new MenuUI(Helper.toHeader("Application Details") + "\n" + application);
-        subMenu.addOption("Print Booking Receipt", () -> {
+        subMenu.addOption("Book Applicant", () -> {
             try {
-                String receipt = ctrl.generateBookingReceipt(application.getUserId());
-                System.out.println("Booking Receipt:\n" + receipt);
+                ctrl.bookFlatForApplicant(application.getUserId());
+                System.out.println("Applicant booked successfully.");
             } catch (Exception e) {
-                System.out.println("Error generating receipt: " + e.getMessage());
+                System.out.println("Error booking applicant: " + e.getMessage());
             }
             Readers.readEnter();
         });

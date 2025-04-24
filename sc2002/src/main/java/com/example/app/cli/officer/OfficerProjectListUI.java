@@ -1,9 +1,10 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.control.OfficerControl;
 import com.example.app.models.Project;
 import com.example.app.enums.FlatType;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.*;
 
 /**
  * Displays a paginated list of projects and handles project-specific actions for officers.

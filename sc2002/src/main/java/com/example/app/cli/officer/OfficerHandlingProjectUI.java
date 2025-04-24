@@ -1,10 +1,11 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.control.OfficerControl;
 import com.example.app.models.Project;
 import com.example.app.models.Registration;
 import com.example.app.enums.RegistrationStatus;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.MenuUI;
 
 public class OfficerHandlingProjectUI {
     private final OfficerControl ctrl;

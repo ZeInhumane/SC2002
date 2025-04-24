@@ -1,15 +1,15 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
-import com.example.app.control.ApplicantControl;
+import com.example.app.control.OfficerControl;
 import com.example.app.models.Project;
 import com.example.app.models.Application;
-import com.example.app.cli.utils.Helper;
-import com.example.app.cli.utils.Readers;
+import com.example.app.cli.utils.*;
+import com.example.app.cli.common.MenuUI;
 
-public class ApplicantAppliedProjectUI {
-    private final ApplicantControl ctrl;
+public class OfficerAppliedProjectUI {
+    private final OfficerControl ctrl;
 
-    public ApplicantAppliedProjectUI(ApplicantControl ctrl) {
+    public OfficerAppliedProjectUI(OfficerControl ctrl) {
         this.ctrl = ctrl;
     }
 

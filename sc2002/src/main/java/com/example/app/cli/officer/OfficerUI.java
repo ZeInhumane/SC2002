@@ -1,10 +1,11 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.control.OfficerControl;
 import com.example.app.control.UserControl;
 import com.example.app.models.Officer;
 import com.example.app.RuntimeData;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.MenuUI;
 
 public class OfficerUI {
     private final OfficerControl ctrl;

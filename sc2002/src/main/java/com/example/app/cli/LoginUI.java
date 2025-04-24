@@ -4,6 +4,11 @@ import com.example.app.cli.utils.*;
 import com.example.app.control.UserControl;
 import com.example.app.RuntimeData;
 
+import com.example.app.cli.applicant.ApplicantUI;
+import com.example.app.cli.common.MenuUI;
+import com.example.app.cli.officer.OfficerUI;
+import com.example.app.cli.manager.ManagerUI;
+
 public class LoginUI {
     private final MenuUI menu;
     private final UserControl userControl;
@@ -41,7 +46,7 @@ public class LoginUI {
                     new OfficerUI().run();
                     break;
                 case MANAGER:
-                    // new ManagerUI().run();
+                    new ManagerUI().run();
                     break;
                 default:
                     System.out.println("Unknown role. Please contact support.");

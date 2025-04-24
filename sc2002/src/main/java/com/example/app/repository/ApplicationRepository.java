@@ -85,5 +85,4 @@ public class ApplicationRepository extends GeneralRepository<Application> {
     public List<Application> findByStatus(ApplicationStatus status) throws IOException {
         return this.findAll().stream().filter(a -> Objects.equals(a.getStatus(), status)).collect(Collectors.toList());
     }
-
 }

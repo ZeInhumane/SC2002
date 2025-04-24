@@ -1,4 +1,4 @@
-package com.example.app.cli;
+package com.example.app.cli.common;
 
 import java.util.LinkedHashMap;
 import com.example.app.cli.utils.Helper;

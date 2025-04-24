@@ -1,15 +1,15 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.cli.utils.*;
-import com.example.app.control.ApplicantControl;
-
+import com.example.app.control.OfficerControl;
 import com.example.app.models.Enquiry;
+import com.example.app.cli.common.*;
 
-public class ApplicantEnquiryUI {
-    private final ApplicantControl ctrl;
+public class OfficerEnquiryUI {
+    private final OfficerControl ctrl;
     private final PaginatedUI<Enquiry> paginator;
 
-    ApplicantEnquiryUI(ApplicantControl ctrl) {
+    public OfficerEnquiryUI(OfficerControl ctrl) {
         this.ctrl = ctrl;
         this.paginator = buildPaginator();
     }
@@ -44,11 +44,10 @@ public class ApplicantEnquiryUI {
             try {
                 ctrl.deleteEnquiry(enquiry.getId());
                 System.out.println("Enquiry deleted.");
-                Readers.readEnter();
-                subMenu.exit();
             } catch (Exception e) {
                 System.out.println("Error deleting enquiry: " + e.getMessage());
             }
+            Readers.readEnter();
         });
         subMenu.addOption("Back", subMenu::exit);
         subMenu.run();

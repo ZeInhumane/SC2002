@@ -24,8 +24,11 @@ public interface ApplicationService {
     // For applicant to withdraw application
     Application withdrawApplication(int id) throws IOException;
 
-    // For maanger to accept withdrawal
+    // For manager to accept withdrawal
     Application updateWithdrawalStatus(int id, boolean status) throws IOException;
+
+    // For manager to get all booked applications
+    List<Application> getAllBookedApplications() throws IOException;
 
     Application save(Application application) throws IOException;
 }

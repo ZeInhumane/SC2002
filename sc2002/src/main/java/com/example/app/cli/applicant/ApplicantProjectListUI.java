@@ -1,9 +1,10 @@
-package com.example.app.cli;
+package com.example.app.cli.applicant;
 
 import com.example.app.control.ApplicantControl;
 import com.example.app.models.Project;
 import com.example.app.enums.FlatType;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.*;
 
 /**
  * Displays a paginated list of projects and handles project-specific actions.

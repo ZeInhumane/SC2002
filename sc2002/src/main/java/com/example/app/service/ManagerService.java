@@ -7,9 +7,9 @@ import com.example.app.models.*;
 import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.RegistrationStatus;
+import com.example.app.models.ApplicantBookingReportRow;
 
 public interface ManagerService extends UserService {
-
     Project createProject(Manager manager, String projectName, Date applicationOpenDate, Date applicationCloseDate,
             String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
             throws IOException;
@@ -45,4 +45,15 @@ public interface ManagerService extends UserService {
     List<Enquiry> getEnquiriesOfProject(Manager manager, int projectId) throws IOException;
 
     Enquiry replyEnquiry(Manager manager, int enquiryId, String message) throws IOException;
+
+    /**
+     * Get a list of booked applications (successful), joined with applicant and project info, filtered by marital status, flat type, project name, and age range if not null.
+     */
+    List<ApplicantBookingReportRow> getBookedApplicationsReport(
+        MaritalStatus maritalStatus,
+        FlatType flatType,
+        String projectName,
+        Integer minAge,
+        Integer maxAge
+    ) throws IOException;
 }

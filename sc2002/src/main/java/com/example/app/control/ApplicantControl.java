@@ -1,6 +1,5 @@
 package com.example.app.control;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.example.app.enums.FlatType;
@@ -28,80 +27,80 @@ public class ApplicantControl {
     public List<Project> getViewableProjects() {
         try {
             return applicantService.getViewableProjects(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error retrieving viewable projects", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting viewable projects: " + e.getMessage(), e);
         }
     }
 
     public boolean isAbleToApply() {
         try {
             return applicantService.isAbleToApply(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error checking application eligibility", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error checking application eligibility: " + e.getMessage(), e);
         }
     }
 
     public void applyForProject(int projectId, FlatType flatType) {
         try {
             applicantService.applyForProject(this.applicant, projectId, flatType);
-        } catch (IOException e) {
-            throw new RuntimeException("Error applying for project", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error applying for project: " + e.getMessage(), e);
         }
     }
 
     public void submitEnquiry(String message, int projectId) {
         try {
             applicantService.submitEnquiry(this.applicant, message, projectId);
-        } catch (IOException e) {
-            throw new RuntimeException("Error submitting enquiry", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error submitting enquiry: " + e.getMessage(), e);
         }
     }
 
     public Application getApplication() {
         try {
             return applicantService.viewApplication(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error retrieving application", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting application: " + e.getMessage(), e);
         }
     }
 
     public Project getAppliedProject() {
         try {
             return applicantService.viewAppliedProject(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error retrieving applied project", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting applied project: " + e.getMessage(), e);
         }
     }
 
     public void withdrawApplication() {
         try {
             applicantService.withdrawApplication(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error withdrawing application", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error withdrawing application: " + e.getMessage(), e);
         }
     }
 
     public List<Enquiry> getEnquiries() {
         try {
             return applicantService.getOwnEnquiries(this.applicant);
-        } catch (IOException e) {
-            throw new RuntimeException("Error retrieving enquiries", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting enquiries: " + e.getMessage(), e);
         }
     }
 
     public void updateEnquiry(int enquiryId, String newMessage) {
         try {
             applicantService.updateEnquiry(this.applicant, enquiryId, newMessage);
-        } catch (IOException e) {
-            throw new RuntimeException("Error editing enquiry", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating enquiry: " + e.getMessage(), e);
         }
     }
 
     public void deleteEnquiry(int enquiryId) {
         try {
             applicantService.deleteEnquiry(this.applicant, enquiryId);
-        } catch (IOException e) {
-            throw new RuntimeException("Error deleting enquiry", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting enquiry: " + e.getMessage(), e);
         }
     }
 }

@@ -1,8 +1,9 @@
-package com.example.app.cli;
+package com.example.app.cli.officer;
 
 import com.example.app.control.OfficerControl;
 import com.example.app.models.Enquiry;
 import com.example.app.cli.utils.*;
+import com.example.app.cli.common.*;
 
 /**
  * Handles viewing and replying to enquiries for the officer's HandlingProject.

@@ -39,6 +39,18 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
     public Project updateProject(Manager manager, int projectId, String projectName, Date applicationOpenDate,
             Date applicationCloseDate, String neighborhood, boolean visibility, Set<MaritalStatus> groups,
             Map<FlatType, Integer> flats) throws IOException {
+        Project project = projectService.findById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project not found.");
+        }
+        Date now = new Date();
+        if (!now.before(project.getApplicationOpenDate())) {
+            throw new IllegalArgumentException("Cannot edit project after application open date.");
+        }
+        // Check for date overlap with other projects (exclude this project)
+        if (hasDateOverlapExcludingProject(manager, applicationOpenDate, applicationCloseDate, projectId)) {
+            throw new IllegalArgumentException("Project dates overlap with existing projects.");
+        }
         return projectService.updateProject(projectId, projectName, applicationOpenDate, applicationCloseDate,
                 neighborhood, manager.getId(), visibility, groups, flats);
     }
@@ -159,6 +171,38 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
         return enquiryService.replyEnquiry(enquiryId, manager.getId(), reply);
     }
 
+    @Override
+    public List<ApplicantBookingReportRow> getBookedApplicationsReport(MaritalStatus maritalStatus, FlatType flatType, String projectName, Integer minAge, Integer maxAge) throws IOException {
+        List<Application> applications = applicationService.getAllBookedApplications();
+        List<ApplicantBookingReportRow> reportRows = new ArrayList<>();
+        for (Application app : applications) {
+            if (app.getStatus() != com.example.app.enums.ApplicationStatus.SUCCESSFUL) continue;
+            User user = this.findById(app.getUserId());
+            if (!(user instanceof Applicant)) continue;
+            Applicant applicant = (Applicant) user;
+            Project project = projectService.findById(app.getProjectId());
+            if (project == null) continue;
+            // Filter by marital status
+            if (maritalStatus != null && applicant.getMaritalStatus() != maritalStatus) continue;
+            // Filter by flat type
+            if (flatType != null && app.getFlatType() != flatType) continue;
+            // Filter by project name (case-insensitive contains)
+            if (projectName != null && !project.getProjectName().toLowerCase().contains(projectName.toLowerCase())) continue;
+            // Filter by age range
+            int age = applicant.getAge();
+            if (minAge != null && age < minAge) continue;
+            if (maxAge != null && age > maxAge) continue;
+            reportRows.add(new ApplicantBookingReportRow(
+                applicant.getName(),
+                applicant.getAge(),
+                applicant.getMaritalStatus(),
+                project.getProjectName(),
+                app.getFlatType()
+            ));
+        }
+        return reportRows;
+    }
+
     private boolean hasDateOverlap(Manager manager, Date start, Date end) throws IOException {
         Collection<Project> myProjects = projectService.findByManagerId(manager.getId());
         return myProjects.stream().anyMatch(p -> {
@@ -166,6 +210,17 @@ public class ManagerServiceImpl extends UserServiceImpl implements ManagerServic
             Date pEnd = p.getApplicationCloseDate();
             return !(end.before(pStart) || start.after(pEnd));
         });
+    }
+
+    private boolean hasDateOverlapExcludingProject(Manager manager, Date start, Date end, int excludeProjectId) throws IOException {
+        Collection<Project> myProjects = projectService.findByManagerId(manager.getId());
+        return myProjects.stream()
+            .filter(p -> p.getId() != excludeProjectId)
+            .anyMatch(p -> {
+                Date pStart = p.getApplicationOpenDate();
+                Date pEnd = p.getApplicationCloseDate();
+                return !(end.before(pStart) || start.after(pEnd));
+            });
     }
 
 }

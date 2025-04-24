@@ -62,6 +62,11 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public List<Application> getAllBookedApplications() throws IOException {
+        return applicationRepository.findByStatus(ApplicationStatus.BOOKED);
+    }
+
+    @Override
     public Application save(Application application) throws IOException {
         return applicationRepository.save(application);
     }

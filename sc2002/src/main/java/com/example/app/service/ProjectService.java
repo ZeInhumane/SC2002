@@ -8,7 +8,6 @@ import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
 
 public interface ProjectService {
-
     // Find project by id
     // Also works with the only project that the officer is managing
     Project findById(int id) throws IOException;
