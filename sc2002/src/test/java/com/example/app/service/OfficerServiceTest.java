@@ -128,9 +128,9 @@ class OfficerServiceTest {
 
         Applicant a1 = new Applicant(null, "App1", "pw", "1@a.com", Role.APPLICANT, "S0000001A", 35, MaritalStatus.SINGLE, null, null);
         a1 = (Applicant) RepositoryDependency.getUserRepository().save(a1);
-        applicationService.save(new Application(null, a1.getId(), project.getId(), ApplicationStatus.PENDING, false, FlatType._3ROOM));
+        applicationService.save(new Application(null, a1.getId(), project.getId(), ApplicationStatus.BOOKED, false, FlatType._3ROOM));
 
-        List<Application> apps = service.getBookingApplications(officer);
+        List<Application> apps = service.getBookedApplications(officer);
         assertEquals(1, apps.size());
     }
 
@@ -208,7 +208,8 @@ class OfficerServiceTest {
         RepositoryDependency.getProjectRepository().deleteById(project.getId());
 
         assertNull(service.viewHandlingProject(officer));
-        assertFalse(service.getBookedApplications(officer).isEmpty());
+        assertFalse(service.getBookingApplications(officer).isEmpty());
+        assertTrue(service.getBookedApplications(officer).isEmpty());
         assertFalse(service.getHandlingEnquiries(officer).isEmpty());
 
         // Optionally test replyEnquiry / booking gracefully fails or does nothing

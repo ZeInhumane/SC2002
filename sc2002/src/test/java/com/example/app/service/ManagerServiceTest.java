@@ -145,7 +145,7 @@ class ManagerServiceTest {
         Date overlapStart = new Date(now.getTime() + 86400000L);
         Date overlapEnd = new Date(now.getTime() + 86400000L * 3);
 
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(IllegalStateException.class, () ->
                 service.createProject(manager, "OverlapProj", overlapStart, overlapEnd,
                         "East", true, 5, new HashSet<>(), new HashSet<>(), Map.of(FlatType._3ROOM, 3)));
     }
@@ -172,7 +172,7 @@ class ManagerServiceTest {
         officer = (Officer) RepositoryDependency.getUserRepository().save(officer);
         Registration registration = RepositoryDependency.getRegistrationRepository().save(new Registration(null, officer.getId(), p.getId(), RegistrationStatus.APPROVED));
         officer.setProjectId(p.getId());
-        officer.setRegisteredId(registration.getId());
+        officer.setRegistrationId(registration.getId());
         RepositoryDependency.getUserRepository().save(officer);
 
         // Delete the project
