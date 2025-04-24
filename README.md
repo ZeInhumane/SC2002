@@ -1,90 +1,104 @@
-# SC/CE/CZ2002: Object-Oriented Design & Programming Project 
-This project focuses on developing a software application for the Housing and Development Board (HDB) system, specifically for managing Build-to-Order (BTO) applications and project registrations. This system aims to streamline the process of handling BTO applications, from submission to project management, containing 3 roles of users: Applicants/Officers and Managers
+# SC2002 CLI HDB Flat Booking Application
 
-## Objectives
-The main objective of this assignment is
-- to apply the Object-Oriented (OO) concepts you have learnt in the course,
-- to model, design and develop an OO application.
-- to gain familiarity with using Java as an object-oriented programming
-language.
-- to work collaboratively as a group to achieve a common goal. 
+## Overview
 
----
+This is a Java-based, command-line interface (CLI) application simulating the end-to-end process of applying for and managing HDB flat bookings. It supports three user roles:
 
-## Deliverables
+- **Applicant**: Browse projects, submit and manage flat applications, view and withdraw applications, and submit enquiries.
+- **Officer**: View applicants’ booking applications, register and book flats on behalf of applicants, manage and reply to enquiries, and generate booking receipts.
+- **Manager**: (Planned) Oversee projects, approvals, and officer workflows (to be implemented).
 
-### UML Class Diagram 
-A detailed UML Class Diagram for the application (exported as an image)
-- Show clearly the class relationship, notation
-- Annotate your UML diagram to highlight where specific OO principles (e.g., encapsulation, polymorphism) are applied. 
-
-
-### UML Sequence Diagram
-A detailed UML Sequence Diagram (exported as an image)
-- The diagram should show clearly all participating objects involved with sufficient detailed flow and relevant interaction fragments.
-
-
-### Report
-#### Report should contain:
-UML Class Diagram:
-- Show the class relationships and apply appropriate notations.
-- Include notes to explain the diagram, highlighting specific Object-Oriented (OO) principles (e.g., encapsulation, polymorphism).
-
-#### UML Sequence Diagram
-- Detail the flow of interactions for the HDB Officer's role in applying for a Build-to-Order (BTO) and registering to handle a project.
-
-#### Additional Features/Functionalities
-- Highlight any extra features added to the system.
-
-#### Design Considerations
-- Discuss the OO concepts used, the design’s extensibility, and maintainability.
-- Reflect on trade-offs made in design choices and how design patterns were applied. Include alternative patterns considered and the reasoning behind your final choice.
-
-#### Reflection
-- Share any difficulties encountered, the knowledge learned, and suggestions for improvement based on experience.
-
-#### GitHub Repository
-- Provide a link to your GitHub repository with all relevant files and code.
-
-#### Declaration of Original Work:
-- Include a signed Declaration form confirming original work (Appendix B).
+The application stores data in plain-text files (development/production modes) and uses a service–repository pattern with customizable serializers.
 
 ---
 
-## DEMOSTRATION & PRESENTATION (Deadline: Week 14 Friday, 11:59pm)
-Your group is required to present your work to your TA to demonstrate the working of the application – presenting ALL the required functionalities of the
-application. It is advised that you planned your demonstration in a storyboarding flow to facilitate understanding of your application. Please introduce your members and group number at the start of presentation, all the group members must take turn to present. The presenter should show his/her face while presenting.
-In the production, you may include:
-- Explaining essential and relevant information about the application
-- Run-through and elaborate on essential part/s of your implementation/coding
+## Key Features
 
-Presentation is 15min total, font must be large enough and the demo is to be done in real time not prerun display. 
+- **Authentication & Authorization**: Login by NRIC/password, role-based menus
+- **Project Browsing & Application**: View available projects, apply for flats, track application status
+- **Enquiry Management**: Create, edit, delete enquiries about projects
+- **Officer Booking Workflow**: Officers can register for new projects, view pending/confirmed bookings, process applications, and generate receipts
+- **Flexible Storage**: Reads/writes to `resources/db/{development|production}/*.txt` with pluggable serializers
+- **Build & Test**: Maven-based build, JUnit test suite
+- **UML Diagrams**: Detailed sequence, class, and package diagrams under `uml-diagrams/`
 
-<p style='color: red;'> Repository is to be submitted one day before presentation with TA </p>
+---
 
+## Getting Started
 
---- 
+### Prerequisites
 
-## Assessment Weightage 
-### UML Class Diagram [25 Marks]
-- Show mainly the Entity classes, the essential Control and Boundary classes, and enumeration type (if there is).
-- Clarity, Correctness and Completeness of details and relationship.
+- **Java JDK 11** or higher
+- **Maven 3.6+**
 
-### UML Sequence Diagram [20 Marks]
-- Show only the sequence Diagram mentioned in 5(b)
-- Clarity, Correctness and Completeness of flow and object interactions details (Boundary-Control-Entities)
+### Build & Run
 
-### Design Consideration [15 Marks]
-- Usage of OO concepts and principle - correctness and appropriateness
-- Explanation of design choices and how it fits the project requirements
-- Coupling and cohesion of classes
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-org/sc2002.git
+   cd sc2002
+   ```
 
-### Implementation Code [20 Marks]
-- Diagram to Code correctness, readability, Java naming convention, exception handling, completeness of Java Doc and overall quality.
-- Creativity of the additional features/functionality added to the system.
-- A Java API HTML documentation of ALL your defined classes using Javadoc must be submitted.
+2. Build with Maven:
+   ```bash
+   mvn clean package
+   ```
 
-### Demonstration and report [20 Marks]
-- Coverage of application essentials and functionalities, user friendliness, demo flow, innovation.
-- Report structure and reflection
-- Highlight clearly any additional features implemented in the system
+3. Run in development mode:
+   ```bash
+   mvn exec:java -Dexec.mainClass="com.example.app.cli.Main" -Dexec.args="--mode=development"
+   ```
+
+4. Switch to production mode by changing `--mode=production` and using the production files under `resources/db/production/`.
+
+### Running Tests
+
+Execute all unit tests:
+```bash
+mvn test
+```
+
+---
+
+## Project Structure
+
+```
+sc2002/
+├─ src/main/java/com/example/app/
+│  ├─ cli/            # Command-line UI components
+│  │   └─ utils/      # CLI helper classes (Helper, Readers)
+│  ├─ control/        # Controllers orchestrating UI ↔ services
+│  ├─ service/        # Service interfaces
+│  ├─ service/impl/   # Business logic implementations
+│  ├─ repository/     # Data access; serializers & repositories
+│  ├─ models/         # Domain entities (Applicant, Officer, Project, etc.)
+│  ├─ enums/          # Status, Role, FlatType definitions
+│  ├─ exceptions/     # Custom exception types
+│  └─ utils/          # Helpers for I/O, runtime configuration
+├─ src/main/resources/db/
+│  ├─ development/    # Text files for dev data
+│  └─ production/     # Text files for live data
+├─ src/test/java      # Unit tests
+├─ uml-diagrams/      # PlantUML & Draw.io diagrams
+└─ pom.xml            # Maven configuration
+```
+
+---
+
+## Configuration & Data Files
+
+- **resources/db/development/**: sample data sets (applicants, projects, registrations, enquiries, users).
+- **resources/db/production/**: separate files for production mode.
+- **Excel reference lists**: under `resources/` for bulk imports (ApplicantList.xlsx, ProjectList.xlsx, etc.).
+
+Modify `Settings.java` for file paths and application mode.
+
+---
+
+## UML Diagrams
+
+See the `uml-diagrams/` folder for:
+- **Class Diagrams**: Domain model and package structure
+- **Sequence Diagrams**: Login flow, Applicant flows, Officer enquiry/bookings workflows
+
+---
