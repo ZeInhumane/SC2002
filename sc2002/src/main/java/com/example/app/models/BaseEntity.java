@@ -1,8 +1,8 @@
 package com.example.app.models;
 
 /**
- * BaseEntity interface that defines the basic structure for entities in the application.
- * It includes methods to get and set the ID of the entity and a toString method for string representation.
+ * BaseEntity interface that defines the basic structure for entities in the application. It includes methods to get and
+ * set the ID of the entity and a toString method for string representation.
  *
  */
 public interface BaseEntity {
@@ -17,7 +17,8 @@ public interface BaseEntity {
     /**
      * Sets the ID of the entity.
      *
-     * @param id the new ID of the entity
+     * @param id
+     *            the new ID of the entity
      */
     void setId(Integer id);
 

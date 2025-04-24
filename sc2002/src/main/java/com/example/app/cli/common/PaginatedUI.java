@@ -7,11 +7,7 @@ import com.example.app.cli.utils.Helper;
 import com.example.app.cli.utils.Readers;
 
 /**
- * Paginates any List<T>:
- *   1..pageSize => items
- *   pageSize+1 => Previous Page
- *   pageSize+2 => Next Page
- *   pageSize+3 => Back
+ * Paginates any List<T>: 1..pageSize => items pageSize+1 => Previous Page pageSize+2 => Next Page pageSize+3 => Back
  */
 public class PaginatedUI<T> {
     private final String title;
@@ -20,7 +16,8 @@ public class PaginatedUI<T> {
     private final int pageSize;
     private final String emptyMessage;
 
-    public PaginatedUI(String title, Supplier<List<T>> itemsSupplier, Consumer<T> onSelect, int pageSize, String emptyMessage) {
+    public PaginatedUI(String title, Supplier<List<T>> itemsSupplier, Consumer<T> onSelect, int pageSize,
+            String emptyMessage) {
         this.title = title;
         this.itemsSupplier = itemsSupplier;
         this.onSelect = onSelect;
@@ -56,14 +53,17 @@ public class PaginatedUI<T> {
             int choice = Readers.readIntRange(1, pageSize + 3);
             Helper.wipeScreen();
 
-            if (choice <= count) onSelect.accept(items.get(start + choice - 1));
+            if (choice <= count)
+                onSelect.accept(items.get(start + choice - 1));
             else if (choice <= pageSize) {
                 System.out.println("Invalid choice. Please try again.");
                 Readers.readEnter();
-            }
-            else if (choice == pageSize + 1) page = Math.max(0, page - 1);
-            else if (choice == pageSize + 2) page = Math.min(total - 1, page + 1);
-            else return;
+            } else if (choice == pageSize + 1)
+                page = Math.max(0, page - 1);
+            else if (choice == pageSize + 2)
+                page = Math.min(total - 1, page + 1);
+            else
+                return;
         }
     }
 }

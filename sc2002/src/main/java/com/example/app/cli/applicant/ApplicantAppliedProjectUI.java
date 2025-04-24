@@ -21,7 +21,8 @@ public class ApplicantAppliedProjectUI {
             Readers.readEnter();
             return;
         }
-        MenuUI menu = new MenuUI(Helper.toHeader("Application Details") + "\n" + application + "\n" + Helper.toHeader("Project Details") + "\n" + project);
+        MenuUI menu = new MenuUI(Helper.toHeader("Application Details") + "\n" + application + "\n"
+                + Helper.toHeader("Project Details") + "\n" + project);
         menu.addOption("Withdraw Application", () -> {
             try {
                 ctrl.withdrawApplication();

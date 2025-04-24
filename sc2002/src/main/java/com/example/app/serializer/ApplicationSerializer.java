@@ -8,8 +8,9 @@ import com.example.app.models.Application;
 import java.util.LinkedList;
 
 /**
- * Serializer for Application objects.
- * This class implements the Serializer interface and provides methods to serialize and deserialize Application objects.
+ * Serializer for Application objects. This class implements the Serializer interface and provides methods to serialize
+ * and deserialize Application objects.
+ * 
  * @see Serializer
  * @see Application
  */

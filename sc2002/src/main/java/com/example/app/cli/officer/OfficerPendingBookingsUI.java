@@ -16,13 +16,9 @@ public class OfficerPendingBookingsUI {
     }
 
     public void run() {
-        PaginatedUI<Application> paginator = new PaginatedUI<Application>(
-            Helper.toHeader("Pending Bookings"),
-            ctrl::getBookingApplications,
-            this::handleApplicationSelection,
-            5,
-            "No pending bookings found for your handling project."
-        );
+        PaginatedUI<Application> paginator = new PaginatedUI<Application>(Helper.toHeader("Pending Bookings"),
+                ctrl::getBookingApplications, this::handleApplicationSelection, 5,
+                "No pending bookings found for your handling project.");
         paginator.run();
     }
 

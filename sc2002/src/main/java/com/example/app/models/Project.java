@@ -8,11 +8,9 @@ import com.example.app.exceptions.OfficerAlreadyInsideException;
 import com.example.app.exceptions.OfficerLimitExceededException;
 
 /**
- * Represents a project in the system.
- * This class implements the BaseEntity interface.
- * It contains project details such as ID, name, application dates, neighborhood,
- * manager ID, visibility, officer limit, officers, groups, and flat count.
- * Provides methods to manage officers, groups, and flats.
+ * Represents a project in the system. This class implements the BaseEntity interface. It contains project details such
+ * as ID, name, application dates, neighborhood, manager ID, visibility, officer limit, officers, groups, and flat
+ * count. Provides methods to manage officers, groups, and flats.
  *
  * @see BaseEntity
  * @see FlatType
@@ -61,8 +59,7 @@ public class Project implements BaseEntity {
     private Integer officerLimit;
 
     /**
-     * The set of officer IDs assigned to the project. A set is used to ensure
-     * unique officer IDs.
+     * The set of officer IDs assigned to the project. A set is used to ensure unique officer IDs.
      */
     private Set<Integer> officers;
 
@@ -77,8 +74,8 @@ public class Project implements BaseEntity {
     private Map<FlatType, Integer> flatCount;
 
     /**
-     * Default constructor for the Project class.
-     * This constructor initializes the officers and groups sets, and the flatCount map.
+     * Default constructor for the Project class. This constructor initializes the officers and groups sets, and the
+     * flatCount map.
      */
     public Project() {
         this.groups = new HashSet<>();
@@ -88,21 +85,34 @@ public class Project implements BaseEntity {
 
     /**
      * Constructor for the Project class with parameters.
-     * @param id the ID of the project. This field should be null for new projects. After saving to the database, it will be set.
-     * @param projectName the name of the project. This should be unique
-     * @param applicationOpenDate the date when the application opens
-     * @param applicationCloseDate the date when the application closes
-     * @param neighborhood the neighborhood where the project is located
-     * @param managerId the ID of the manager responsible for the project
-     * @param visibility the visibility status of the project
-     * @param officerLimit the limit on the number of officers that can be assigned to the project
-     * @param officers the set of officer IDs assigned to the project
-     * @param groups the set of marital status groups that the project is open to
-     * @param flatCount the map of flat types and their corresponding counts available in the project
+     * 
+     * @param id
+     *            the ID of the project. This field should be null for new projects. After saving to the database, it
+     *            will be set.
+     * @param projectName
+     *            the name of the project. This should be unique
+     * @param applicationOpenDate
+     *            the date when the application opens
+     * @param applicationCloseDate
+     *            the date when the application closes
+     * @param neighborhood
+     *            the neighborhood where the project is located
+     * @param managerId
+     *            the ID of the manager responsible for the project
+     * @param visibility
+     *            the visibility status of the project
+     * @param officerLimit
+     *            the limit on the number of officers that can be assigned to the project
+     * @param officers
+     *            the set of officer IDs assigned to the project
+     * @param groups
+     *            the set of marital status groups that the project is open to
+     * @param flatCount
+     *            the map of flat types and their corresponding counts available in the project
      */
     public Project(Integer id, String projectName, Date applicationOpenDate, Date applicationCloseDate,
-            String neighborhood, Integer managerId, Boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups,
-            Map<FlatType, Integer> flatCount) {
+            String neighborhood, Integer managerId, Boolean visibility, Integer officerLimit, Set<Integer> officers,
+            Set<MaritalStatus> groups, Map<FlatType, Integer> flatCount) {
         this.id = id;
         this.projectName = projectName;
         this.applicationOpenDate = applicationOpenDate;
@@ -118,6 +128,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the ID of the project.
+     * 
      * @return the ID of the project
      */
     @Override
@@ -127,7 +138,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the ID of the project.
-     * @param id the ID of the project
+     * 
+     * @param id
+     *            the ID of the project
      */
     @Override
     public void setId(Integer id) {
@@ -136,6 +149,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the name of the project.
+     * 
      * @return the name of the project
      */
     public String getProjectName() {
@@ -144,7 +158,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the name of the project.
-     * @param projectName the name of the project
+     * 
+     * @param projectName
+     *            the name of the project
      */
     public void setProjectName(String projectName) {
         this.projectName = projectName;
@@ -152,6 +168,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the date when the application opens.
+     * 
      * @return the date when the application opens
      */
     public Date getApplicationOpenDate() {
@@ -160,7 +177,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the date when the application opens.
-     * @param applicationOpenDate the date when the application opens
+     * 
+     * @param applicationOpenDate
+     *            the date when the application opens
      */
     public void setApplicationOpenDate(Date applicationOpenDate) {
         this.applicationOpenDate = applicationOpenDate;
@@ -168,6 +187,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the date when the application closes.
+     * 
      * @return the date when the application closes
      */
     public Date getApplicationCloseDate() {
@@ -176,7 +196,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the date when the application closes.
-     * @param applicationCloseDate the date when the application closes
+     * 
+     * @param applicationCloseDate
+     *            the date when the application closes
      */
     public void setApplicationCloseDate(Date applicationCloseDate) {
         this.applicationCloseDate = applicationCloseDate;
@@ -184,6 +206,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the neighborhood where the project is located.
+     * 
      * @return the neighborhood where the project is located
      */
     public String getNeighborhood() {
@@ -192,7 +215,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the neighborhood where the project is located.
-     * @param neighborhood the neighborhood where the project is located
+     * 
+     * @param neighborhood
+     *            the neighborhood where the project is located
      */
     public void setNeighborhood(String neighborhood) {
         this.neighborhood = neighborhood;
@@ -200,6 +225,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the limit on the number of officers that can be assigned to the project.
+     * 
      * @return the limit on the number of officers
      */
     public Integer getOfficerLimit() {
@@ -208,7 +234,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the limit on the number of officers that can be assigned to the project.
-     * @param officerLimit the limit on the number of officers
+     * 
+     * @param officerLimit
+     *            the limit on the number of officers
      */
     public void setOfficerLimit(Integer officerLimit) {
         this.officerLimit = officerLimit;
@@ -216,8 +244,11 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the set of officer IDs assigned to the project.
-     * @throws OfficerAlreadyInsideException if the officer is already inside the project
-     * @throws OfficerLimitExceededException if the officer limit is exceeded
+     * 
+     * @throws OfficerAlreadyInsideException
+     *             if the officer is already inside the project
+     * @throws OfficerLimitExceededException
+     *             if the officer limit is exceeded
      */
     public void addOfficer(Integer officerId) throws OfficerAlreadyInsideException, OfficerLimitExceededException {
         if (officers.contains(officerId)) {
@@ -231,7 +262,9 @@ public class Project implements BaseEntity {
 
     /**
      * Removes an officer from the project.
-     * @param officerId the ID of the officer to be removed
+     * 
+     * @param officerId
+     *            the ID of the officer to be removed
      */
     public void removeOfficer(Integer officerId) {
         officers.remove(officerId);
@@ -239,15 +272,18 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the set of officer IDs assigned to the project.
+     * 
      * @return the set of officer IDs
      */
-    public Set <Integer> getOfficers() {
+    public Set<Integer> getOfficers() {
         return officers;
     }
 
     /**
      * Sets the set of officer IDs assigned to the project.
-     * @param officers the set of officer IDs
+     * 
+     * @param officers
+     *            the set of officer IDs
      */
     public void setOfficers(Set<Integer> officers) {
         this.officers = officers;
@@ -262,7 +298,9 @@ public class Project implements BaseEntity {
 
     /**
      * Removes a marital status group from the project.
-     * @param group the marital status group to be removed
+     * 
+     * @param group
+     *            the marital status group to be removed
      */
     public void removeMaritalStatus(MaritalStatus group) throws UnsupportedOperationException {
         this.groups.remove(group);
@@ -270,6 +308,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the set of marital status groups that the project is open to.
+     * 
      * @return the set of marital status groups
      */
     public Set<MaritalStatus> getGroups() {
@@ -278,7 +317,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the set of marital status groups that the project is open to.
-     * @param groups the set of marital status groups
+     * 
+     * @param groups
+     *            the set of marital status groups
      */
     public void setGroups(Set<MaritalStatus> groups) {
         this.groups = groups;
@@ -286,6 +327,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the visibility status of the project.
+     * 
      * @return the visibility status of the project
      */
     public Boolean getVisibility() {
@@ -294,7 +336,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the visibility status of the project.
-     * @param visibility the visibility status of the project
+     * 
+     * @param visibility
+     *            the visibility status of the project
      */
     public void setVisibility(Boolean visibility) {
         this.visibility = visibility;
@@ -302,6 +346,7 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the ID of the manager responsible for the project.
+     * 
      * @return the ID of the manager
      */
     public int getManagerId() {
@@ -310,7 +355,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the ID of the manager responsible for the project.
-     * @param managerId the ID of the manager
+     * 
+     * @param managerId
+     *            the ID of the manager
      */
     public void setManagerId(int managerId) {
         this.managerId = managerId;
@@ -318,8 +365,11 @@ public class Project implements BaseEntity {
 
     /**
      * Gets the map of flat types and their corresponding counts available in the project.
-     * @throws UnsupportedOperationException to ensure the flatCount is mutable
-     * @throws IllegalArgumentException if the flat type is not available in this project
+     * 
+     * @throws UnsupportedOperationException
+     *             to ensure the flatCount is mutable
+     * @throws IllegalArgumentException
+     *             if the flat type is not available in this project
      */
     public void decrementFlatCount(FlatType flatType) throws UnsupportedOperationException {
         if (!flatCount.containsKey(flatType)) {
@@ -335,16 +385,18 @@ public class Project implements BaseEntity {
 
     /**
      * Checks if there are flats of the specified type available in the project.
-     * @param flatType the type of flat to check
+     * 
+     * @param flatType
+     *            the type of flat to check
      * @return true if flats of the specified type are available, false otherwise
      */
     public boolean hasFlatLeft(FlatType flatType) {
         return flatCount.getOrDefault(flatType, 0) > 0;
     }
 
-
     /**
      * Gets the map of flat types and their corresponding counts available in the project.
+     * 
      * @return the map of flat types and their counts
      */
     public Map<FlatType, Integer> getFlats() {
@@ -353,7 +405,9 @@ public class Project implements BaseEntity {
 
     /**
      * Sets the map of flat types and their corresponding counts available in the project.
-     * @param flatCount the map of flat types and their counts
+     * 
+     * @param flatCount
+     *            the map of flat types and their counts
      */
     public void setFlats(Map<FlatType, Integer> flatCount) {
         this.flatCount = flatCount;
@@ -390,7 +444,9 @@ public class Project implements BaseEntity {
 
     /**
      * Formats the date to a string in the format "yyyy-MM-dd".
-     * @param date the date to be formatted
+     * 
+     * @param date
+     *            the date to be formatted
      * @return the formatted date string
      */
     public String formatDate(Date date) {
@@ -399,6 +455,7 @@ public class Project implements BaseEntity {
 
     /**
      * Formats the groups to a string.
+     * 
      * @return the formatted groups string
      */
     public String formatGroup() {
@@ -413,6 +470,7 @@ public class Project implements BaseEntity {
 
     /**
      * Formats the flats to a string.
+     * 
      * @return the formatted flats string
      */
     public String formatFlats() {

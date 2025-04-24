@@ -4,9 +4,8 @@ import com.example.app.enums.ApplicationStatus;
 import com.example.app.enums.FlatType;
 
 /**
- * Application class that represents an application made by a user for a project.
- * It implements the BaseEntity interface.
- * Provides methods to get and set application details.
+ * Application class that represents an application made by a user for a project. It implements the BaseEntity
+ * interface. Provides methods to get and set application details.
  *
  * @see BaseEntity
  * @see ApplicationStatus
@@ -53,12 +52,19 @@ public class Application implements BaseEntity {
     /**
      * Constructor for the Application class with parameters.
      *
-     * @param id               the ID of the application. This field should be null for new applications. After saving to the database, it will be set.
-     * @param userId           the ID of the user who made the application
-     * @param projectId        the ID of the project for which the application is made
-     * @param status           the status of the application
-     * @param requestWithdrawal indicates whether the user has requested to withdraw the application
-     * @param flatType         the type of flat the user is applying for
+     * @param id
+     *            the ID of the application. This field should be null for new applications. After saving to the
+     *            database, it will be set.
+     * @param userId
+     *            the ID of the user who made the application
+     * @param projectId
+     *            the ID of the project for which the application is made
+     * @param status
+     *            the status of the application
+     * @param requestWithdrawal
+     *            indicates whether the user has requested to withdraw the application
+     * @param flatType
+     *            the type of flat the user is applying for
      */
     public Application(Integer id, Integer userId, Integer projectId, ApplicationStatus status,
             Boolean requestWithdrawal, FlatType flatType) {
@@ -83,7 +89,8 @@ public class Application implements BaseEntity {
     /**
      * Sets the ID of the application.
      *
-     * @param id the new ID of the application
+     * @param id
+     *            the new ID of the application
      */
     @Override
     public void setId(Integer id) {
@@ -102,7 +109,8 @@ public class Application implements BaseEntity {
     /**
      * Sets the ID of the user who made the application.
      *
-     * @param userId the new ID of the user who made the application
+     * @param userId
+     *            the new ID of the user who made the application
      */
     public void setUserId(int userId) {
         this.userId = userId;
@@ -120,7 +128,8 @@ public class Application implements BaseEntity {
     /**
      * Sets the ID of the project for which the application is made.
      *
-     * @param projectId the new ID of the project for which the application is made
+     * @param projectId
+     *            the new ID of the project for which the application is made
      */
     public void setProjectId(int projectId) {
         this.projectId = projectId;
@@ -138,7 +147,8 @@ public class Application implements BaseEntity {
     /**
      * Sets the status of the application.
      *
-     * @param status the new status of the application
+     * @param status
+     *            the new status of the application
      */
     public void setStatus(ApplicationStatus status) {
         this.status = status;
@@ -156,7 +166,8 @@ public class Application implements BaseEntity {
     /**
      * Sets whether the user has requested to withdraw the application.
      *
-     * @param requestWithdrawal true if the user has requested to withdraw the application, false otherwise
+     * @param requestWithdrawal
+     *            true if the user has requested to withdraw the application, false otherwise
      */
     public void setRequestWithdrawal(boolean requestWithdrawal) {
         this.requestWithdrawal = requestWithdrawal;
@@ -174,7 +185,8 @@ public class Application implements BaseEntity {
     /**
      * Sets the type of flat the user is applying for.
      *
-     * @param flatType the new type of flat the user is applying for
+     * @param flatType
+     *            the new type of flat the user is applying for
      */
     public void setFlatType(FlatType flatType) {
         this.flatType = flatType;

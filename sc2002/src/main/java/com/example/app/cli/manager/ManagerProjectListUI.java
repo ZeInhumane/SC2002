@@ -19,12 +19,8 @@ public class ManagerProjectListUI {
     }
 
     private PaginatedUI<Project> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("All Projects"),
-            ctrl::getAllProjects,
-            project -> {}, // No action on selection
-            5,
-            "No projects found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("All Projects"), ctrl::getAllProjects, project -> {
+        }, // No action on selection
+                5, "No projects found.");
     }
 }

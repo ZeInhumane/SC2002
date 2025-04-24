@@ -11,8 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Implementation of the ApplicationService interface.
- * This class handles the application-related operations.
+ * Implementation of the ApplicationService interface. This class handles the application-related operations.
  *
  * @see ApplicationService
  */
@@ -27,11 +26,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Create new application of an applicant for a project
-     * @param userId the ID of the applicant
-     * @param projectId the ID of the project
-     * @param flatType the type of flat
+     * 
+     * @param userId
+     *            the ID of the applicant
+     * @param projectId
+     *            the ID of the project
+     * @param flatType
+     *            the type of flat
      * @return the new application object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Application applyForProject(int userId, int projectId, FlatType flatType) throws IOException {
@@ -42,9 +46,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Find application by ID
-     * @param id the ID of the application
+     * 
+     * @param id
+     *            the ID of the application
      * @return the application object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Application findById(int id) throws IOException {
@@ -52,11 +59,13 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     /**
-     * Get all applications relating to a project
-     * Should be used by officer and manager only
-     * @param projectId the ID of the project
+     * Get all applications relating to a project Should be used by officer and manager only
+     * 
+     * @param projectId
+     *            the ID of the project
      * @return the list of applications
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public List<Application> findByProjectId(int projectId) throws IOException {
@@ -65,11 +74,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Update the status of an application
-     * @param id the ID of the application
-     * @param status the new status of the application
+     * 
+     * @param id
+     *            the ID of the application
+     * @param status
+     *            the new status of the application
      * @return the updated application object
-     * @throws IOException if an I/O error occurs
-     * @throws NullPointerException if the application is null
+     * @throws IOException
+     *             if an I/O error occurs
+     * @throws NullPointerException
+     *             if the application is null
      */
     @Override
     public Application updateStatus(int id, ApplicationStatus status) throws IOException, NullPointerException {
@@ -80,9 +94,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Withdraw an application
-     * @param id the ID of the application
+     * 
+     * @param id
+     *            the ID of the application
      * @return the updated application object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Application withdrawApplication(int id) throws IOException {
@@ -93,10 +110,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Update the withdrawal status of an application
-     * @param id the ID of the application
-     * @param status the new withdrawal status
+     * 
+     * @param id
+     *            the ID of the application
+     * @param status
+     *            the new withdrawal status
      * @return the updated application object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Application updateWithdrawalStatus(int id, boolean status) throws IOException {
@@ -110,9 +131,12 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     /**
      * Get all applications of an applicant
-     * @param application the application object to save
+     * 
+     * @param application
+     *            the application object to save
      * @return the saved application object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public List<Application> getAllBookedApplications() throws IOException {

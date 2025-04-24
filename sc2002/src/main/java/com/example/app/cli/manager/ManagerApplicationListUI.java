@@ -22,13 +22,9 @@ public class ManagerApplicationListUI {
     }
 
     private PaginatedUI<Application> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("Project Applications"),
-            () -> ctrl.getApplicationsOfProject(projectId),
-            this::handleApplicationSelection,
-            5,
-            "No applications found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("Project Applications"),
+                () -> ctrl.getApplicationsOfProject(projectId), this::handleApplicationSelection, 5,
+                "No applications found.");
     }
 
     private void handleApplicationSelection(Application app) {

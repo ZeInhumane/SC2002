@@ -50,8 +50,8 @@ public class RegistrationRepositoryTest extends GeneralRepositoryTestBase<Regist
         // Save projects
         project1 = projectRepository
                 .save(new Project(null, "AI Research", open, close, "Punggol", 123, true, 4, officers, groups, flats));
-        project2 = projectRepository
-                .save(new Project(null, "Blockchain Project", open, close, "Tampines", 456, true, 10, officers, groups, flats));
+        project2 = projectRepository.save(new Project(null, "Blockchain Project", open, close, "Tampines", 456, true,
+                10, officers, groups, flats));
     }
 
     @Override

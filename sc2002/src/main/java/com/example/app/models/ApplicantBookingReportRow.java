@@ -10,7 +10,8 @@ public class ApplicantBookingReportRow {
     private final String projectName;
     private final FlatType flatType;
 
-    public ApplicantBookingReportRow(String applicantName, int applicantAge, MaritalStatus maritalStatus, String projectName, FlatType flatType) {
+    public ApplicantBookingReportRow(String applicantName, int applicantAge, MaritalStatus maritalStatus,
+            String projectName, FlatType flatType) {
         this.applicantName = applicantName;
         this.applicantAge = applicantAge;
         this.maritalStatus = maritalStatus;
@@ -40,6 +41,7 @@ public class ApplicantBookingReportRow {
 
     @Override
     public String toString() {
-        return String.format("%-20s | Age: %-3d | %-8s | %-20s | %-7s", applicantName, applicantAge, maritalStatus, projectName, flatType);
+        return String.format("%-20s | Age: %-3d | %-8s | %-20s | %-7s", applicantName, applicantAge, maritalStatus,
+                projectName, flatType);
     }
 }

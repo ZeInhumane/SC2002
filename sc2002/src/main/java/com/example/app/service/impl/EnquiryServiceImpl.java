@@ -9,8 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Implementation of the EnquiryService interface.
- * This class handles the enquiry-related operations.
+ * Implementation of the EnquiryService interface. This class handles the enquiry-related operations.
  *
  * @see EnquiryService
  */
@@ -25,9 +24,12 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      * Find an enquiry by ID
-     * @param id the ID of the enquiry
+     * 
+     * @param id
+     *            the ID of the enquiry
      * @return the enquiry object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Enquiry findById(Integer id) throws IOException {
@@ -35,10 +37,11 @@ public class EnquiryServiceImpl implements EnquiryService {
     }
 
     /**
-     * Get all enquiries
-     * Meant for manager use only
+     * Get all enquiries Meant for manager use only
+     * 
      * @return the list of enquiries
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public List<Enquiry> findAll() throws IOException {
@@ -47,9 +50,12 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      * Get all enquiries relating to a project
-     * @param projectId the ID of the project
+     * 
+     * @param projectId
+     *            the ID of the project
      * @return the list of enquiries
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public List<Enquiry> findByProjectId(int projectId) throws IOException {
@@ -58,9 +64,11 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      *
-     * @param userId the ID of the replier
+     * @param userId
+     *            the ID of the replier
      * @return the list of enquiries
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public List<Enquiry> findByReplierId(int userId) throws IOException {
@@ -68,9 +76,10 @@ public class EnquiryServiceImpl implements EnquiryService {
     }
 
     /**
-     * Get all enquiries made by the enquirer
-     * This is meant for the enquirer to view their own enquiries
-     * @param userId the ID of the enquirer
+     * Get all enquiries made by the enquirer This is meant for the enquirer to view their own enquiries
+     * 
+     * @param userId
+     *            the ID of the enquirer
      * @return
      * @throws IOException
      */
@@ -81,11 +90,16 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      * Submit an enquiry
-     * @param question the question to be submitted
-     * @param projectId the ID of the project
-     * @param userId the ID of the enquirer
+     * 
+     * @param question
+     *            the question to be submitted
+     * @param projectId
+     *            the ID of the project
+     * @param userId
+     *            the ID of the enquirer
      * @return the enquiry object
-     * @throws IOException if an I/O error occurs
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public Enquiry submitEnquiry(String question, Integer projectId, Integer userId) throws IOException {
@@ -94,13 +108,18 @@ public class EnquiryServiceImpl implements EnquiryService {
     }
 
     /**
-     * Allow user to edit the enquiry question
-     * In practice, the user is only allowed to modify their question if no reply has been made
-     * @param id the ID of the enquiry
-     * @param question the new question
+     * Allow user to edit the enquiry question In practice, the user is only allowed to modify their question if no
+     * reply has been made
+     * 
+     * @param id
+     *            the ID of the enquiry
+     * @param question
+     *            the new question
      * @return the updated enquiry object
-     * @throws IOException if an I/O error occurs
-     * @throws NullPointerException if the enquiry does not exist
+     * @throws IOException
+     *             if an I/O error occurs
+     * @throws NullPointerException
+     *             if the enquiry does not exist
      */
     @Override
     public Enquiry updateEnquiryQuestion(Integer id, String question) throws IOException, NullPointerException {
@@ -115,12 +134,18 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      * Reply to an enquiry
-     * @param id the ID of the enquiry
-     * @param replierId the ID of the replier
-     * @param reply the response to the enquiry
+     * 
+     * @param id
+     *            the ID of the enquiry
+     * @param replierId
+     *            the ID of the replier
+     * @param reply
+     *            the response to the enquiry
      * @return the updated enquiry object
-     * @throws IOException if an I/O error occurs
-     * @throws NullPointerException if the enquiry does not exist
+     * @throws IOException
+     *             if an I/O error occurs
+     * @throws NullPointerException
+     *             if the enquiry does not exist
      */
     @Override
     public Enquiry replyEnquiry(Integer id, Integer replierId, String reply) throws IOException, NullPointerException {
@@ -135,8 +160,11 @@ public class EnquiryServiceImpl implements EnquiryService {
 
     /**
      * Delete an enquiry
-     * @param id the ID of the enquiry
-     * @throws IOException if an I/O error occurs
+     * 
+     * @param id
+     *            the ID of the enquiry
+     * @throws IOException
+     *             if an I/O error occurs
      */
     @Override
     public void deleteEnquiry(Integer id) throws IOException {

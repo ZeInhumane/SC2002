@@ -21,13 +21,8 @@ public class ManagerEnquiryListUI {
     }
 
     private PaginatedUI<Enquiry> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("Project Enquiries"),
-            () -> ctrl.getEnquiriesOfProject(projectId),
-            this::handleEnquirySelection,
-            5,
-            "No enquiries found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("Project Enquiries"), () -> ctrl.getEnquiriesOfProject(projectId),
+                this::handleEnquirySelection, 5, "No enquiries found.");
     }
 
     private void handleEnquirySelection(Enquiry enquiry) {

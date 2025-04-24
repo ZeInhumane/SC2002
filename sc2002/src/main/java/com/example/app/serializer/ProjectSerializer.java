@@ -9,8 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Serializer for Project objects.
- * This class implements the Serializer interface and provides methods to serialize and deserialize Project objects.
+ * Serializer for Project objects. This class implements the Serializer interface and provides methods to serialize and
+ * deserialize Project objects.
+ * 
  * @see Serializer
  * @see Project
  */
@@ -20,7 +21,9 @@ public class ProjectSerializer implements Serializer<Project> {
 
     /**
      * Serializes a Project object into a string format.
-     * @param project The Project object to serialize.
+     * 
+     * @param project
+     *            The Project object to serialize.
      * @return The serialized string representation of the Project object.
      */
     @Override
@@ -29,8 +32,9 @@ public class ProjectSerializer implements Serializer<Project> {
         result.append(String.format("%d,%s,%s,%s,%s,%d,%b,%d", project.getId(),
                 stringSerializer.serialize(project.getProjectName()),
                 new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationOpenDate()),
-                new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()), project.getNeighborhood(),
-                project.getManagerId(), project.getVisibility(), project.getOfficerLimit()));
+                new SimpleDateFormat("yyyy-MM-dd").format(project.getApplicationCloseDate()),
+                stringSerializer.serialize(project.getNeighborhood()), project.getManagerId(), project.getVisibility(),
+                project.getOfficerLimit()));
 
         result.append(",").append(project.getOfficers().size());
         for (Integer officerId : project.getOfficers()) {
@@ -51,9 +55,12 @@ public class ProjectSerializer implements Serializer<Project> {
 
     /**
      * Deserializes a string representation of a Project object into a Project object.
-     * @param parts A LinkedList of strings representing the parts of the Project object.
+     * 
+     * @param parts
+     *            A LinkedList of strings representing the parts of the Project object.
      * @return The deserialized Project object.
-     * @throws DataParsingException If there is an error during parsing.
+     * @throws DataParsingException
+     *             If there is an error during parsing.
      */
     @Override
     public Project deserialize(LinkedList<String> parts) throws DataParsingException {
@@ -68,7 +75,7 @@ public class ProjectSerializer implements Serializer<Project> {
             throw new RuntimeException(e);
         }
 
-        String neighborhood = parts.removeFirst().trim();
+        String neighborhood = stringSerializer.deserialize(parts);
         Integer managerId = Integer.parseInt(parts.removeFirst().trim());
         Boolean visibility = Boolean.parseBoolean(parts.removeFirst().trim());
         Integer officerLimit = Integer.parseInt(parts.removeFirst().trim());

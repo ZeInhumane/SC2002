@@ -35,12 +35,14 @@ public class ManagerReportUI {
             System.out.println("6. Back");
             int choice = Readers.readIntRange(1, 6);
             switch (choice) {
-                case 1 -> filterMaritalStatus();
-                case 2 -> filterFlatType();
-                case 3 -> filterProjectName();
-                case 4 -> filterAgeRange();
-                case 5 -> resetFilters();
-                case 6 -> { return; }
+            case 1 -> filterMaritalStatus();
+            case 2 -> filterFlatType();
+            case 3 -> filterProjectName();
+            case 4 -> filterAgeRange();
+            case 5 -> resetFilters();
+            case 6 -> {
+                return;
+            }
             }
         }
     }
@@ -49,15 +51,17 @@ public class ManagerReportUI {
         System.out.println("Current Filters:");
         System.out.println("  Marital Status: " + (maritalStatusFilter == null ? "All" : maritalStatusFilter));
         System.out.println("  Flat Type: " + (flatTypeFilter == null ? "All" : flatTypeFilter));
-        System.out.println("  Project Name: " + (projectNameFilter == null || projectNameFilter.isEmpty() ? "All" : projectNameFilter));
-        System.out.println("  Age Range: " + (minAgeFilter == null && maxAgeFilter == null ? "All" :
-            (minAgeFilter == null ? "<= " + maxAgeFilter : maxAgeFilter == null ? ">= " + minAgeFilter : minAgeFilter + " - " + maxAgeFilter)));
+        System.out.println("  Project Name: "
+                + (projectNameFilter == null || projectNameFilter.isEmpty() ? "All" : projectNameFilter));
+        System.out.println("  Age Range: "
+                + (minAgeFilter == null && maxAgeFilter == null ? "All" : (minAgeFilter == null ? "<= " + maxAgeFilter
+                        : maxAgeFilter == null ? ">= " + minAgeFilter : minAgeFilter + " - " + maxAgeFilter)));
     }
 
     private void displayReport() {
         try {
-            List<ApplicantBookingReportRow> rows = ctrl.getBookedApplicationsReport(
-                maritalStatusFilter, flatTypeFilter, projectNameFilter, minAgeFilter, maxAgeFilter);
+            List<ApplicantBookingReportRow> rows = ctrl.getBookedApplicationsReport(maritalStatusFilter, flatTypeFilter,
+                    projectNameFilter, minAgeFilter, maxAgeFilter);
             if (rows.isEmpty()) {
                 System.out.println("\nNo results found for the current filters.");
             } else {
@@ -80,9 +84,9 @@ public class ManagerReportUI {
         System.out.println("3. Single");
         int choice = Readers.readIntRange(1, 3);
         maritalStatusFilter = switch (choice) {
-            case 2 -> MaritalStatus.MARRIED;
-            case 3 -> MaritalStatus.SINGLE;
-            default -> null;
+        case 2 -> MaritalStatus.MARRIED;
+        case 3 -> MaritalStatus.SINGLE;
+        default -> null;
         };
     }
 
@@ -93,9 +97,9 @@ public class ManagerReportUI {
         System.out.println("3. 3-Room");
         int choice = Readers.readIntRange(1, 3);
         flatTypeFilter = switch (choice) {
-            case 2 -> FlatType._2ROOM;
-            case 3 -> FlatType._3ROOM;
-            default -> null;
+        case 2 -> FlatType._2ROOM;
+        case 3 -> FlatType._3ROOM;
+        default -> null;
         };
     }
 

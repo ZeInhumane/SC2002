@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 /**
  *
- * Serializer for Enquiry objects.
- * This class implements the Serializer interface and provides methods to serialize and deserialize Enquiry objects.
+ * Serializer for Enquiry objects. This class implements the Serializer interface and provides methods to serialize and
+ * deserialize Enquiry objects.
  *
  * @see Serializer
  * @see Enquiry
@@ -19,7 +19,9 @@ public class EnquirySerializer implements Serializer<Enquiry> {
 
     /**
      * Serializes an Enquiry object into a string format.
-     * @param enquiry The Enquiry object to serialize.
+     * 
+     * @param enquiry
+     *            The Enquiry object to serialize.
      * @return The serialized string representation of the Enquiry object.
      */
     @Override
@@ -33,9 +35,12 @@ public class EnquirySerializer implements Serializer<Enquiry> {
 
     /**
      * Deserializes a string representation of an Enquiry object into an Enquiry object.
-     * @param parts A LinkedList of strings representing the parts of the Enquiry object.
+     * 
+     * @param parts
+     *            A LinkedList of strings representing the parts of the Enquiry object.
      * @return The deserialized Enquiry object.
-     * @throws DataParsingException If there is an error during parsing.
+     * @throws DataParsingException
+     *             If there is an error during parsing.
      */
     @Override
     public Enquiry deserialize(LinkedList<String> parts) throws DataParsingException {

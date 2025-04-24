@@ -8,12 +8,12 @@ import com.example.app.models.BaseEntity;
 import com.example.app.serializer.Serializer;
 
 /**
- * GeneralRepository is a generic class that provides basic CRUD operations (Create, Read, Update, Delete)
- * for any entity that extends BaseEntity.
- * It uses a Serializer to convert entities to and from a string format.
- * The repository is backed by a text file, and the file path is specified during instantiation.
+ * GeneralRepository is a generic class that provides basic CRUD operations (Create, Read, Update, Delete) for any
+ * entity that extends BaseEntity. It uses a Serializer to convert entities to and from a string format. The repository
+ * is backed by a text file, and the file path is specified during instantiation.
  *
- * @param <T> the type of entity that extends BaseEntity
+ * @param <T>
+ *            the type of entity that extends BaseEntity
  *
  * @see BaseEntity
  * @see Serializer
@@ -25,8 +25,12 @@ public class GeneralRepository<T extends BaseEntity> {
 
     /**
      * Constructor for GeneralRepository
-     * @param serializer the serializer to use for converting entities to and from string format
-     * @param filePath the path to the file where entities are stored. This path is relative to the DB_PATH specified in Settings.
+     * 
+     * @param serializer
+     *            the serializer to use for converting entities to and from string format
+     * @param filePath
+     *            the path to the file where entities are stored. This path is relative to the DB_PATH specified in
+     *            Settings.
      *
      * @see Settings
      */
@@ -48,12 +52,14 @@ public class GeneralRepository<T extends BaseEntity> {
     }
 
     /**
-     * Saves an entity to the file. If the entity does not have an ID, a new ID is generated.
-     * If the entity already exists, it is updated.
+     * Saves an entity to the file. If the entity does not have an ID, a new ID is generated. If the entity already
+     * exists, it is updated.
      *
-     * @param entity the entity to save
+     * @param entity
+     *            the entity to save
      * @return the saved entity
-     * @throws IOException if there is an error writing to the file
+     * @throws IOException
+     *             if there is an error writing to the file
      */
     public T save(T entity) throws IOException {
         if (entity.getId() == null) {
@@ -72,7 +78,8 @@ public class GeneralRepository<T extends BaseEntity> {
      * Finds all entities in the file.
      *
      * @return a list of all entities
-     * @throws IOException if there is an error reading from the file
+     * @throws IOException
+     *             if there is an error reading from the file
      */
     public List<T> findAll() throws IOException {
         List<T> result = new ArrayList<>();
@@ -88,9 +95,12 @@ public class GeneralRepository<T extends BaseEntity> {
 
     /**
      * Finds all entities in the file and returns them as a map with ID as the key.
-     * @param id the ID of the entity to find
+     * 
+     * @param id
+     *            the ID of the entity to find
      * @return a map of all entities with ID as the key
-     * @throws IOException if there is an error reading from the file
+     * @throws IOException
+     *             if there is an error reading from the file
      */
     public T findById(Integer id) throws IOException {
         return this.findAll().stream().filter(entity -> Objects.equals(entity.getId(), id)).findFirst().orElse(null);
@@ -98,8 +108,11 @@ public class GeneralRepository<T extends BaseEntity> {
 
     /**
      * Deletes an entity by its ID.
-     * @param id the ID of the entity to delete
-     * @throws IOException if there is an error writing to the file
+     * 
+     * @param id
+     *            the ID of the entity to delete
+     * @throws IOException
+     *             if there is an error writing to the file
      */
     public void deleteById(Integer id) throws IOException {
         HashMap<Integer, T> all = findAllAsMap();
@@ -109,7 +122,9 @@ public class GeneralRepository<T extends BaseEntity> {
 
     /**
      * Deletes all entities in the file.
-     * @throws IOException if there is an error writing to the file
+     * 
+     * @throws IOException
+     *             if there is an error writing to the file
      */
     public void deleteAll() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {

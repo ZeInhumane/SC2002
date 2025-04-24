@@ -21,13 +21,8 @@ public class ApplicantEnquiryUI {
     }
 
     private PaginatedUI<Enquiry> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("Your Enquiries"),
-            ctrl::getEnquiries,
-            this::handleEnquirySelection,
-            5,
-            "No enquiries found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("Your Enquiries"), ctrl::getEnquiries, this::handleEnquirySelection, 5,
+                "No enquiries found.");
     }
 
     private void handleEnquirySelection(Enquiry enquiry) {

@@ -20,13 +20,9 @@ public class ManagerOfficerRegistrationUI {
     }
 
     private PaginatedUI<Registration> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("Officer Registrations"),
-            () -> ctrl.getRegistrationsOfCurrentProject(),
-            this::handleRegistrationSelection,
-            5,
-            "No officer registrations found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("Officer Registrations"),
+                () -> ctrl.getRegistrationsOfCurrentProject(), this::handleRegistrationSelection, 5,
+                "No officer registrations found.");
     }
 
     private void handleRegistrationSelection(Registration reg) {

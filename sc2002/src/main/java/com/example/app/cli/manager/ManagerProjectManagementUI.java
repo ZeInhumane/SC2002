@@ -35,16 +35,20 @@ public class ManagerProjectManagementUI {
         try {
             System.out.println("\nEditing Project: " + project.getProjectName());
             String name = Readers.readString("Enter new project name (current: " + project.getProjectName() + "):");
-            String neighborhood = Readers.readString("Enter new neighborhood (current: " + project.getNeighborhood() + "):");
-            String openDateStr = Readers.readString("Enter new application open date (yyyy-MM-dd, current: " + project.formatDate(project.getApplicationOpenDate()) + "):");
-            String closeDateStr = Readers.readString("Enter new application close date (yyyy-MM-dd, current: " + project.formatDate(project.getApplicationCloseDate()) + "):");
+            String neighborhood = Readers
+                    .readString("Enter new neighborhood (current: " + project.getNeighborhood() + "):");
+            String openDateStr = Readers.readString("Enter new application open date (yyyy-MM-dd, current: "
+                    + project.formatDate(project.getApplicationOpenDate()) + "):");
+            String closeDateStr = Readers.readString("Enter new application close date (yyyy-MM-dd, current: "
+                    + project.formatDate(project.getApplicationCloseDate()) + "):");
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
             java.util.Date openDate = sdf.parse(openDateStr);
             java.util.Date closeDate = sdf.parse(closeDateStr);
             boolean visibility = project.getVisibility(); // Keep as is
 
             // Officer limit
-            int officerLimit = Readers.readInt("Enter officer limit (max 10, current: " + project.getOfficerLimit() + "):");
+            int officerLimit = Readers
+                    .readInt("Enter officer limit (max 10, current: " + project.getOfficerLimit() + "):");
             if (officerLimit < 1 || officerLimit > 10) {
                 System.out.println("Officer limit must be between 1 and 10.");
                 Readers.readEnter();
@@ -52,8 +56,10 @@ public class ManagerProjectManagementUI {
             }
 
             // Flat counts
-            int twoRoom = Readers.readInt("Enter number of 2-Room units (current: " + project.getFlats().getOrDefault(com.example.app.enums.FlatType._2ROOM, 0) + "):");
-            int threeRoom = Readers.readInt("Enter number of 3-Room units (current: " + project.getFlats().getOrDefault(com.example.app.enums.FlatType._3ROOM, 0) + "):");
+            int twoRoom = Readers.readInt("Enter number of 2-Room units (current: "
+                    + project.getFlats().getOrDefault(com.example.app.enums.FlatType._2ROOM, 0) + "):");
+            int threeRoom = Readers.readInt("Enter number of 3-Room units (current: "
+                    + project.getFlats().getOrDefault(com.example.app.enums.FlatType._3ROOM, 0) + "):");
             java.util.Map<com.example.app.enums.FlatType, Integer> flats = new java.util.HashMap<>();
             flats.put(com.example.app.enums.FlatType._2ROOM, twoRoom);
             flats.put(com.example.app.enums.FlatType._3ROOM, threeRoom);
@@ -65,8 +71,10 @@ public class ManagerProjectManagementUI {
             java.util.Set<com.example.app.enums.MaritalStatus> groups = new java.util.HashSet<>();
             for (String s : groupInput.split(",")) {
                 s = s.trim();
-                if (s.equals("1")) groups.add(com.example.app.enums.MaritalStatus.MARRIED);
-                if (s.equals("2")) groups.add(com.example.app.enums.MaritalStatus.SINGLE);
+                if (s.equals("1"))
+                    groups.add(com.example.app.enums.MaritalStatus.MARRIED);
+                if (s.equals("2"))
+                    groups.add(com.example.app.enums.MaritalStatus.SINGLE);
             }
             if (groups.isEmpty()) {
                 System.out.println("At least one group must be selected.");
@@ -74,16 +82,7 @@ public class ManagerProjectManagementUI {
                 return;
             }
 
-            ctrl.updateProject(
-                project.getId(),
-                name,
-                openDate,
-                closeDate,
-                neighborhood,
-                visibility,
-                groups,
-                flats
-            );
+            ctrl.updateProject(project.getId(), name, openDate, closeDate, neighborhood, visibility, groups, flats);
             System.out.println("Project updated successfully.");
         } catch (Exception e) {
             System.out.println("Error updating project: " + e.getMessage());

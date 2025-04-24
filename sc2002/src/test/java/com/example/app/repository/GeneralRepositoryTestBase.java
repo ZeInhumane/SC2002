@@ -1,6 +1,7 @@
 package com.example.app.repository;
 
 import com.example.app.models.BaseEntity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ public abstract class GeneralRepositoryTestBase<T extends BaseEntity> {
 
     protected abstract List<T> saveSampleEntities() throws IOException;
 
-    @BeforeEach
+    @AfterEach
     public void cleanRepository() throws IOException {
         getRepository().deleteAll();
     }

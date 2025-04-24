@@ -5,17 +5,17 @@ import com.example.app.exceptions.DataParsingException;
 import java.util.LinkedList;
 
 /**
- * Serializer for String objects.
- * This class implements the Serializer interface and provides methods to serialize and deserialize
- * Since there are 'commas' in the string, we need to count the number of commas in the string
- * and store it in the first part of the string
- * then we can use the comma to separate the string
+ * Serializer for String objects. This class implements the Serializer interface and provides methods to serialize and
+ * deserialize Since there are 'commas' in the string, we need to count the number of commas in the string and store it
+ * in the first part of the string then we can use the comma to separate the string
  */
 public class StringSerializer implements Serializer<String> {
 
     /**
      * Serializes a String object into a string format.
-     * @param entity The String object to serialize.
+     * 
+     * @param entity
+     *            The String object to serialize.
      * @return The serialized string representation of the String object.
      */
     @Override
@@ -29,9 +29,12 @@ public class StringSerializer implements Serializer<String> {
 
     /**
      * Deserializes a string representation of a String object into a String object.
-     * @param parts A LinkedList of strings representing the parts of the String object.
+     * 
+     * @param parts
+     *            A LinkedList of strings representing the parts of the String object.
      * @return The deserialized String object.
-     * @throws DataParsingException If there is an error during parsing.
+     * @throws DataParsingException
+     *             If there is an error during parsing.
      */
     @Override
     public String deserialize(LinkedList<String> parts) throws DataParsingException {

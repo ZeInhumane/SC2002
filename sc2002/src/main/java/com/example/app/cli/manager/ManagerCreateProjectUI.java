@@ -89,15 +89,18 @@ public class ManagerCreateProjectUI {
                 String groupInput = Readers.readString("Enter choices (e.g. 1,2):");
                 for (String s : groupInput.split(",")) {
                     s = s.trim();
-                    if (s.equals("1")) groups.add(MaritalStatus.MARRIED);
-                    if (s.equals("2")) groups.add(MaritalStatus.SINGLE);
+                    if (s.equals("1"))
+                        groups.add(MaritalStatus.MARRIED);
+                    if (s.equals("2"))
+                        groups.add(MaritalStatus.SINGLE);
                 }
                 if (groups.isEmpty()) {
                     System.out.println("At least one group must be selected.");
                 }
             }
             boolean visibility = true; // Default to visible on creation
-            ctrl.createProject(name, openDate, closeDate, neighborhood, visibility, officerLimit, new HashSet<>(), groups, flats);
+            ctrl.createProject(name, openDate, closeDate, neighborhood, visibility, officerLimit, new HashSet<>(),
+                    groups, flats);
             System.out.println("Project created successfully.");
         } catch (Exception e) {
             System.out.println("Error creating project: " + e.getMessage());

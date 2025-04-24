@@ -40,17 +40,21 @@ public class ManagerControl {
         }
     }
 
-    public Project createProject(String projectName, Date open, Date close, String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) {
+    public Project createProject(String projectName, Date open, Date close, String neighborhood, boolean visibility,
+            Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) {
         try {
-            return managerService.createProject(manager, projectName, open, close, neighborhood, visibility, officerLimit, officers, groups, flats);
+            return managerService.createProject(manager, projectName, open, close, neighborhood, visibility,
+                    officerLimit, officers, groups, flats);
         } catch (Exception e) {
             throw new RuntimeException("Error creating project: " + e.getMessage(), e);
         }
     }
 
-    public Project updateProject(int projectId, String projectName, Date open, Date close, String neighborhood, boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) {
+    public Project updateProject(int projectId, String projectName, Date open, Date close, String neighborhood,
+            boolean visibility, Set<MaritalStatus> groups, Map<FlatType, Integer> flats) {
         try {
-            return managerService.updateProject(manager, projectId, projectName, open, close, neighborhood, visibility, groups, flats);
+            return managerService.updateProject(manager, projectId, projectName, open, close, neighborhood, visibility,
+                    groups, flats);
         } catch (Exception e) {
             throw new RuntimeException("Error updating project: " + e.getMessage(), e);
         }
@@ -122,13 +126,8 @@ public class ManagerControl {
         }
     }
 
-    public List<ApplicantBookingReportRow> getBookedApplicationsReport(
-        MaritalStatus maritalStatus,
-        FlatType flatType,
-        String projectName,
-        Integer minAge,
-        Integer maxAge
-    ) {
+    public List<ApplicantBookingReportRow> getBookedApplicationsReport(MaritalStatus maritalStatus, FlatType flatType,
+            String projectName, Integer minAge, Integer maxAge) {
         try {
             return managerService.getBookedApplicationsReport(maritalStatus, flatType, projectName, minAge, maxAge);
         } catch (Exception e) {

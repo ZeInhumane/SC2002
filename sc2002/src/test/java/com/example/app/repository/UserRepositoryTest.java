@@ -25,8 +25,8 @@ public class UserRepositoryTest extends GeneralRepositoryTestBase<User> {
     @Override
     protected List<User> createSampleEntities() {
 
-        Applicant testApplicant = new Applicant(null, "Alice", "pass123", null, Role.APPLICANT,
-                "S1234567A", 25, MaritalStatus.SINGLE, null, null);
+        Applicant testApplicant = new Applicant(null, "Alice", "pass123", null, Role.APPLICANT, "S1234567A", 25,
+                MaritalStatus.SINGLE, null, null);
         Manager testManager = new Manager(null, "Bob", "pass456", "bob@example.com", Role.MANAGER, "S7654321B", 30,
                 MaritalStatus.MARRIED);
         Officer testOfficer = new Officer(null, "Charlie", "pass789", "charlie@example.com", Role.OFFICER, "S9999999C",

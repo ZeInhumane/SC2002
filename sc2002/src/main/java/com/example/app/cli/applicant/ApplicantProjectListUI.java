@@ -23,13 +23,8 @@ public class ApplicantProjectListUI {
     }
 
     private PaginatedUI<Project> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("Available Projects"),
-            ctrl::getViewableProjects,
-            this::handleProjectSelection,
-            5,
-            "No suitable projects found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("Available Projects"), ctrl::getViewableProjects,
+                this::handleProjectSelection, 5, "No suitable projects found.");
     }
 
     private void handleProjectSelection(Project project) {
@@ -42,15 +37,15 @@ public class ApplicantProjectListUI {
                 int ftChoice = Readers.readInt("Select Flat Type (2 = 2-Room, 3 = 3-Room): ");
                 FlatType ft;
                 switch (ftChoice) {
-                    case 2:
-                        ft = FlatType._2ROOM;
-                        break;
-                    case 3:
-                        ft = FlatType._3ROOM;
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Stopping application process...");
-                        return;
+                case 2:
+                    ft = FlatType._2ROOM;
+                    break;
+                case 3:
+                    ft = FlatType._3ROOM;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Stopping application process...");
+                    return;
                 }
                 try {
                     ctrl.applyForProject(project.getId(), ft);

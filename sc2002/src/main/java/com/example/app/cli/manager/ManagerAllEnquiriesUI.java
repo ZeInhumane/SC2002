@@ -19,12 +19,8 @@ public class ManagerAllEnquiriesUI {
     }
 
     private PaginatedUI<Enquiry> buildPaginator() {
-        return new PaginatedUI<>(
-            Helper.toHeader("All Enquiries"),
-            ctrl::getAllEnquiries,
-            enquiry -> {}, // No action on selection
-            5,
-            "No enquiries found."
-        );
+        return new PaginatedUI<>(Helper.toHeader("All Enquiries"), ctrl::getAllEnquiries, enquiry -> {
+        }, // No action on selection
+                5, "No enquiries found.");
     }
 }

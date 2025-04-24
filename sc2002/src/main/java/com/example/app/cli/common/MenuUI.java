@@ -15,6 +15,7 @@ public class MenuUI {
     private static class MenuOption {
         final String label;
         final Runnable action;
+
         MenuOption(String label, Runnable action) {
             this.label = label;
             this.action = action;
@@ -41,9 +42,7 @@ public class MenuUI {
         while (!exit) {
             Helper.wipeScreen();
             System.out.println(content + "\n");
-            options.forEach((num, opt) ->
-                System.out.printf("%d. %s%n", num, opt.label)
-            );
+            options.forEach((num, opt) -> System.out.printf("%d. %s%n", num, opt.label));
             int choice = Readers.readIntRange(1, options.size());
             options.get(choice).action.run();
         }

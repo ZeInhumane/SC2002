@@ -18,8 +18,8 @@ public class EnquiryRepositoryTest extends GeneralRepositoryTestBase<Enquiry> {
 
     @Override
     protected List<Enquiry> createSampleEntities() {
-        return List.of(
-                new Enquiry(null, "When is the project open? I have heard they are open next month, but I am not quite sure...", 101, 1),
+        return List.of(new Enquiry(null,
+                "When is the project open? I have heard they are open next month, but I am not quite sure...", 101, 1),
                 new Enquiry(null, "How many units left?", 101, 2),
                 new Enquiry(null, "Is this project near MRT?", 102, 1));
     }
@@ -80,5 +80,10 @@ public class EnquiryRepositoryTest extends GeneralRepositoryTestBase<Enquiry> {
 
         List<Enquiry> forProject999 = enquiryRepository.findByProjectId(999);
         assertTrue(forProject999.isEmpty());
+    }
+
+    @Test
+    public void testFindAllShouldOk() throws IOException {
+        this.getRepository().findAll();
     }
 }

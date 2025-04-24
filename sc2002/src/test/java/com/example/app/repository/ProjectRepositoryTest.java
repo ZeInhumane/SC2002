@@ -38,11 +38,12 @@ public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
         calendar.add(Calendar.DAY_OF_MONTH, 60);
         Date futureDate = calendar.getTime();
 
-        Project project1 = new Project(null, "Sunshine, Grove", today, futureDate, "Tampines", 101, true, 10, officers, groups1,
-                flats1);
-        Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, 3, officers, groups2, flats2);
-        Project project3 = new Project(null, "Skyline Heights,", today, futureDate, "Jurong", 103, true, 4, officers, groups3,
-                flats3);
+        Project project1 = new Project(null, "Sunshine, Grove", today, futureDate, "Tampines", 101, true, 10, officers,
+                groups1, flats1);
+        Project project2 = new Project(null, "RiverEdge", today, futureDate, "Sengkang", 102, true, 3, officers,
+                groups2, flats2);
+        Project project3 = new Project(null, "Skyline Heights,", today, futureDate, "Jurong", 103, true, 4, officers,
+                groups3, flats3);
 
         return List.of(project1, project2, project3);
     }
@@ -102,9 +103,9 @@ public class ProjectRepositoryTest extends GeneralRepositoryTestBase<Project> {
         cal.add(Calendar.DAY_OF_MONTH, 1);
         Date dateWithin = cal.getTime(); // within open-close range
 
-        List<Project> filtered = projectRepository.findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(
-                MaritalStatus.SINGLE, true, dateWithin
-        );
+        List<Project> filtered = projectRepository
+                .findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(MaritalStatus.SINGLE, true,
+                        dateWithin);
 
         assertEquals(2, filtered.size());
     }

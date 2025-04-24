@@ -39,21 +39,21 @@ public class LoginUI {
             System.out.println("Login successful. Welcome, " + RuntimeData.getCurrentUser().getName() + "!");
             Readers.readEnter();
             switch (RuntimeData.getCurrentUser().getRole()) {
-                case APPLICANT:
-                    new ApplicantUI().run();
-                    break;
-                case OFFICER:
-                    new OfficerUI().run();
-                    break;
-                case MANAGER:
-                    new ManagerUI().run();
-                    break;
-                default:
-                    System.out.println("Unknown role. Please contact support.");
-                    break;
+            case APPLICANT:
+                new ApplicantUI().run();
+                break;
+            case OFFICER:
+                new OfficerUI().run();
+                break;
+            case MANAGER:
+                new ManagerUI().run();
+                break;
+            default:
+                System.out.println("Unknown role. Please contact support.");
+                break;
             }
-        }
-        else Readers.readEnter();
+        } else
+            Readers.readEnter();
     }
 
     private void changePassword() {

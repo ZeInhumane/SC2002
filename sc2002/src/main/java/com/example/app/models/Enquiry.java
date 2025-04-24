@@ -1,8 +1,7 @@
 package com.example.app.models;
 
 /**
- * Enquiry class that represents an enquiry made by a user regarding a project.
- * It implements the BaseEntity interface.
+ * Enquiry class that represents an enquiry made by a user regarding a project. It implements the BaseEntity interface.
  * Provides methods to get and set enquiry details.
  *
  */
@@ -47,10 +46,15 @@ public class Enquiry implements BaseEntity {
     /**
      * Constructor for the Enquiry class with parameters.
      *
-     * @param id         the ID of the enquiry. This field should be null for new enquiries. After saving to the database, it will be set.
-     * @param question   the question asked by the user
-     * @param projectId  the ID of the project for which the enquiry is made
-     * @param enquirerId the ID of the user who made the enquiry
+     * @param id
+     *            the ID of the enquiry. This field should be null for new enquiries. After saving to the database, it
+     *            will be set.
+     * @param question
+     *            the question asked by the user
+     * @param projectId
+     *            the ID of the project for which the enquiry is made
+     * @param enquirerId
+     *            the ID of the user who made the enquiry
      */
     public Enquiry(Integer id, String question, Integer projectId, Integer enquirerId) {
         this.id = id;
@@ -61,6 +65,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the ID of the enquiry.
+     * 
      * @return the ID of the enquiry
      */
     @Override
@@ -70,7 +75,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the ID of the enquiry.
-     * @param id the ID of the enquiry
+     * 
+     * @param id
+     *            the ID of the enquiry
      */
     @Override
     public void setId(Integer id) {
@@ -79,6 +86,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the question asked by the user.
+     * 
      * @return the question asked by the user
      */
     public String getQuestion() {
@@ -87,7 +95,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the question asked by the user.
-     * @param question the question to set
+     * 
+     * @param question
+     *            the question to set
      */
     public void setQuestion(String question) {
         this.question = question;
@@ -95,6 +105,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the response to the enquiry.
+     * 
      * @return the response to the enquiry
      */
     public String getResponse() {
@@ -103,7 +114,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the response to the enquiry.
-     * @param response the response to set
+     * 
+     * @param response
+     *            the response to set
      */
     public void setResponse(String response) {
         this.response = response;
@@ -111,6 +124,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the ID of the project for which the enquiry is made.
+     * 
      * @return the ID of the project for which the enquiry is made
      */
     public Integer getProjectId() {
@@ -119,7 +133,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the ID of the project for which the enquiry is made.
-     * @param projectId the ID of the project to set
+     * 
+     * @param projectId
+     *            the ID of the project to set
      */
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
@@ -127,6 +143,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the ID of the user who made the enquiry.
+     * 
      * @return the ID of the user who made the enquiry
      */
     public Integer getEnquirerId() {
@@ -135,7 +152,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the ID of the user who made the enquiry.
-     * @param enquirerId the ID of the user to set
+     * 
+     * @param enquirerId
+     *            the ID of the user to set
      */
     public void setEnquirerId(Integer enquirerId) {
         this.enquirerId = enquirerId;
@@ -143,6 +162,7 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Gets the ID of the officer who replied to the enquiry.
+     * 
      * @return the ID of the officer who replied to the enquiry
      */
     public Integer getReplierId() {
@@ -151,7 +171,9 @@ public class Enquiry implements BaseEntity {
 
     /**
      * Sets the ID of the officer who replied to the enquiry.
-     * @param replierId the ID of the officer to set
+     * 
+     * @param replierId
+     *            the ID of the officer to set
      */
     public void setReplierId(Integer replierId) {
         this.replierId = replierId;

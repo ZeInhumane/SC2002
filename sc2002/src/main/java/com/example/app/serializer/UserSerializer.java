@@ -12,8 +12,8 @@ import com.example.app.models.User;
 import java.util.LinkedList;
 
 /**
- * Serializer for User objects.
- * This class implements the Serializer interface and provides methods to serialize and deserialize User objects.
+ * Serializer for User objects. This class implements the Serializer interface and provides methods to serialize and
+ * deserialize User objects.
  *
  * @see Serializer
  * @see User
@@ -64,9 +64,12 @@ public class UserSerializer implements Serializer<User> {
 
     /**
      * Deserializes a string representation of a User object into a User object.
-     * @param parts A LinkedList of strings representing the parts of the User object.
+     * 
+     * @param parts
+     *            A LinkedList of strings representing the parts of the User object.
      * @return The deserialized User object.
-     * @throws DataParsingException If there is an error during parsing.
+     * @throws DataParsingException
+     *             If there is an error during parsing.
      */
     @Override
     public User deserialize(LinkedList<String> parts) throws DataParsingException {
@@ -78,7 +81,6 @@ public class UserSerializer implements Serializer<User> {
         String nric = stringSerializer.deserialize(parts);
         int age = Integer.parseInt(parts.removeFirst().trim());
         MaritalStatus maritalStatus = MaritalStatus.valueOf(parts.removeFirst().trim());
-
 
         // Shared constructor args
         if (role == Role.MANAGER) {

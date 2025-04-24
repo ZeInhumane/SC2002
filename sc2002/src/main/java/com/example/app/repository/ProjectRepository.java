@@ -11,8 +11,8 @@ import com.example.app.models.Project;
 import com.example.app.serializer.SerializerDependency;
 
 /**
- * Repository class for Project.
- * This class extends the GeneralRepository class to provide CRUD operations for Project objects.
+ * Repository class for Project. This class extends the GeneralRepository class to provide CRUD operations for Project
+ * objects.
  *
  * @see GeneralRepository
  * @see Project
@@ -20,8 +20,7 @@ import com.example.app.serializer.SerializerDependency;
 public class ProjectRepository extends GeneralRepository<Project> {
 
     /**
-     * Constructor for ProjectRepository.
-     * Initializes the repository with the Project serializer and the file name.
+     * Constructor for ProjectRepository. Initializes the repository with the Project serializer and the file name.
      *
      * @see SerializerDependency
      * @see GeneralRepository
@@ -33,10 +32,13 @@ public class ProjectRepository extends GeneralRepository<Project> {
     /**
      * Finds all projects by the marital status and visibility.
      *
-     * @param status    the marital status
-     * @param visibility the visibility of the project
+     * @param status
+     *            the marital status
+     * @param visibility
+     *            the visibility of the project
      * @return a list of projects that match the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public List<Project> findByMaritalStatusAndVisibility(MaritalStatus status, boolean visibility) throws IOException {
         return this.findAll().stream()
@@ -46,11 +48,16 @@ public class ProjectRepository extends GeneralRepository<Project> {
 
     /**
      * Finds all projects by the marital status, visibility, and open/close date.
-     * @param status  the marital status
-     * @param visibility the visibility of the project
-     * @param date the date to compare with the open and close dates
+     * 
+     * @param status
+     *            the marital status
+     * @param visibility
+     *            the visibility of the project
+     * @param date
+     *            the date to compare with the open and close dates
      * @return a list of projects that match the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public List<Project> findByMaritalStatusAndVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(
             MaritalStatus status, boolean visibility, Date date) throws IOException {
@@ -64,9 +71,11 @@ public class ProjectRepository extends GeneralRepository<Project> {
     /**
      * Finds all projects by the visibility.
      *
-     * @param visibility the visibility of the project
+     * @param visibility
+     *            the visibility of the project
      * @return a list of projects that match the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public List<Project> findByVisibility(boolean visibility) throws IOException {
         return this.findAll().stream().filter(p -> Objects.equals(p.getVisibility(), visibility))
@@ -75,10 +84,14 @@ public class ProjectRepository extends GeneralRepository<Project> {
 
     /**
      * Finds all projects by the visibility and open/close date.
-     * @param visibility the visibility of the project
-     * @param date the date to compare with the open and close dates
+     * 
+     * @param visibility
+     *            the visibility of the project
+     * @param date
+     *            the date to compare with the open and close dates
      * @return a list of projects that match the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public List<Project> findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(boolean visibility, Date date)
             throws IOException {
@@ -92,9 +105,11 @@ public class ProjectRepository extends GeneralRepository<Project> {
     /**
      * Finds all projects by the manager ID.
      *
-     * @param managerId the ID of the manager
+     * @param managerId
+     *            the ID of the manager
      * @return a list of projects that match the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public List<Project> findByManagerId(Integer managerId) throws IOException {
         return this.findAll().stream().filter(p -> Objects.equals(p.getManagerId(), managerId))
@@ -104,10 +119,13 @@ public class ProjectRepository extends GeneralRepository<Project> {
     /**
      * Finds a project by the manager ID and open/close date.
      *
-     * @param managerId the ID of the manager
-     * @param date      the date to compare with the open and close dates
+     * @param managerId
+     *            the ID of the manager
+     * @param date
+     *            the date to compare with the open and close dates
      * @return a project that matches the criteria
-     * @throws IOException if there is an error reading the file
+     * @throws IOException
+     *             if there is an error reading the file
      */
     public Project findByManagerIdAndOpenDateGreaterThanAndCloseDateLessThan(Integer managerId, Date date)
             throws IOException {

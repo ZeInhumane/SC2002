@@ -16,13 +16,8 @@ public class OfficerEnquiryManagementUI {
     }
 
     public void run() {
-        PaginatedUI<Enquiry> paginator = new PaginatedUI<>(
-            Helper.toHeader("Enquiries"),
-            ctrl::getHandlingEnquiries,
-            this::handleEnquirySelection,
-            5,
-            "No enquiries found for your handling project."
-        );
+        PaginatedUI<Enquiry> paginator = new PaginatedUI<>(Helper.toHeader("Enquiries"), ctrl::getHandlingEnquiries,
+                this::handleEnquirySelection, 5, "No enquiries found for your handling project.");
         paginator.run();
     }
 

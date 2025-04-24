@@ -1,8 +1,8 @@
 package com.example.app.repository;
 
 /**
- * RepositoryDependency is a singleton class that provides access to various repository instances.
- * It ensures that only one instance of each repository is created and reused throughout the application.
+ * RepositoryDependency is a singleton class that provides access to various repository instances. It ensures that only
+ * one instance of each repository is created and reused throughout the application.
  *
  */
 public class RepositoryDependency {
@@ -14,6 +14,7 @@ public class RepositoryDependency {
 
     /**
      * Returns the singleton instance of the UserRepository.
+     * 
      * @return The singleton instance of UserRepository.
      */
     public static UserRepository getUserRepository() {
@@ -22,6 +23,7 @@ public class RepositoryDependency {
 
     /**
      * Returns the singleton instance of the RegistrationRepository.
+     * 
      * @return The singleton instance of RegistrationRepository.
      */
     public static RegistrationRepository getRegistrationRepository() {
@@ -30,6 +32,7 @@ public class RepositoryDependency {
 
     /**
      * Returns the singleton instance of the ProjectRepository.
+     * 
      * @return The singleton instance of ProjectRepository.
      */
     public static ProjectRepository getProjectRepository() {
@@ -38,6 +41,7 @@ public class RepositoryDependency {
 
     /**
      * Returns the singleton instance of the EnquiryRepository.
+     * 
      * @return The singleton instance of EnquiryRepository.
      */
     public static EnquiryRepository getEnquiryRepository() {
@@ -46,6 +50,7 @@ public class RepositoryDependency {
 
     /**
      * Returns the singleton instance of the ApplicationRepository.
+     * 
      * @return The singleton instance of ApplicationRepository.
      */
     public static ApplicationRepository getApplicationRepository() {

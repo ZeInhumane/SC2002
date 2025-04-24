@@ -39,7 +39,8 @@ public class OfficerHandlingProjectUI {
                 return;
             }
 
-            MenuUI menu = new MenuUI(Helper.toHeader("Project Details") + "\n" + project + "\n" + Helper.toHeader("Manage Project"));
+            MenuUI menu = new MenuUI(
+                    Helper.toHeader("Project Details") + "\n" + project + "\n" + Helper.toHeader("Manage Project"));
             menu.addOption("View and Reply to Enquiries", () -> new OfficerEnquiryManagementUI(ctrl).run());
             menu.addOption("View and Manage Pending Bookings", () -> new OfficerPendingBookingsUI(ctrl).run());
             menu.addOption("View and Print Successful Bookings", () -> new OfficerSuccessfulBookingsUI(ctrl).run());
