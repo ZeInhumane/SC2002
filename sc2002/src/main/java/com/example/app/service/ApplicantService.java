@@ -7,6 +7,10 @@ import com.example.app.enums.MaritalStatus;
 import com.example.app.models.*;
 import com.example.app.enums.FlatType;
 
+/**
+ * Service interface for managing applicant-related operations.
+ * This interface provides methods to interact with the applicant service and perform various actions related to applicants.
+ */
 public interface ApplicantService extends UserService {
 
     /**
