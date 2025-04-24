@@ -19,7 +19,7 @@ public abstract class GeneralRepositoryTestBase<T extends BaseEntity> {
 
     protected abstract List<T> saveSampleEntities() throws IOException;
 
-    @AfterEach
+    @BeforeEach
     public void cleanRepository() throws IOException {
         getRepository().deleteAll();
     }
