@@ -31,8 +31,8 @@ class ManagerServiceTest {
 
     @Test
     void testCreateUpdateDeleteProject() throws IOException {
-        Date start = new Date();
-        Date end = new Date(start.getTime() + 2 * 86400000L);
+        Date start = new Date(System.currentTimeMillis() - 86400000L);
+        Date end = new Date(System.currentTimeMillis() + 86400000L);
 
         Project created = service.createProject(manager, "Proj1", start, end, "Punggol", true, 5,
                 new HashSet<>(), Set.of(MaritalStatus.MARRIED), Map.of(FlatType._2ROOM, 10));
@@ -92,16 +92,46 @@ class ManagerServiceTest {
     }
 
     @Test
-    void testEnquiryReply() throws IOException {
+    void testEnquiryReplyAndGetEnquiries() throws IOException {
         Project p = service.createProject(manager, "ReplyProj", new Date(), new Date(),
                 "Serangoon", true, 2, new HashSet<>(), new HashSet<>(), Map.of(FlatType._2ROOM, 5));
 
-        Enquiry e = new Enquiry(null, "Any 3-room left?", p.getId(), 201);
-        e = RepositoryDependency.getEnquiryRepository().save(e);
+        Enquiry e = RepositoryDependency.getEnquiryRepository().save(
+                new Enquiry(null, "Any 3-room left?", p.getId(), 201));
 
         Enquiry replied = service.replyEnquiry(manager, e.getId(), "Only 2-room available.");
         assertEquals("Only 2-room available.", replied.getResponse());
         assertEquals(manager.getId(), replied.getReplierId());
+
+        List<Enquiry> enquiries = service.getEnquiriesOfProject(manager, p.getId());
+        assertEquals(1, enquiries.size());
+        assertEquals(e.getId(), enquiries.get(0).getId());
+    }
+
+    @Test
+    void testGetAllProjectsAndMyProjects() throws IOException {
+        Project p1 = service.createProject(manager, "A", new Date(), new Date(), "A1", true, 3, Set.of(), Set.of(), Map.of(FlatType._2ROOM, 5));
+        List<Project> all = service.getAllProjects();
+        assertTrue(all.stream().anyMatch(p -> p.getId().equals(p1.getId())));
+
+        List<Project> mine = service.getMyProjects(manager);
+        assertEquals(1, mine.size());
+        assertEquals(p1.getId(), mine.get(0).getId());
+    }
+
+    @Test
+    void testGetApplicationsOfProject() throws IOException {
+        Project p = service.createProject(manager, "AppProj", new Date(), new Date(), "Yew Tee", true, 1,
+                Set.of(), Set.of(), Map.of(FlatType._2ROOM, 1));
+
+        Applicant a = new Applicant(null, "A", "pw", "a@a.com", Role.APPLICANT, "S1233211A", 34,
+                MaritalStatus.MARRIED, null, null);
+        a = (Applicant) RepositoryDependency.getUserRepository().save(a);
+        Application app = RepositoryDependency.getApplicationRepository().save(
+                new Application(null, a.getId(), p.getId(), ApplicationStatus.PENDING, false, FlatType._2ROOM));
+
+        List<Application> apps = service.getApplicationsOfProject(manager, p.getId());
+        assertEquals(1, apps.size());
     }
 
     @Test
@@ -121,10 +151,48 @@ class ManagerServiceTest {
     }
 
     @Test
-    void testPreventManagerFromApplying() {
-        UnsupportedOperationException ex = assertThrows(UnsupportedOperationException.class, () -> {
-            throw new UnsupportedOperationException("Manager cannot apply for BTO");
-        });
-        assertTrue(ex.getMessage().contains("cannot apply"));
+    void testDeleteProject_thenAccessFromApplicantAndOfficerFailsGracefully() throws IOException {
+        Project p = service.createProject(manager, "DeleteAccessProj",
+                new Date(System.currentTimeMillis() - 86400000L), new Date(System.currentTimeMillis() + 86400000L),
+                "Jurong", true, 2, new HashSet<>(), Set.of(MaritalStatus.SINGLE), Map.of(FlatType._2ROOM, 3));
+
+        // Create applicant and submit enquiry and application
+        Applicant applicant = new Applicant(null, "App", "pw", "app@ntu.sg", Role.APPLICANT, "S1231231Z", 32, MaritalStatus.SINGLE, null, null);
+        applicant = (Applicant) RepositoryDependency.getUserRepository().save(applicant);
+
+        Enquiry enquiry = RepositoryDependency.getEnquiryRepository().save(new Enquiry(null, "Is this project still open?", p.getId(), applicant.getId()));
+        Application application = RepositoryDependency.getApplicationRepository().save(
+                new Application(null, applicant.getId(), p.getId(), ApplicationStatus.SUCCESSFUL, false, FlatType._2ROOM));
+        applicant.setApplicationId(application.getId());
+        RepositoryDependency.getUserRepository().save(applicant);
+
+        // Create officer and register
+        Officer officer = new Officer(null, "O", "pw", "officer@hdb.sg", Role.OFFICER, "S1122334Z",
+                30, MaritalStatus.SINGLE, null, null, null, null);
+        officer = (Officer) RepositoryDependency.getUserRepository().save(officer);
+        Registration registration = RepositoryDependency.getRegistrationRepository().save(new Registration(null, officer.getId(), p.getId(), RegistrationStatus.APPROVED));
+        officer.setProjectId(p.getId());
+        officer.setRegisteredId(registration.getId());
+        RepositoryDependency.getUserRepository().save(officer);
+
+        // Delete the project
+        service.deleteProject(p.getId());
+
+        // Attempt access from applicant and officer
+        assertThrows(IllegalArgumentException.class, () -> service.getApplicationsOfProject(manager, p.getId()));
+
+        Application loadedApp = RepositoryDependency.getApplicationRepository().findById(application.getId());
+        assertEquals(p.getId(), loadedApp.getProjectId());
+        assertNull(RepositoryDependency.getProjectRepository().findById(loadedApp.getProjectId()));
+
+        Enquiry loadedEnq = RepositoryDependency.getEnquiryRepository().findById(enquiry.getId());
+        assertEquals(p.getId(), loadedEnq.getProjectId());
+        assertNull(RepositoryDependency.getProjectRepository().findById(loadedEnq.getProjectId()));
+
+        Registration loadedReg = RepositoryDependency.getRegistrationRepository().findById(registration.getId());
+        assertEquals(p.getId(), loadedReg.getProjectId());
+        assertNull(RepositoryDependency.getProjectRepository().findById(loadedReg.getProjectId()));
+
     }
+
 }

@@ -15,16 +15,53 @@ import com.example.app.service.ProjectService;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Service implementation for applicant service
+ * The ApplicantServiceImpl possesses methods from the UserServiceImpl
+ * and implements the ApplicantService interface.
+ *
+ * @see ApplicantService
+ * @see UserServiceImpl
+ */
 public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantService {
+
+    /**
+     * ProjectService instance for managing projects.
+     * @see ProjectService
+     */
     static ProjectService projectService = new ProjectServiceImpl();
+
+    /**
+     * ApplicationService instance for managing applications.
+     * @see ApplicationService
+     */
     static ApplicationService applicationService = new ApplicationServiceImpl();
+
+    /**
+     * EnquiryService instance for managing enquiries.
+     * @see EnquiryService
+     */
     static EnquiryService enquiryService = new EnquiryServiceImpl();
 
+    /**
+     * Get all projects that the applicant can view.
+     * @param applicant the applicant
+     * @return a list of projects that the applicant can view
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public List<Project> getViewableProjects(Applicant applicant) throws IOException, NullPointerException {
         return projectService.getPublicProjects(applicant.getMaritalStatus(), true, new Date());
     }
 
+    /**
+     * Get all projects that the applicant has applied for.
+     * @param applicant the applicant
+     * @return the project that the applicant has applied or currently applying
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Project viewAppliedProjects(Applicant applicant) throws IOException, NullPointerException {
         Application application = applicationService.findById(applicant.getApplicationId());
@@ -34,7 +71,14 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return projectService.findById(application.getProjectId());
     }
 
-    // Can only apply if no app exists or the last one failed
+
+    /**
+     * The applicant is only able to apply if they have no application yet or the last one failed
+     * @param applicant the applicant
+     * @return true if the applicant is able to apply, false otherwise
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
         Application application = viewApplication(applicant);
@@ -42,6 +86,15 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
                 || application.getStatus() == ApplicationStatus.WITHDRAWN;
     }
 
+    /**
+     * Apply an applicant for a project
+     * @param applicant the applicant
+     * @param projectId the project ID
+     * @param preferredFlatType the preferred flat type
+     * @return the application object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException {
         Project project = projectService.findById(projectId);
@@ -65,6 +118,13 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return application;
     }
 
+    /**
+     * View the current applied project of the applicant, regardless of project status.
+     * @param applicant the applicant
+     * @return the project object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Project viewAppliedProject(Applicant applicant) throws IOException, NullPointerException{
         if (applicant.getApplicationId() == null) {
@@ -78,7 +138,13 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return projectService.findById(application.getProjectId());
     }
 
-    // Get current application safely
+    /**
+     * View the current application of the applicant.
+     * @param applicant the applicant
+     * @return the application object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Application viewApplication(Applicant applicant) throws IOException, NullPointerException {
         if (applicant.getApplicationId() == null)
@@ -86,6 +152,13 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return applicationService.findById(applicant.getApplicationId());
     }
 
+    /**
+     * Withdraw the current application of the applicant.
+     * @param applicant the applicant
+     * @return the application object after modifying
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
         Application application = viewApplication(applicant);
@@ -101,18 +174,41 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     // Submit enquiry (stores ID back to user profile)
+
+    /**
+     * @param applicant the applicant
+     * @param question the message to be sent
+     * @param projectId the project ID
+     * @return the enquiry object after being submitted
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Enquiry submitEnquiry(Applicant applicant, String question, int projectId) throws IOException, NullPointerException {
         return enquiryService.submitEnquiry(question, projectId, applicant.getId());
     }
 
-    // get all enquiries made by the applicant
+    /**
+     * Get all enquiries made by the applicant.
+     * @param applicant the applicant
+     * @return a list of enquiries made by the applicant
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public List<Enquiry> getOwnEnquiries(Applicant applicant) throws IOException, NullPointerException {
         return enquiryService.findByEnquirerId(applicant.getId());
     }
 
-    // Edit enquiry (if it belongs to this user)
+    /**
+     * Update an enquiry (update enquiry question only)
+     * @param applicant the applicant
+     * @param enquiryId the enquiry ID
+     * @param newQuestion the new message
+     * @return the updated enquiry object
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public Enquiry updateEnquiry(Applicant applicant, int enquiryId, String newQuestion) throws IOException, NullPointerException {
         Enquiry enquiry = enquiryService.findById(enquiryId);
@@ -124,7 +220,13 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return enquiryService.updateEnquiryQuestion(enquiryId, newQuestion);
     }
 
-    // Delete enquiry (if it belongs to this user)
+    /**
+     * Delete an enquiry.
+     * @param applicant the applicant
+     * @param enquiryId the enquiry ID
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public void deleteEnquiry(Applicant applicant, int enquiryId) throws IOException, NullPointerException {
 
@@ -138,6 +240,14 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     }
 
+    /**
+     * Get all enquiries for a specific project.
+     * @param applicant the applicant
+     * @param projectId the project ID
+     * @return a list of enquiries for the project
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the applicant is null
+     */
     @Override
     public List<FlatType> getEligibleFlatTypesForProject(Applicant applicant, int projectId)
             throws IOException, NullPointerException {
@@ -152,9 +262,16 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
         return eligible;
     }
 
+    /**
+     * Get all eligible flat types for the applicant based on marital status and age.
+     * @param userStatus the marital status of the user
+     * @param userAge the age of the user
+     * @return a list of eligible flat types
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the user status is null
+     */
     @Override
-    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws
-            IOException, NullPointerException {
+    public List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws NullPointerException {
         List<FlatType> eligible = new ArrayList<>();
         if (userStatus == MaritalStatus.SINGLE && userAge >= 35) {
             eligible.add(FlatType._2ROOM);

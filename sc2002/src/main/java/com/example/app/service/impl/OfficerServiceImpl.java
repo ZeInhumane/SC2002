@@ -13,18 +13,44 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * OfficerServiceImpl is a service class that implements the OfficerService interface.
+ * It provides methods for managing officer registrations, handling enquiries,
+ *
+ * @see OfficerService
+ * @see ApplicantServiceImpl
+ */
 public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerService {
+
+    /**
+     * Service for managing registration.
+     *
+     * @see RegistrationService
+     */
     static RegistrationService registrationService = new RegistrationServiceImpl();
+
+    /**
+     * Service for managing users
+     *
+     * @see UserService
+     */
     static UserService userService = new UserServiceImpl();
 
-    public boolean isHandling(Officer officer, int projectId) throws IOException {
+    @Override
+    public boolean isHandling(Officer officer, int projectId) throws IOException, NullPointerException {
         return Objects.equals(projectId, officer.getProjectId()) && projectService.isActive(projectId);
     }
 
-    // Checks if cannot register as officer (An applicant for the hdb or has a
-    // project somewhere before deadline)
+    /**
+     * Check if the officer is able to register for a project.
+     * @param officer the officer
+     * @param projectId the project ID
+     * @return true if the officer is able to register, false otherwise
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the officer is null
+     */
     @Override
-    public boolean isRegistrable(Officer officer, int projectId) throws IOException {
+    public boolean isRegistrable(Officer officer, int projectId) throws IOException, NullPointerException {
         boolean isAlreadyApplicant = officer.getApplicationId() != null && officer.getApplicationId() == projectId;
 
         boolean isAlreadyHandling = officer.getProjectId() != null && projectService.isActive(officer.getProjectId());
@@ -32,8 +58,15 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         return !isAlreadyApplicant && !isAlreadyHandling;
     }
 
-    // Check if officer can apply for project
-    // Can only apply if 1, able to apply as applicant and 2, not handling any active project
+    /**
+     * Check if the officer is able to apply for a project.
+     * This is an extension from applicant.isAbleToAplly() since the officer cannot apply for the project they are handling
+     * After this check, the officer will be treated as an applicant for the next check
+     * @param officer the officer
+     * @return true if the officer is able to apply, false otherwise
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
     public boolean isAbleToApply(Officer officer) throws IOException {
         if (officer.getProjectId() != null && projectService.isActive(officer.getProjectId())) {
             return false;
@@ -41,6 +74,13 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         return super.isAbleToApply(officer);
     }
 
+    /**
+     * Get all projects that the officer can register for.
+     * @param officer the officer
+     * @return a list of projects that the officer can register for
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the officer is null
+     */
     @Override
     public List<Project> getRegistrableProjects(Officer officer) throws IOException, NullPointerException {
         Collection<Project> allProjects = projectService.findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(true, new Date());
@@ -54,9 +94,18 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         }).collect(Collectors.toList());
     }
 
-    // Register for project
+    /**
+     * Registers the officer for the specified project.
+     *
+     * @param officer   the officer registering for the project
+     * @param projectId the ID of the project
+     * @return the updated officer after registration
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the officer is not eligible to register
+     */
     @Override
     public Officer registerForProject(Officer officer, int projectId) throws IOException {
+
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project ID " + projectId + " not found.");
@@ -72,7 +121,13 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         return (Officer) this.save(officer);
     }
 
-    // Retrieve current registration even if it is turned off
+    /**
+     * Retrieves the officer's current registration, even if the project is closed.
+     *
+     * @param officer the officer requesting to view registration
+     * @return the current registration of the officer
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public Registration viewCurrentRegistration(Officer officer) throws IOException {
         Registration registration = registrationService.findById(officer.getRegistrationId());
@@ -81,32 +136,60 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         }
         return registration;
     }
-
+    /**
+     * Retrieves the project that the officer is currently assigned to handle.
+     *
+     * @param officer the officer handling the project
+     * @return the project being handled
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the officer is not assigned to any project
+     */
     @Override
     public Project viewHandlingProject(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
             throw new IllegalStateException("Officer is not assigned to any project.");
         }
-
         return projectService.findById(officer.getProjectId());
     }
 
-    // get Enquiries regarding handling project
+    /**
+     * Retrieves all enquiries related to the project the officer is currently handling.
+     *
+     * @param officer the officer handling the project
+     * @return a list of enquiries related to the project
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the officer is not assigned to any project
+     */
     @Override
     public List<Enquiry> getHandlingEnquiries(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
             throw new IllegalStateException("Officer is not assigned to any project.");
         }
-
         return enquiryService.findByProjectId(officer.getProjectId());
     }
 
-    // reply Enquiry
+    /**
+     * Replies to an enquiry made for the project the officer is handling.
+     *
+     * @param officer    the officer replying to the enquiry
+     * @param enquiryId  the ID of the enquiry to reply to
+     * @param reply      the reply content
+     * @return the updated enquiry after reply
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     public Enquiry replyEnquiry(Officer officer, int enquiryId, String reply) throws IOException {
         return enquiryService.replyEnquiry(enquiryId, officer.getId(), reply);
     }
 
+    /**
+     * Retrieves all applications for the officer's assigned project that have been marked as SUCCESSFUL.
+     *
+     * @param officer the officer requesting the applications
+     * @return a list of successful applications
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the officer is not assigned to any project
+     */
     @Override
     public List<Application> getBookingApplications(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
@@ -118,6 +201,14 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves all applications for the officer's assigned project that have been marked as BOOKED.
+     *
+     * @param officer the officer requesting the applications
+     * @return a list of booked applications
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the officer is not assigned to any project
+     */
     @Override
     public List<Application> getBookedApplications(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
@@ -129,28 +220,44 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Books a flat for the specified applicant. The application must be in SUCCESSFUL status before booking.
+     *
+     * @param applicantId the ID of the applicant
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the applicant does not have a successful application
+     * @throws NullPointerException  if the applicant does not exist
+     */
     @Override
     public void bookFlatForApplicant(int applicantId) throws IOException {
         Applicant applicant = (Applicant) userService.findById(applicantId);
+
+        if (applicant == null) {
+            throw new NullPointerException("NRIC does not belong to an applicant.");
+        }
+
         Application application = applicationService.findById(applicant.getApplicationId());
 
-        // CHANGE BACK TO SUCCESSFUL
         if (application == null || application.getStatus() != ApplicationStatus.SUCCESSFUL) {
             throw new IllegalStateException("Applicant has no successful application.");
         }
 
-        // Update project flat count
         projectService.decrementFlatCount(application.getProjectId(), application.getFlatType());
-
-        // Update application status
         application.setStatus(ApplicationStatus.BOOKED);
         applicationService.save(application);
-
-        // Assign flat type to applicant
         applicant.setFlatType(application.getFlatType());
         userService.save(applicant);
     }
 
+    /**
+     * Generates a booking receipt for the applicant who has successfully booked a flat.
+     *
+     * @param applicantId the ID of the applicant
+     * @return a formatted booking receipt string
+     * @throws IOException           if an I/O error occurs
+     * @throws IllegalStateException if the applicant has not booked a flat
+     * @throws NullPointerException  if the project cannot be found
+     */
     @Override
     public String generateBookingReceipt(int applicantId) throws IOException {
         Applicant applicant = (Applicant) userService.findById(applicantId);
@@ -161,6 +268,10 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         }
 
         Project project = projectService.findById(app.getProjectId());
+
+        if (project == null) {
+            throw new NullPointerException("Project not found.");
+        }
 
         return String.format("""
                 === Booking Receipt ===
@@ -180,5 +291,4 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
                 project.getProjectName(),
                 project.getNeighborhood());
     }
-
 }

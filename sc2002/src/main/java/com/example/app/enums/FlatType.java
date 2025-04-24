@@ -1,5 +1,9 @@
 package com.example.app.enums;
 
+/**
+ * Enum representing the type of flat.
+ * It includes various types of flats available in the system.
+ */
 public enum FlatType {
     _2ROOM, _3ROOM;
 
