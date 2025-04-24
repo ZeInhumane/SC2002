@@ -11,7 +11,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ApplicationRepositoryTest extends GeneralRepositoryTestBase<Application> {
-
     private final ApplicationRepository applicationRepository = new ApplicationRepository();
 
     @Override
