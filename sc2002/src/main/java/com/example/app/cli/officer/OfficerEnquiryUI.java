@@ -1,5 +1,10 @@
 package com.example.app.cli.officer;
 
+import com.example.app.cli.utils.*;
+import com.example.app.control.OfficerControl;
+import com.example.app.models.Enquiry;
+import com.example.app.cli.common.*;
+
 /**
  * Manages and displays a paginated list of enquiries for officers.
  *
@@ -12,11 +17,6 @@ package com.example.app.cli.officer;
  *
  * @see PaginatedUI
  */
-import com.example.app.cli.utils.*;
-import com.example.app.control.OfficerControl;
-import com.example.app.models.Enquiry;
-import com.example.app.cli.common.*;
-
 public class OfficerEnquiryUI {
     private final OfficerControl ctrl;
     private final PaginatedUI<Enquiry> paginator;

@@ -1,5 +1,11 @@
 package com.example.app.cli.manager;
 
+import com.example.app.control.ManagerControl;
+import com.example.app.models.Registration;
+import com.example.app.enums.RegistrationStatus;
+import com.example.app.cli.utils.*;
+import com.example.app.cli.common.*;
+
 /**
  * Manages officer registrations for a project.
  *
@@ -11,12 +17,6 @@ package com.example.app.cli.manager;
  *
  * @see PaginatedUI
  */
-import com.example.app.control.ManagerControl;
-import com.example.app.models.Registration;
-import com.example.app.enums.RegistrationStatus;
-import com.example.app.cli.utils.*;
-import com.example.app.cli.common.*;
-
 public class ManagerOfficerRegistrationUI {
     private final ManagerControl ctrl;
     private final PaginatedUI<Registration> paginator;

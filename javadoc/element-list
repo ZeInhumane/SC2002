@@ -1,0 +1,15 @@
+com.example.app
+com.example.app.cli
+com.example.app.cli.applicant
+com.example.app.cli.common
+com.example.app.cli.manager
+com.example.app.cli.officer
+com.example.app.cli.utils
+com.example.app.control
+com.example.app.enums
+com.example.app.exceptions
+com.example.app.models
+com.example.app.repository
+com.example.app.serializer
+com.example.app.service
+com.example.app.service.impl
