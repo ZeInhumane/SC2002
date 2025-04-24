@@ -11,11 +11,11 @@ public enum FlatType {
     public String toString() {
         switch (this) {
             case _2ROOM:
-                return "2 Room";
+                return "2-Room";
             case _3ROOM:
-                return "3 Room";
+                return "3-Room";
             default:
-                return super.toString();
+                throw new IllegalArgumentException("Unknown FlatType: " + this);
         }
     }
 }

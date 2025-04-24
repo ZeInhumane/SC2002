@@ -19,6 +19,16 @@ import com.example.app.models.Project;
 public interface OfficerService extends ApplicantService {
 
     /**
+     * Check if the officer is currently handling a project.
+     * @param officer the officer
+     * @param projectId the project ID
+     * @return true if the officer is handling the project, false otherwise
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the officer is null
+     */
+    boolean isHandling(Officer officer, int projectId) throws IOException, NullPointerException;
+
+    /**
      * Check if the officer is able to register for a project.
      * @param officer the officer
      * @param projectId the project ID
@@ -27,6 +37,15 @@ public interface OfficerService extends ApplicantService {
      * @throws NullPointerException if the officer is null
      */
     boolean isRegistrable(Officer officer, int projectId) throws IOException, NullPointerException;
+
+    /**
+     *
+     * @param officer
+     * @return
+     * @throws IOException
+     * @throws NullPointerException
+     */
+    boolean isAbleToApply(Officer officer) throws IOException, NullPointerException;
 
     /**
      * Get all projects that the officer can register for.
@@ -59,13 +78,13 @@ public interface OfficerService extends ApplicantService {
     Registration viewCurrentRegistration(Officer officer) throws IOException, NullPointerException;
 
     /**
-     * View the current project of the officer.
+     * View the current project the officer is handling.
      * @param officer the officer
      * @return the project object
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the officer is null
      */
-    Project viewCurrentProject(Officer officer) throws IOException, NullPointerException;
+    Project viewHandlingProject(Officer officer) throws IOException, NullPointerException;
 
     /**
      * Get all enquiries that the officer is handling.
@@ -88,29 +107,37 @@ public interface OfficerService extends ApplicantService {
     Enquiry replyEnquiry(Officer officer, int enquiryId, String message) throws IOException, NullPointerException;
 
     /**
-     * Get all applications of applicant for the project that the officer is handling.
+     * Get all applications that the officer is handling with {@code Application.status = SUCCESSFUL}.
      * @param officer the officer
      * @return a list of applications that the officer is handling
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the officer is null
      */
-    List<Application> getHandlingApplications(Officer officer) throws IOException, NullPointerException;
+    List<Application> getBookingApplications(Officer officer) throws IOException, NullPointerException;
 
     /**
-     * Book a flat for the applicant.
-     * @param nric the NRIC of the applicant
+     * Get all applications that the officer is handling with {@code Application.status = BOOKED}
+     * @param officer the officer
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the NRIC is null
      */
-    void bookFlatForApplicant(String nric) throws IOException, NullPointerException;
+    List<Application> getBookedApplications(Officer officer) throws IOException, NullPointerException;
+
+    /**
+     * Book a flat for the applicant.
+     * @param applicantId the NRIC of the applicant
+     * @throws IOException if an I/O error occurs
+     * @throws NullPointerException if the NRIC is null, or if the project is not found
+     */
+    void bookFlatForApplicant(int applicantId) throws IOException, NullPointerException;
 
     /**
      * Generate a booking receipt for the applicant.
-     * @param nric the NRIC of the applicant
+     * @param applicantId the NRIC of the applicant
      * @return the booking receipt
      * @throws IOException if an I/O error occurs
      * @throws IllegalStateException if the applicant has not booked a flat,
      * @throws NullPointerException if the NRIC is null, or if the project is not found
      */
-    String generateBookingReceipt(String nric) throws IOException, IllegalStateException, NullPointerException;
+    String generateBookingReceipt(int applicantId) throws IOException, NullPointerException;
 }

@@ -56,7 +56,7 @@ public class UserSerializer implements Serializer<User> {
                 yield base + "," +
                         (officer.getFlatType() != null ? officer.getFlatType().name() : "") + "," +
                         (officer.getApplicationId() != null ? officer.getApplicationId() : "") + "," +
-                        (officer.getRegisteredId() != null ? officer.getRegisteredId() : "") + "," +
+                        (officer.getRegistrationId() != null ? officer.getRegistrationId() : "") + "," +
                         (officer.getProjectId() != null ? officer.getProjectId() : "");
             }
         };
@@ -70,7 +70,6 @@ public class UserSerializer implements Serializer<User> {
      */
     @Override
     public User deserialize(LinkedList<String> parts) throws DataParsingException {
-
         Integer id = Integer.valueOf(parts.removeFirst().trim());
         String name = stringSerializer.deserialize(parts);
         String password = stringSerializer.deserialize(parts);

@@ -39,7 +39,7 @@ class OfficerServiceTest {
                 new HashSet<>(), new HashSet<>(), Map.of(FlatType._2ROOM, 3)));
 
         Officer registered = service.registerForProject(officer, project.getId());
-        assertNotNull(registered.getRegisteredId());
+        assertNotNull(registered.getRegistrationId());
 
         Registration reg = service.viewCurrentRegistration(registered);
         assertEquals(project.getId(), reg.getProjectId());
@@ -103,19 +103,19 @@ class OfficerServiceTest {
         officer.setProjectId(project.getId());
         RepositoryDependency.getUserRepository().save(officer);
 
-        service.bookFlatForApplicant(applicant.getNric());
+        service.bookFlatForApplicant(applicant.getId());
 
         Application updated = RepositoryDependency.getApplicationRepository().findById(app.getId());
         assertEquals(ApplicationStatus.BOOKED, updated.getStatus());
 
-        String receipt = service.generateBookingReceipt(applicant.getNric());
+        String receipt = service.generateBookingReceipt(applicant.getId());
         assertTrue(receipt.contains("Booking Receipt"));
         assertTrue(receipt.contains("Woodlands"));
     }
 
     @Test
     void viewCurrentProject_throwsIfNone() {
-        assertThrows(IllegalStateException.class, () -> service.viewCurrentProject(officer));
+        assertThrows(IllegalStateException.class, () -> service.viewHandlingProject(officer));
     }
 
     @Test
@@ -130,7 +130,7 @@ class OfficerServiceTest {
         a1 = (Applicant) RepositoryDependency.getUserRepository().save(a1);
         applicationService.save(new Application(null, a1.getId(), project.getId(), ApplicationStatus.PENDING, false, FlatType._3ROOM));
 
-        List<Application> apps = service.getHandlingApplications(officer);
+        List<Application> apps = service.getBookingApplications(officer);
         assertEquals(1, apps.size());
     }
 
@@ -156,13 +156,13 @@ class OfficerServiceTest {
         officer.setProjectId(project.getId());
         RepositoryDependency.getUserRepository().save(officer);
 
-        service.bookFlatForApplicant(applicant.getNric());
+        service.bookFlatForApplicant(applicant.getId());
 
 
         Application updated = RepositoryDependency.getApplicationRepository().findById(app.getId());
         assertEquals(ApplicationStatus.BOOKED, updated.getStatus());
 
-        String receipt = service.generateBookingReceipt(applicant.getNric());
+        String receipt = service.generateBookingReceipt(applicant.getId());
 
         Applicant updatedApplicant = (Applicant) RepositoryDependency.getUserRepository().findByNric(applicant.getNric());
 
@@ -201,21 +201,21 @@ class OfficerServiceTest {
         Registration reg = RepositoryDependency.getRegistrationRepository().save(
                 new Registration(null, officer.getId(), project.getId(), RegistrationStatus.APPROVED));
         officer.setProjectId(project.getId());
-        officer.setRegisteredId(reg.getId());
+        officer.setRegistrationId(reg.getId());
         RepositoryDependency.getUserRepository().save(officer);
 
         // Delete the project
         RepositoryDependency.getProjectRepository().deleteById(project.getId());
 
-        assertNull(service.viewCurrentProject(officer));
-        assertFalse(service.getHandlingApplications(officer).isEmpty());
+        assertNull(service.viewHandlingProject(officer));
+        assertFalse(service.getBookedApplications(officer).isEmpty());
         assertFalse(service.getHandlingEnquiries(officer).isEmpty());
 
         // Optionally test replyEnquiry / booking gracefully fails or does nothing
         assertThrows(NullPointerException.class, () -> service.replyEnquiry(officer, 999, "No such enquiry"));
-        assertThrows(NullPointerException.class, () -> service.bookFlatForApplicant(applicant.getNric()));
+        assertThrows(NullPointerException.class, () -> service.bookFlatForApplicant(applicant.getId()));
         assertThrows(IllegalStateException.class, (() -> {
-            String receipt = service.generateBookingReceipt(applicant.getNric());
+            String receipt = service.generateBookingReceipt(applicant.getId());
             assertTrue(receipt == null || receipt.isEmpty());
         }));
     }

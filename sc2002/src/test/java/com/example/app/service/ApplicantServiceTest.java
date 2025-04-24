@@ -81,10 +81,10 @@ class ApplicantServiceTest {
         assertTrue(service.isAbleToApply(applicant));
     }
 
-    @Test
-    void viewCurrentApplication_and_viewCurrentProject() throws IOException {
-        assertNull(service.viewCurrentApplication(applicant));
-        assertNull(service.viewCurrentProject(applicant));
+@Test
+void viewCurrentApplication_and_viewCurrentProject() throws IOException {
+    assertNull(service.viewApplication(applicant));
+    assertNull(service.viewAppliedProject(applicant));
 
         Project p = projectService.createProject("Proj", new Date(), new Date(), "Jurong",
                 1, true, 1, Set.of(), Set.of(), Map.of(FlatType._2ROOM, 1));
@@ -93,9 +93,9 @@ class ApplicantServiceTest {
         applicant.setApplicationId(app.getId());
         RepositoryDependency.getUserRepository().save(applicant);
 
-        assertEquals(app.getId(), service.viewCurrentApplication(applicant).getId());
-        assertEquals(p.getId(), service.viewCurrentProject(applicant).getId());
-    }
+    assertEquals(app.getId(), service.viewApplication(applicant).getId());
+    assertEquals(p.getId(), service.viewAppliedProject(applicant).getId());
+}
 
     @Test
     void withdrawApplication_setsFlag_andRejectDuplicate() throws IOException {
@@ -159,7 +159,7 @@ class ApplicantServiceTest {
         service.submitEnquiry(applicant, "Q1?", p.getId());
         service.submitEnquiry(applicant, "Q2?", p.getId());
 
-        List<Enquiry> list = service.getAllEnquiries(applicant);
-        assertEquals(2, list.size());
-    }
+    List<Enquiry> list = service.getOwnEnquiries(applicant);
+    assertEquals(2, list.size());
+}
 }

@@ -19,7 +19,7 @@ public class Officer extends Applicant {
     /**
      * The ID of the officer's registration. This field is null if the officer has not submitted any registration.
      */
-    private Integer registeredId;
+    private Integer registrationId;
 
     /**
      * The ID of the project for which the officer is registered. This field is null if the officer has not registered for any project.
@@ -52,7 +52,7 @@ public class Officer extends Applicant {
             MaritalStatus maritalStatus, FlatType flatType, Integer applicationId, Integer registeredId,
             Integer projectId) {
         super(id, username, password, email, role, nric, age, maritalStatus, flatType, applicationId);
-        this.registeredId = registeredId;
+        this.registrationId = registeredId;
         this.projectId = projectId;
     }
 
@@ -61,17 +61,17 @@ public class Officer extends Applicant {
      *
      * @return the ID of the officer's registration
      */
-    public Integer getRegisteredId() {
-        return registeredId;
+    public Integer getRegistrationId() {
+        return registrationId;
     }
 
     /**
      * Sets the ID of the officer's registration.
      *
-     * @param registeredId the ID of the officer's registration
+     * @param registrationId the ID of the officer's registration
      */
-    public void setRegisteredId(Integer registeredId) {
-        this.registeredId = registeredId;
+    public void setRegistrationId(Integer registrationId){
+        this.registrationId = registrationId;
     }
 
     /**

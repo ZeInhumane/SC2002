@@ -5,46 +5,67 @@ import com.example.app.control.UserControl;
 import com.example.app.RuntimeData;
 
 public class LoginUI {
-    public void printMenu() {
-        System.out.println("1. Login");
-        System.out.println("2. Exit");
+    private final MenuUI menu;
+    private final UserControl userControl;
+
+    public LoginUI() {
+        this.userControl = new UserControl();
+        this.menu = buildMenu();
     }
 
     public void run() {
         Helper.wipeScreen();
-        while (true) {
-            printMenu();
+        menu.run();
+    }
 
-            int choice = Readers.readIntRange(1, 2);
+    private MenuUI buildMenu() {
+        MenuUI m = new MenuUI(Helper.toHeader("Main Menu"));
+        m.addOption("Login", this::login);
+        m.addOption("Change Password", this::changePassword);
+        m.addOption("Exit", m::exit);
+        return m;
+    }
 
-            switch (choice) {
-                case 1:
-                    String nric = Readers.readString("Enter your NRIC: ");
-                    String password = Readers.readPassword();
-                    Helper.wipeScreen();
-                    if (UserControl.login(nric, password)) {
-                        switch (RuntimeData.getCurrentUser().getRole()) {
-                            case APPLICANT:
-                                new ApplicantUI().run();
-                                break;
-                            case OFFICER:
-                                // new OfficerUI().run();
-                                break;
-                            case MANAGER:
-                                // new ManagerUI().run();
-                                break;
-                            default:
-                                System.out.println("Unknown role. Please contact support.");
-                                break;
-                        }
-                    }
+    private void login() {
+        String nric = Readers.readString("Enter your NRIC: ");
+        String password = Readers.readPassword();
+        Helper.wipeScreen();
+        if (userControl.login(nric, password)) {
+            System.out.println("Login successful. Welcome, " + RuntimeData.getCurrentUser().getName() + "!");
+            Readers.readEnter();
+            switch (RuntimeData.getCurrentUser().getRole()) {
+                case APPLICANT:
+                    new ApplicantUI().run();
                     break;
-                case 2:
-                    System.out.println("Exiting...");
-                    return;    
+                case OFFICER:
+                    new OfficerUI().run();
+                    break;
+                case MANAGER:
+                    // new ManagerUI().run();
+                    break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + choice);
+                    System.out.println("Unknown role. Please contact support.");
+                    break;
             }
         }
+        else Readers.readEnter();
+    }
+
+    private void changePassword() {
+        String changeNric = Readers.readString("Enter your NRIC: ");
+        String currentPassword = Readers.readPassword("Enter your current password (case-sensitive): ");
+        if (userControl.login(changeNric, currentPassword)) {
+            String newPassword = Readers.readPassword("Enter your new password (case-sensitive): ");
+            try {
+                userControl.changePassword(RuntimeData.getCurrentUser(), newPassword);
+                System.out.println("Password changed successfully.");
+                UserControl.logout();
+            } catch (Exception e) {
+                System.out.println("Error changing password: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Invalid NRIC or password. Please try again.");
+        }
+        Readers.readEnter();
     }
 }

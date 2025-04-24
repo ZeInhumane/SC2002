@@ -48,13 +48,13 @@ public interface ApplicantService extends UserService {
     Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException;
 
     /**
-     * View the current project of the applicant, regardless of project status.
+     * View the current applied project of the applicant, regardless of project status.
      * @param applicant
      * @return the project object
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the applicant is null
      */
-    Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException;
+    Project viewAppliedProject(Applicant applicant) throws IOException, NullPointerException;
 
     /**
      * View the current application of the applicant.
@@ -63,7 +63,7 @@ public interface ApplicantService extends UserService {
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the applicant is null
      */
-    Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException;
+    Application viewApplication(Applicant applicant) throws IOException, NullPointerException;
 
     /**
      * With draw an application.
@@ -92,7 +92,7 @@ public interface ApplicantService extends UserService {
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the applicant is null
      */
-    List<Enquiry> getAllEnquiries(Applicant applicant) throws IOException, NullPointerException;
+    List<Enquiry> getOwnEnquiries(Applicant applicant) throws IOException, NullPointerException;
 
     /**
      * Update an enquiry (update enquiry question only)
@@ -133,6 +133,5 @@ public interface ApplicantService extends UserService {
      * @throws IOException if an I/O error occurs
      * @throws NullPointerException if the user status is null
      */
-    List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws
-            IOException, NullPointerException;
+    List<FlatType> getEligibleFlatTypes(MaritalStatus userStatus, int userAge) throws NullPointerException;
 }

@@ -25,19 +25,43 @@ public class Readers {
     public static void readEnter() {
         System.out.println("Press Enter to continue...");
         sc.nextLine();
+        Helper.wipeScreen();
     }
 
     public static String readPassword() {
         String password;
         while (true) {
             if (System.console() == null) {
-                System.out.println("Enter password: ");
+                System.out.println("Enter password (case-sensitive): ");
                 password = sc.nextLine();
+            } else {
+                password = new String(System.console().readPassword("Enter password (case-sensitive): "));
             }
-            else password = new String(System.console().readPassword("Enter password: "));
 
-            if (password.isEmpty()) System.out.println("Password cannot be empty. Please try again.");
-            else break;
+            if (password.isEmpty()) {
+                System.out.println("Password cannot be empty. Please try again.");
+            } else {
+                break;
+            }
+        }
+        return password;
+    }
+
+    public static String readPassword(String prompt) {
+        String password;
+        while (true) {
+            System.out.println(prompt);
+            if (System.console() == null) {
+                password = sc.nextLine();
+            } else {
+                password = new String(System.console().readPassword());
+            }
+
+            if (password.isEmpty()) {
+                System.out.println("Password cannot be empty. Please try again.");
+            } else {
+                break;
+            }
         }
         return password;
     }

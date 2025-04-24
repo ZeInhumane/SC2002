@@ -73,7 +73,6 @@ public class ProjectRepository extends GeneralRepository<Project> {
                 .collect(Collectors.toList());
     }
 
-
     /**
      * Finds all projects by the visibility and open/close date.
      * @param visibility the visibility of the project

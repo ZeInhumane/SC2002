@@ -36,7 +36,7 @@ public interface ManagerService extends UserService {
      */
     Project createProject(Manager manager, String projectName, Date applicationOpenDate, Date applicationCloseDate,
             String neighborhood, boolean visibility, Integer officerLimit, Set<Integer> officers, Set<MaritalStatus> groups, Map<FlatType, Integer> flats)
-            throws IOException;
+            throws IOException, IllegalStateException;
 
     /**
      * Update an existing project.
