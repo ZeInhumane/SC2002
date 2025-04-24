@@ -1,5 +1,16 @@
 package com.example.app.cli.manager;
 
+/**
+ * Manages officer registrations for a project.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>View a paginated list of officer registrations</li>
+ *   <li>Approve or deny pending registrations</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 import com.example.app.control.ManagerControl;
 import com.example.app.models.Registration;
 import com.example.app.enums.RegistrationStatus;

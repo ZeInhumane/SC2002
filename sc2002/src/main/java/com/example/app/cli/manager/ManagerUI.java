@@ -8,6 +8,25 @@ import com.example.app.control.ManagerControl;
 import com.example.app.cli.common.MenuUI;
 import com.example.app.models.ProjectFilter;
 
+/**
+ * Represents the main dashboard for managers.
+ *
+ * <p>This class provides a menu interface for managers to:
+ * <ul>
+ *   <li>View all projects</li>
+ *   <li>View all enquiries</li>
+ *   <li>View their projects</li>
+ *   <li>Create new projects</li>
+ *   <li>Generate applicant reports</li>
+ *   <li>Logout from the system</li>
+ * </ul>
+ *
+ * @see ManagerProjectListUI
+ * @see ManagerAllEnquiriesUI
+ * @see ManagerMyProjectListUI
+ * @see ManagerCreateProjectUI
+ * @see ManagerReportUI
+ */
 public class ManagerUI {
     private final ManagerControl ctrl;
     private final MenuUI menu;

@@ -5,6 +5,16 @@ import com.example.app.models.Enquiry;
 import com.example.app.cli.utils.Helper;
 import com.example.app.cli.common.PaginatedUI;
 
+/**
+ * Displays a paginated list of all enquiries across projects.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>View all enquiries without specific actions on selection</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 public class ManagerAllEnquiriesUI {
     private final ManagerControl ctrl;
     private final PaginatedUI<Enquiry> paginator;

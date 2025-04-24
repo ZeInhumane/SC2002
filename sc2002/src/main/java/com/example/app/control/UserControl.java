@@ -5,6 +5,11 @@ import com.example.app.service.impl.UserServiceImpl;
 import com.example.app.RuntimeData;
 import com.example.app.models.User;
 
+/**
+ * Control class for managing user-related operations.
+ * 
+ * This class provide methods to interact with the user service: login, change password, and logout.
+ */
 public class UserControl {
     private final UserService userService;
 

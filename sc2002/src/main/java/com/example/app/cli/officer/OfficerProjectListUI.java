@@ -13,6 +13,17 @@ import java.util.stream.Collectors;
 
 /**
  * Displays a paginated list of projects and handles project-specific actions for officers.
+ *
+ * <p>This class allows officers to:
+ * <ul>
+ *   <li>Set filters for projects based on neighborhood, flat type, and project name</li>
+ *   <li>View filtered projects</li>
+ *   <li>Apply for projects</li>
+ *   <li>Join projects as an officer</li>
+ *   <li>Submit enquiries about projects</li>
+ * </ul>
+ *
+ * @see PaginatedUI
  */
 public class OfficerProjectListUI {
     private final OfficerControl ctrl;

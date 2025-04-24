@@ -11,7 +11,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Displays a paginated list of projects and handles project-specific actions.
+ * Displays a paginated list of projects for applicants.
+ *
+ * <p>This class allows applicants to:
+ * <ul>
+ *   <li>Set filters for projects based on neighborhood, flat type, and project name</li>
+ *   <li>View filtered projects</li>
+ *   <li>Apply for a project</li>
+ *   <li>Submit enquiries about a project</li>
+ * </ul>
+ *
+ * @see PaginatedUI
  */
 public class ApplicantProjectListUI {
     private final ApplicantControl ctrl;

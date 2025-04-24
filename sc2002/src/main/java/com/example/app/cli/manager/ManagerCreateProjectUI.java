@@ -8,6 +8,16 @@ import com.example.app.cli.utils.Readers;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Provides an interface for creating new projects.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>Specify project details such as name, neighborhood, and dates</li>
+ *   <li>Set constraints like officer limits and flat types</li>
+ *   <li>Define eligible groups for the project</li>
+ * </ul>
+ */
 public class ManagerCreateProjectUI {
     private final ManagerControl ctrl;
 

@@ -413,10 +413,6 @@ public class Project implements BaseEntity {
         this.flatCount = flatCount;
     }
 
-    /**
-     * Sets the map of flat types and their corresponding counts available in the project.
-     * @param flatCount the map of flat types and their counts
-     */
     @Override
     public String toString() {
         return String.format("""

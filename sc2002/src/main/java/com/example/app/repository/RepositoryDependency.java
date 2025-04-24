@@ -2,8 +2,7 @@ package com.example.app.repository;
 
 /**
  * RepositoryDependency is a singleton class that provides access to various repository instances. It ensures that only
- * one instance of each repository is created and reused throughout the application.
- *
+ * one instance of each repository is created and shared across the application.
  */
 public class RepositoryDependency {
     private static final UserRepository userRepository = new UserRepository();

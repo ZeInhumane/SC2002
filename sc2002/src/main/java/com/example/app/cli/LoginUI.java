@@ -9,6 +9,15 @@ import com.example.app.cli.common.MenuUI;
 import com.example.app.cli.officer.OfficerUI;
 import com.example.app.cli.manager.ManagerUI;
 
+/**
+ * Displays the login menu and handles user login and password change.
+ * 
+ * <p>This class provides:
+ * <ul>
+ *  <li>Login functionality for users</li>
+ *  <li>Password change functionality for users</li>
+ * </ul>
+ */
 public class LoginUI {
     private final MenuUI menu;
     private final UserControl userControl;

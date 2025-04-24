@@ -7,6 +7,13 @@ import com.example.app.enums.FlatType;
 import com.example.app.enums.MaritalStatus;
 import com.example.app.models.Project;
 
+/**
+ * Service interface for managing projects.
+ * 
+ * This interface defines methods for creating, updating, deleting, and retrieving
+ * projects. It also includes methods for checking project status and managing
+ * project officers.
+ */
 public interface ProjectService {
 
     /**

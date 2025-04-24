@@ -6,7 +6,15 @@ import com.example.app.cli.utils.*;
 import com.example.app.cli.common.*;
 
 /**
- * Handles viewing and replying to enquiries for the officer's HandlingProject.
+ * Handles viewing and replying to enquiries for the officer's handling project.
+ *
+ * <p>This class allows officers to:
+ * <ul>
+ *   <li>View a paginated list of enquiries for their handling project</li>
+ *   <li>Reply to specific enquiries</li>
+ * </ul>
+ *
+ * @see PaginatedUI
  */
 public class OfficerEnquiryManagementUI {
     private final OfficerControl ctrl;

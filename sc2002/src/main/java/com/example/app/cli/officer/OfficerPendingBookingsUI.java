@@ -6,7 +6,13 @@ import com.example.app.cli.utils.*;
 import com.example.app.cli.common.*;
 
 /**
- * Handles viewing and booking pending applications for the officer's HandlingProject.
+ * Handles viewing and booking pending applications for the officer's handling project.
+ *
+ * <p>This class allows officers to:
+ * <ul>
+ *   <li>View a paginated list of pending bookings</li>
+ *   <li>Book applicants for flats</li>
+ * </ul>
  */
 public class OfficerPendingBookingsUI {
     private final OfficerControl ctrl;

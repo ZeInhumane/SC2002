@@ -10,6 +10,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Displays a list of all projects for managers.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>Set filters for projects based on neighborhood, flat type, and project name</li>
+ *   <li>View filtered projects</li>
+ *   <li>View current filter settings</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 public class ManagerProjectListUI {
     private final ManagerControl ctrl;
     private final ProjectFilter filter;
@@ -76,9 +88,5 @@ public class ManagerProjectListUI {
             .filter(p -> filter.getProjectName() == null || p.getProjectName().toLowerCase().contains(filter.getProjectName().toLowerCase()))
             .sorted(Comparator.comparing(Project::getProjectName, String.CASE_INSENSITIVE_ORDER))
             .collect(Collectors.toList());
-    }
-
-    private void handleProjectSelection(Project project) {
-        // No actions for ManagerProjectListUI, but if you add any with try/catch, use only e.getMessage()
     }
 }

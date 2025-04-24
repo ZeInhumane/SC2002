@@ -6,6 +6,18 @@ import com.example.app.cli.utils.*;
 import com.example.app.cli.common.MenuUI;
 import java.util.Date;
 
+/**
+ * Manages individual projects for managers.
+ *
+ * <p>This class provides options to:
+ * <ul>
+ *   <li>Edit project details</li>
+ *   <li>View officer registrations</li>
+ *   <li>View applications</li>
+ *   <li>View enquiries</li>
+ *   <li>Toggle project visibility</li>
+ * </ul>
+ */
 public class ManagerProjectManagementUI {
     private final ManagerControl ctrl;
     private final Project project;

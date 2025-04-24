@@ -1,9 +1,11 @@
 package com.example.app.models;
 
+import com.example.app.service.ProjectService;
+import com.example.app.service.impl.ProjectServiceImpl;
+import com.example.app.models.Project;
+
 /**
  * Enquiry class that represents an enquiry made by a user regarding a project. It implements the BaseEntity interface.
- * Provides methods to get and set enquiry details.
- *
  */
 public class Enquiry implements BaseEntity {
 
@@ -36,6 +38,8 @@ public class Enquiry implements BaseEntity {
      * The ID of the officer who replied to the enquiry.
      */
     private Integer replierId;
+
+    private static ProjectService projectService = new ProjectServiceImpl();
 
     /**
      * Default constructor for the Enquiry class.
@@ -185,14 +189,26 @@ public class Enquiry implements BaseEntity {
      */
     @Override
     public String toString() {
-        return String.format("""
+        String projectName = "Unknown";
+        try {
+            Project project = projectService.findById(projectId);
+            if (project != null) {
+                projectName = project.getProjectName();
+            }
+        } catch (Exception e) {
+            projectName = "Error fetching project name";
+        }
+
+        return String.format(
+                """
                 Question: %s
                 Response: %s
                 Project ID: %d
+                Project Name: %s
                 """,
-//                projectName,
                 question,
                 response != null ? response : "N/A",
-                projectId);
+                projectId,
+                projectName);
     }
 }

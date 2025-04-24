@@ -6,6 +6,16 @@ import com.example.app.models.Application;
 import com.example.app.cli.utils.*;
 import com.example.app.cli.common.*;
 
+/**
+ * Displays details of the currently applied project for applicants.
+ *
+ * <p>This class provides:
+ * <ul>
+ *   <li>Details of the applicant's current application</li>
+ *   <li>Details of the project they have applied for</li>
+ *   <li>An option to withdraw the application</li>
+ * </ul>
+ */
 public class ApplicantAppliedProjectUI {
     private final ApplicantControl ctrl;
 

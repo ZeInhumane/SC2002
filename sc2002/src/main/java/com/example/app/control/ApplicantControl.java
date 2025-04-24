@@ -10,6 +10,10 @@ import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
 import com.example.app.service.impl.ApplicantServiceImpl;
 
+/**
+ * Control class for managing applicant-related operations.
+ * This class provides methods to interact with the applicant service and perform various actions related to applicants.
+ */
 public class ApplicantControl {
     private final ApplicantService applicantService;
     private Applicant applicant;

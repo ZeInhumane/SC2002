@@ -6,6 +6,17 @@ import com.example.app.cli.utils.Helper;
 import com.example.app.cli.utils.Readers;
 import com.example.app.cli.common.*;
 
+/**
+ * Displays applications for a specific project.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>View a paginated list of applications for a project</li>
+ *   <li>Approve applications or handle withdrawal requests</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 public class ManagerApplicationListUI {
     private final ManagerControl ctrl;
     private final int projectId;

@@ -5,6 +5,17 @@ import com.example.app.models.Enquiry;
 import com.example.app.cli.utils.*;
 import com.example.app.cli.common.*;
 
+/**
+ * Displays enquiries for a specific project.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>View a paginated list of enquiries for a project</li>
+ *   <li>Reply to specific enquiries</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 public class ManagerEnquiryListUI {
     private final ManagerControl ctrl;
     private final int projectId;

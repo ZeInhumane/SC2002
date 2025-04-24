@@ -1,5 +1,17 @@
 package com.example.app.cli.officer;
 
+/**
+ * Manages and displays a paginated list of enquiries for officers.
+ *
+ * <p>This class allows officers to:
+ * <ul>
+ *   <li>View their submitted enquiries</li>
+ *   <li>Edit an existing enquiry</li>
+ *   <li>Delete an enquiry</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 import com.example.app.cli.utils.*;
 import com.example.app.control.OfficerControl;
 import com.example.app.models.Enquiry;

@@ -66,7 +66,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     * Retrieves projects based on visibility and date range (open < now < close).
+     * Retrieves projects based on visibility and date range (open &lt; now &lt; close).
      *
      * @param visibility
      *            visibility of the project

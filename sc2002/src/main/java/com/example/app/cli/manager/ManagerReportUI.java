@@ -8,6 +8,16 @@ import com.example.app.cli.utils.Helper;
 import com.example.app.cli.utils.Readers;
 import java.util.List;
 
+/**
+ * Generates and displays applicant booking reports for managers.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>Filter reports by marital status, flat type, project name, and age range</li>
+ *   <li>Reset filters</li>
+ *   <li>View the filtered report</li>
+ * </ul>
+ */
 public class ManagerReportUI {
     private final ManagerControl ctrl;
     private MaritalStatus maritalStatusFilter = null;

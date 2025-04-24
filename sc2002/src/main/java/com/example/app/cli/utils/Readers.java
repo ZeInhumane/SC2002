@@ -2,6 +2,9 @@ package com.example.app.cli.utils;
 
 import java.util.Scanner;
 
+/**
+ * A utility class for reading user input from the console.
+ */
 public class Readers {
     public static final Scanner sc = new Scanner(System.in);
 

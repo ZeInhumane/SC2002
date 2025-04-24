@@ -330,8 +330,6 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
      * @param userAge
      *            the age of the user
      * @return a list of eligible flat types
-     * @throws IOException
-     *             if an I/O error occurs
      * @throws NullPointerException
      *             if the user status is null
      */

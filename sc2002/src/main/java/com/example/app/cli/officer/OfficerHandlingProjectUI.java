@@ -7,6 +7,20 @@ import com.example.app.enums.RegistrationStatus;
 import com.example.app.cli.utils.*;
 import com.example.app.cli.common.MenuUI;
 
+/**
+ * Manages the specific project assigned to the officer.
+ *
+ * <p>This class allows officers to:
+ * <ul>
+ *   <li>View and reply to enquiries</li>
+ *   <li>Manage pending bookings</li>
+ *   <li>View and print successful bookings</li>
+ * </ul>
+ *
+ * @see OfficerEnquiryManagementUI
+ * @see OfficerPendingBookingsUI
+ * @see OfficerSuccessfulBookingsUI
+ */
 public class OfficerHandlingProjectUI {
     private final OfficerControl ctrl;
 

@@ -73,6 +73,18 @@
           <mainClass>com.example.app.Main</mainClass>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.5.0</version> <!-- use latest if possible -->
+        <configuration>
+          <!-- Suppress warnings -->
+          <!-- <additionalJOptions>
+            <additionalJOption>-Xdoclint:none</additionalJOption>
+          </additionalJOptions> -->
+          <failOnError>false</failOnError>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>

@@ -7,13 +7,33 @@ import com.example.app.cli.utils.Helper;
 import com.example.app.cli.utils.Readers;
 
 /**
- * Paginates any List<T>: 1..pageSize => items pageSize+1 => Previous Page pageSize+2 => Next Page pageSize+3 => Back
+ * A utility class for paginating a list of items and displaying them in a user-friendly format.
+ *
+ * This class divides a list of items into pages, each containing a fixed number of items.
+ * Users can navigate between pages, select an item, or return to a previous menu.
+ *
+ * @param <T> The type of items to paginate.
  */
 public class PaginatedUI<T> {
+    /**
+     * The title of the paginated UI.
+     */
     private final String title;
+    /**
+     * A supplier that provides the list of items to paginate.
+     */
     private final Supplier<List<T>> itemsSupplier;
+    /**
+     * A consumer that handles the action to perform when an item is selected.
+     */
     private final Consumer<T> onSelect;
+    /**
+     * The number of items to display per page.
+     */
     private final int pageSize;
+    /**
+     * The message to display when there are no items to show.
+     */
     private final String emptyMessage;
 
     public PaginatedUI(String title, Supplier<List<T>> itemsSupplier, Consumer<T> onSelect, int pageSize,

@@ -7,6 +7,10 @@ import com.example.app.service.impl.OfficerServiceImpl;
 
 import java.util.List;
 
+/**
+ * Control class for managing officer-related operations.
+ * This class provides methods to interact with the officer service and perform various actions related to officers.
+ */
 public class OfficerControl {
     private final OfficerService officerService;
     private Officer officer;

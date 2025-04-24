@@ -9,6 +9,10 @@ import com.example.app.service.impl.ManagerServiceImpl;
 
 import java.util.*;
 
+/**
+ * Control class for managing manager-related operations.
+ * This class provides methods to interact with the manager service and perform various actions related to managers.
+ */
 public class ManagerControl {
     private final ManagerService managerService;
     private final Manager manager;

@@ -130,11 +130,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     /**
-     * Get all applications of an applicant
+     * Get all applications with the status of BOOKED
      * 
-     * @param application
-     *            the application object to save
-     * @return the saved application object
+     * @return the list of booked applications
      * @throws IOException
      *             if an I/O error occurs
      */
@@ -143,9 +141,17 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.findByStatus(ApplicationStatus.BOOKED);
     }
 
+    /**
+     * Save applicant to db
+     * 
+     * @param application
+     *            the application object to save
+     * @return the saved application object
+     * @throws IOException
+     *             if an I/O error occurs
+     */
     @Override
     public Application save(Application application) throws IOException {
         return applicationRepository.save(application);
     }
-
 }

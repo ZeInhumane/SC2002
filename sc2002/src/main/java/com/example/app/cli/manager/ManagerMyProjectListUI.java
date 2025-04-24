@@ -5,6 +5,17 @@ import com.example.app.models.Project;
 import com.example.app.cli.utils.Helper;
 import com.example.app.cli.common.PaginatedUI;
 
+/**
+ * Displays a paginated list of projects assigned to the manager.
+ *
+ * <p>This class allows managers to:
+ * <ul>
+ *   <li>View their assigned projects</li>
+ *   <li>Select a project for further management</li>
+ * </ul>
+ *
+ * @see ManagerProjectManagementUI
+ */
 public class ManagerMyProjectListUI {
     private final ManagerControl ctrl;
     private final PaginatedUI<Project> paginator;

@@ -189,8 +189,6 @@ public interface ApplicantService extends UserService {
      * @param userAge
      *            the age of the user
      * @return a list of eligible flat types
-     * @throws IOException
-     *             if an I/O error occurs
      * @throws NullPointerException
      *             if the user status is null
      */

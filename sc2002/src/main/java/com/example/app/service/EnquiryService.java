@@ -68,7 +68,7 @@ public interface EnquiryService {
      * 
      * @param projectId
      *            the ID of the project
-     * @param enquirerId
+     * @param userId
      *            the ID of the enquirer
      * @return a list of enquiries for the project and enquirer
      * @throws IOException

@@ -7,11 +7,23 @@ import com.example.app.control.ApplicantControl;
 
 import com.example.app.models.Enquiry;
 
+/**
+ * Manages and displays a paginated list of enquiries for applicants.
+ *
+ * <p>This class allows applicants to:
+ * <ul>
+ *   <li>View their submitted enquiries</li>
+ *   <li>Edit an existing enquiry</li>
+ *   <li>Delete an enquiry</li>
+ * </ul>
+ *
+ * @see PaginatedUI
+ */
 public class ApplicantEnquiryUI {
     private final ApplicantControl ctrl;
     private final PaginatedUI<Enquiry> paginator;
 
-    ApplicantEnquiryUI(ApplicantControl ctrl) {
+    public ApplicantEnquiryUI(ApplicantControl ctrl) {
         this.ctrl = ctrl;
         this.paginator = buildPaginator();
     }

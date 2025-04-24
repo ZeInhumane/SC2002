@@ -1,5 +1,8 @@
 package com.example.app.cli.utils;
 
+/**
+ * A utility class for common helper methods used in the CLI.
+ */
 public class Helper {
     public static void wipeScreen() {
         String OS = System.getProperty("os.name").toLowerCase();
