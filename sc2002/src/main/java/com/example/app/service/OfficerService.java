@@ -9,7 +9,6 @@ import com.example.app.models.Registration;
 import com.example.app.models.Project;
 
 public interface OfficerService extends ApplicantService {
-
     boolean isRegistrable(Officer officer, int projectId) throws IOException, NullPointerException;
 
     List<Project> getRegistrableProjects(Officer officer) throws IOException, NullPointerException;
@@ -18,15 +17,17 @@ public interface OfficerService extends ApplicantService {
 
     Registration viewCurrentRegistration(Officer officer) throws IOException, NullPointerException;
 
-    Project viewCurrentProject(Officer officer) throws IOException, NullPointerException;
+    Project viewHandlingProject(Officer officer) throws IOException, NullPointerException;
 
     List<Enquiry> getHandlingEnquiries(Officer officer) throws IOException, NullPointerException;
 
     Enquiry replyEnquiry(Officer officer, int enquiryId, String message) throws IOException, NullPointerException;
 
-    List<Application> getHandlingApplications(Officer officer) throws IOException, NullPointerException;
+    List<Application> getBookingApplications(Officer officer) throws IOException, NullPointerException;
 
-    void bookFlatForApplicant(String nric) throws IOException, NullPointerException;
+    List<Application> getBookedApplications(Officer officer) throws IOException, NullPointerException;
 
-    String generateBookingReceipt(String nric) throws IOException, NullPointerException;
+    void bookFlatForApplicant(int applicantId) throws IOException, NullPointerException;
+
+    String generateBookingReceipt(int applicantId) throws IOException, NullPointerException;
 }

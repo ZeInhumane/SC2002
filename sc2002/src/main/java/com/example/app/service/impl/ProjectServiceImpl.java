@@ -57,8 +57,8 @@ public class ProjectServiceImpl implements ProjectService {
         Date now = new Date();
         Date openDate = project.getApplicationOpenDate();
         Date closeDate = project.getApplicationCloseDate();
-        System.out.println(now);
-        System.out.println(now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0);
+        // System.out.println(now);
+        // System.out.println(now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0);
         return now.compareTo(openDate) >= 0 && now.compareTo(closeDate) <= 0;
     }
 

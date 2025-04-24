@@ -1,18 +1,18 @@
 package com.example.app.cli;
 
-import com.example.app.control.ApplicantControl;
+import com.example.app.control.OfficerControl;
 import com.example.app.models.Project;
 import com.example.app.enums.FlatType;
 import com.example.app.cli.utils.*;
 
 /**
- * Displays a paginated list of projects and handles project-specific actions.
+ * Displays a paginated list of projects and handles project-specific actions for officers.
  */
-public class ApplicantProjectListUI {
-    private final ApplicantControl ctrl;
+public class OfficerProjectListUI {
+    private final OfficerControl ctrl;
     private final PaginatedUI<Project> paginator;
 
-    public ApplicantProjectListUI(ApplicantControl ctrl) {
+    public OfficerProjectListUI(OfficerControl ctrl) {
         this.ctrl = ctrl;
         this.paginator = buildPaginator();
     }
@@ -35,7 +35,7 @@ public class ApplicantProjectListUI {
         MenuUI subMenu = new MenuUI(Helper.toHeader("Project Details") + "\n" + project);
         subMenu.addOption("Apply for Project", () -> {
             if (!ctrl.isAbleToApply()) {
-                System.out.println("Cannot apply for project, as you already have an active application.");
+                System.out.println("You currently have an active application and thus cannot apply for more.");
                 Readers.readEnter();
             } else {
                 int ftChoice = Readers.readInt("Select Flat Type (2 = 2-Room, 3 = 3-Room): ");
@@ -59,6 +59,16 @@ public class ApplicantProjectListUI {
                 }
                 Readers.readEnter();
             }
+        });
+
+        subMenu.addOption("Join Project as Officer", () -> {
+            try {
+                ctrl.registerForProject(project.getId());
+                System.out.println("Successfully registered as an officer for the project.");
+            } catch (Exception e) {
+                System.out.println("Error registering as officer: " + e.getMessage());
+            }
+            Readers.readEnter();
         });
 
         subMenu.addOption("Submit Enquiry", () -> {

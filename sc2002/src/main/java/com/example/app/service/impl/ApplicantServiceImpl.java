@@ -37,7 +37,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     // Can only apply if no app exists or the last one failed
     @Override
     public boolean isAbleToApply(Applicant applicant) throws IOException, NullPointerException {
-        Application application = viewCurrentApplication(applicant);
+        Application application = viewApplication(applicant);
         return application == null || application.getStatus() == ApplicationStatus.UNSUCCESSFUL
                 || application.getStatus() == ApplicationStatus.WITHDRAWN;
     }
@@ -58,9 +58,6 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
             throw new IllegalArgumentException("You are not eligible for the selected flat type.");
         }
 
-        if (!isAbleToApply(applicant)) {
-            throw new IllegalArgumentException("You are not eligible to apply for this project, as you already have an active application.");
-        }
         Application application = applicationService.applyForProject(applicant.getId(), projectId, preferredFlatType);
         applicant.setApplicationId(application.getId());
         applicant.setFlatType(preferredFlatType);
@@ -69,7 +66,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
     }
 
     @Override
-    public Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException{
+    public Project viewAppliedProject(Applicant applicant) throws IOException, NullPointerException{
         if (applicant.getApplicationId() == null) {
             return null;
         }
@@ -83,7 +80,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     // Get current application safely
     @Override
-    public Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException {
+    public Application viewApplication(Applicant applicant) throws IOException, NullPointerException {
         if (applicant.getApplicationId() == null)
             return null;
         return applicationService.findById(applicant.getApplicationId());
@@ -91,7 +88,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     @Override
     public Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException {
-        Application application = viewCurrentApplication(applicant);
+        Application application = viewApplication(applicant);
         if (application == null) {
             throw new IllegalArgumentException("No application found to withdraw.");
         }
@@ -111,7 +108,7 @@ public class ApplicantServiceImpl extends UserServiceImpl implements ApplicantSe
 
     // get all enquiries made by the applicant
     @Override
-    public List<Enquiry> getAllEnquiries(Applicant applicant) throws IOException, NullPointerException {
+    public List<Enquiry> getOwnEnquiries(Applicant applicant) throws IOException, NullPointerException {
         return enquiryService.findByEnquirerId(applicant.getId());
     }
 

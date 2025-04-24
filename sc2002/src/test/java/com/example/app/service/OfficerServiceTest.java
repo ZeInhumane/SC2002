@@ -39,7 +39,7 @@ class OfficerServiceTest {
                 new HashSet<>(), new HashSet<>(), Map.of(FlatType._2ROOM, 3)));
 
         Officer registered = service.registerForProject(officer, project.getId());
-        assertNotNull(registered.getRegisteredId());
+        assertNotNull(registered.getRegistrationId());
 
         Registration reg = service.viewCurrentRegistration(registered);
         assertEquals(project.getId(), reg.getProjectId());
@@ -103,19 +103,19 @@ class OfficerServiceTest {
         officer.setProjectId(project.getId());
         RepositoryDependency.getUserRepository().save(officer);
 
-        service.bookFlatForApplicant(applicant.getNric());
+        service.bookFlatForApplicant(applicant.getId());
 
         Application updated = RepositoryDependency.getApplicationRepository().findById(app.getId());
         assertEquals(ApplicationStatus.BOOKED, updated.getStatus());
 
-        String receipt = service.generateBookingReceipt(applicant.getNric());
+        String receipt = service.generateBookingReceipt(applicant.getId());
         assertTrue(receipt.contains("Booking Receipt"));
         assertTrue(receipt.contains("Woodlands"));
     }
 
     @Test
     void viewCurrentProject_throwsIfNone() {
-        assertThrows(IllegalStateException.class, () -> service.viewCurrentProject(officer));
+        assertThrows(IllegalStateException.class, () -> service.viewHandlingProject(officer));
     }
 
     @Test
@@ -130,7 +130,7 @@ class OfficerServiceTest {
         a1 = (Applicant) RepositoryDependency.getUserRepository().save(a1);
         applicationService.save(new Application(null, a1.getId(), project.getId(), ApplicationStatus.PENDING, false, FlatType._3ROOM));
 
-        List<Application> apps = service.getHandlingApplications(officer);
+        List<Application> apps = service.getBookingApplications(officer);
         assertEquals(1, apps.size());
     }
 }

@@ -5,8 +5,7 @@ import com.example.app.enums.MaritalStatus;
 import com.example.app.enums.Role;
 
 public class Officer extends Applicant {
-
-    private Integer registeredId;
+    private Integer registrationId;
     private Integer projectId;
 
     public Officer() {
@@ -16,16 +15,16 @@ public class Officer extends Applicant {
             MaritalStatus maritalStatus, FlatType flatType, Integer applicationId, Integer registeredId,
             Integer projectId) {
         super(id, username, password, email, role, nric, age, maritalStatus, flatType, applicationId);
-        this.registeredId = registeredId;
+        this.registrationId = registeredId;
         this.projectId = projectId;
     }
 
-    public Integer getRegisteredId() {
-        return registeredId;
+    public Integer getRegistrationId() {
+        return registrationId;
     }
 
-    public void setRegisteredId(Integer registeredId) {
-        this.registeredId = registeredId;
+    public void setRegistrationId(Integer registeredId) {
+        this.registrationId = registeredId;
     }
 
     public Integer getProjectId() {
@@ -35,5 +34,4 @@ public class Officer extends Applicant {
     public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
-
 }

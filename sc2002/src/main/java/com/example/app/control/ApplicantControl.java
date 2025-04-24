@@ -9,14 +9,20 @@ import com.example.app.models.Application;
 import com.example.app.models.Enquiry;
 import com.example.app.models.Project;
 import com.example.app.service.ApplicantService;
+import com.example.app.service.impl.ApplicantServiceImpl;
 
 public class ApplicantControl {
-    private ApplicantService applicantService;
+    private final ApplicantService applicantService;
     private Applicant applicant;
 
     public ApplicantControl(ApplicantService applicantService, Applicant applicant) {
         this.applicantService = applicantService;
         this.applicant = applicant;
+    }
+
+    // Default constructor wiring for production
+    public ApplicantControl(Applicant applicant) {
+        this(new ApplicantServiceImpl(), applicant);
     }
 
     public List<Project> getViewableProjects() {
@@ -53,7 +59,7 @@ public class ApplicantControl {
 
     public Application getApplication() {
         try {
-            return applicantService.viewCurrentApplication(this.applicant);
+            return applicantService.viewApplication(this.applicant);
         } catch (IOException e) {
             throw new RuntimeException("Error retrieving application", e);
         }
@@ -61,7 +67,7 @@ public class ApplicantControl {
 
     public Project getAppliedProject() {
         try {
-            return applicantService.viewCurrentProject(this.applicant);
+            return applicantService.viewAppliedProject(this.applicant);
         } catch (IOException e) {
             throw new RuntimeException("Error retrieving applied project", e);
         }
@@ -77,7 +83,7 @@ public class ApplicantControl {
 
     public List<Enquiry> getEnquiries() {
         try {
-            return applicantService.getAllEnquiries(this.applicant);
+            return applicantService.getOwnEnquiries(this.applicant);
         } catch (IOException e) {
             throw new RuntimeException("Error retrieving enquiries", e);
         }

@@ -22,10 +22,10 @@ public interface ApplicantService extends UserService {
     Application applyForProject(Applicant applicant, int projectId, FlatType preferredFlatType) throws IOException, NullPointerException;
 
     // View the project that the applicant has applied for, regardless of status
-    Project viewCurrentProject(Applicant applicant) throws IOException, NullPointerException;
+    Project viewAppliedProject(Applicant applicant) throws IOException, NullPointerException;
 
     // Check the application status
-    Application viewCurrentApplication(Applicant applicant) throws IOException, NullPointerException;
+    Application viewApplication(Applicant applicant) throws IOException, NullPointerException;
 
     // Withdraw application
     Application withdrawApplication(Applicant applicant) throws IOException, NullPointerException;
@@ -33,7 +33,7 @@ public interface ApplicantService extends UserService {
     Enquiry submitEnquiry(Applicant applicant, String message, int projectId) throws IOException, NullPointerException;
 
     // Get all enquiries made by the applicant
-    List<Enquiry> getAllEnquiries(Applicant applicant) throws IOException, NullPointerException;
+    List<Enquiry> getOwnEnquiries(Applicant applicant) throws IOException, NullPointerException;
 
     Enquiry updateEnquiry(Applicant applicant, int enquiryId, String message) throws IOException, NullPointerException;
 

@@ -8,7 +8,7 @@ import com.example.app.cli.utils.Readers;
  * Generic numbered menu loop. Call exit() to break out of run().
  */
 public class MenuUI {
-    private final String title;
+    private final String content;
     private final LinkedHashMap<Integer, MenuOption> options = new LinkedHashMap<>();
     private boolean exit = false;
 
@@ -21,8 +21,8 @@ public class MenuUI {
         }
     }
 
-    public MenuUI(String title) {
-        this.title = title;
+    public MenuUI(String content) {
+        this.content = content;
     }
 
     /** Add a numbered menu option. */
@@ -39,12 +39,12 @@ public class MenuUI {
     public void run() {
         exit = false;
         while (!exit) {
-            System.out.println(title + "\n");
+            Helper.wipeScreen();
+            System.out.println(content + "\n");
             options.forEach((num, opt) ->
                 System.out.printf("%d. %s%n", num, opt.label)
             );
             int choice = Readers.readIntRange(1, options.size());
-            Helper.wipeScreen();
             options.get(choice).action.run();
         }
     }

@@ -14,7 +14,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerService {
-
     static RegistrationService registrationService = new RegistrationServiceImpl();
     static UserService userService = new UserServiceImpl();
 
@@ -33,6 +32,15 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         return !isAlreadyApplicant && !isAlreadyHandling;
     }
 
+    // Check if officer can apply for project
+    // Can only apply if 1, able to apply as applicant and 2, not handling any active project
+    public boolean isAbleToApply(Officer officer) throws IOException {
+        if (officer.getProjectId() != null && projectService.isActive(officer.getProjectId())) {
+            return false;
+        }
+        return super.isAbleToApply(officer);
+    }
+
     @Override
     public List<Project> getRegistrableProjects(Officer officer) throws IOException, NullPointerException {
         Collection<Project> allProjects = projectService.findByVisibilityAndOpenDateGreaterThanAndCloseDateLessThan(true, new Date());
@@ -49,30 +57,33 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     // Register for project
     @Override
     public Officer registerForProject(Officer officer, int projectId) throws IOException {
-
         Project project = projectService.findById(projectId);
         if (project == null) {
             throw new IllegalArgumentException("Project ID " + projectId + " not found.");
         }
 
+        if (!isRegistrable(officer, projectId)) {
+            throw new IllegalStateException("You are not eligible to register for this project.");
+        }
+
         // Override the registration to the latest one
         Registration registration = registrationService.registerForProject(officer.getId(), projectId);
-        officer.setRegisteredId(registration.getId());
+        officer.setRegistrationId(registration.getId());
         return (Officer) this.save(officer);
     }
 
-    // Retrieve curren registration even if it is turned off
+    // Retrieve current registration even if it is turned off
     @Override
     public Registration viewCurrentRegistration(Officer officer) throws IOException {
-        Registration registration = registrationService.findById(officer.getRegisteredId());
+        Registration registration = registrationService.findById(officer.getRegistrationId());
         if (registration == null) {
-            throw new IllegalArgumentException("Registration ID " + officer.getRegisteredId() + " not found.");
+            throw new IllegalArgumentException("Registration ID " + officer.getRegistrationId() + " not found.");
         }
         return registration;
     }
 
     @Override
-    public Project viewCurrentProject(Officer officer) throws IOException {
+    public Project viewHandlingProject(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
             throw new IllegalStateException("Officer is not assigned to any project.");
         }
@@ -80,10 +91,9 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
         return projectService.findById(officer.getProjectId());
     }
 
-    // get Enquiries regarding a project
+    // get Enquiries regarding handling project
     @Override
     public List<Enquiry> getHandlingEnquiries(Officer officer) throws IOException {
-
         if (officer.getProjectId() == null) {
             throw new IllegalStateException("Officer is not assigned to any project.");
         }
@@ -98,23 +108,30 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     }
 
     @Override
-    public List<Application> getHandlingApplications(Officer officer) throws IOException {
-
+    public List<Application> getBookingApplications(Officer officer) throws IOException {
         if (officer.getProjectId() == null) {
             throw new IllegalStateException("Officer is not assigned to any project.");
         }
 
-        return applicationService.findByProjectId(officer.getProjectId());
+        return applicationService.findByProjectId(officer.getProjectId()).stream()
+                .filter(application -> application.getStatus() == ApplicationStatus.SUCCESSFUL)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void bookFlatForApplicant(String applicantNric) throws IOException {
-        Applicant applicant = (Applicant) userService.findByNric(applicantNric);
-
-        if (applicant == null) {
-            throw new IllegalArgumentException("NRIC does not belong to an applicant.");
+    public List<Application> getBookedApplications(Officer officer) throws IOException {
+        if (officer.getProjectId() == null) {
+            throw new IllegalStateException("Officer is not assigned to any project.");
         }
 
+        return applicationService.findByProjectId(officer.getProjectId()).stream()
+                .filter(application -> application.getStatus() == ApplicationStatus.BOOKED)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void bookFlatForApplicant(int applicantId) throws IOException {
+        Applicant applicant = (Applicant) userService.findById(applicantId);
         Application application = applicationService.findById(applicant.getApplicationId());
 
         // CHANGE BACK TO SUCCESSFUL
@@ -135,8 +152,8 @@ public class OfficerServiceImpl extends ApplicantServiceImpl implements OfficerS
     }
 
     @Override
-    public String generateBookingReceipt(String applicantNric) throws IOException {
-        Applicant applicant = (Applicant) userService.findByNric(applicantNric);
+    public String generateBookingReceipt(int applicantId) throws IOException {
+        Applicant applicant = (Applicant) userService.findById(applicantId);
 
         Application app = applicationService.findById(applicant.getApplicationId());
         if (app == null || app.getStatus() != ApplicationStatus.BOOKED) {

@@ -4,7 +4,6 @@ import com.example.app.enums.ApplicationStatus;
 import com.example.app.enums.FlatType;
 
 public class Application implements BaseEntity {
-
     private Integer id;
     private Integer userId;
     private Integer projectId;

@@ -1,10 +1,23 @@
 package com.example.app.control;
 
-import com.example.app.models.User;
+import com.example.app.service.UserService;
 import com.example.app.service.impl.UserServiceImpl;
+import com.example.app.RuntimeData;
+import com.example.app.models.User;
 
 public class UserControl {
-    public static boolean login(String nric, String password) {
+    private final UserService userService;
+
+    public UserControl(UserService userService) {
+        this.userService = userService;
+    }
+
+    // Default constructor wiring for production
+    public UserControl() {
+        this(new UserServiceImpl());
+    }
+
+    public boolean login(String nric, String password) {
         nric = nric.trim().toUpperCase(); // Normalize NRIC input
         password = password.trim(); // Normalize password input
 
@@ -15,9 +28,8 @@ public class UserControl {
         }
 
         try {
-            User user = new UserServiceImpl().login(nric, password);
+            User user = userService.login(nric, password);
             if (user != null) {
-                System.out.println("Login successful. Welcome, " + user.getName() + "!");
                 return true;
             } else {
                 System.out.println("Login failed. Please check your NRIC and password.");
@@ -27,5 +39,24 @@ public class UserControl {
             System.out.println("Login failed: " + e.getMessage() + ". Please try again.");
             return false;
         }
+    }
+
+    public void changePassword(User user, String newPassword) throws Exception {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null.");
+        }
+
+        newPassword = newPassword.trim(); // Normalize new password input
+
+        if (newPassword.isEmpty()) {
+            throw new IllegalArgumentException("New password cannot be empty.");
+        }
+
+        userService.changePassword(user, newPassword);
+    }
+
+    public static void logout() {
+        RuntimeData.setCurrentUser(null);
+        System.out.println("You have been logged out successfully.");
     }
 }
