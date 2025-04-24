@@ -56,6 +56,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0</version>
+        <configuration>
+          <parallel>none</parallel>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>net.revelc.code.formatter</groupId>
@@ -68,7 +71,6 @@
         <version>3.1.0</version>
         <configuration>
           <mainClass>com.example.app.Main</mainClass>
-          <parallel>none</parallel>
         </configuration>
       </plugin>
     </plugins>

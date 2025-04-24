@@ -1,7 +1,6 @@
 package com.example.app.repository;
 
 import com.example.app.models.BaseEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class GeneralRepositoryTestBase<T extends BaseEntity> {
-
     protected abstract GeneralRepository<T> getRepository();
 
     // Return multiple test entities

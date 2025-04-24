@@ -6,10 +6,12 @@ import com.example.app.RuntimeData;
 import com.example.app.cli.utils.*;
 import com.example.app.cli.common.MenuUI;
 import com.example.app.control.UserControl;
+import com.example.app.models.ProjectFilter;
 
 public class ApplicantUI {
     private final ApplicantControl ctrl;
     private final MenuUI menu;
+    private final ProjectFilter projectFilter = new ProjectFilter();
 
     public ApplicantUI() {
         Applicant me = (Applicant) RuntimeData.getCurrentUser();
@@ -23,7 +25,7 @@ public class ApplicantUI {
 
     private MenuUI buildMenu() {
         MenuUI m = new MenuUI(Helper.toHeader("Applicant Dashboard"));
-        m.addOption("View Projects", () -> new ApplicantProjectListUI(ctrl).run());
+        m.addOption("View Projects", () -> new ApplicantProjectListUI(ctrl, projectFilter).run());
         m.addOption("View Applied Project", () -> new ApplicantAppliedProjectUI(ctrl).run());
         m.addOption("View Enquiries", () -> new ApplicantEnquiryUI(ctrl).run());
         m.addOption("Logout", () -> {

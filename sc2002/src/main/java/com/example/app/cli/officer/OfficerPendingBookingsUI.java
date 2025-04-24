@@ -32,6 +32,7 @@ public class OfficerPendingBookingsUI {
                 System.out.println("Error booking applicant: " + e.getMessage());
             }
             Readers.readEnter();
+            subMenu.exit();
         });
         subMenu.addOption("Back", subMenu::exit);
         subMenu.run();

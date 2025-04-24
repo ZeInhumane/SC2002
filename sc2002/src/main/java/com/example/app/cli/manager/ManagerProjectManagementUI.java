@@ -17,10 +17,13 @@ public class ManagerProjectManagementUI {
 
     public void run() {
         MenuUI menu = new MenuUI(Helper.toHeader("Manage Project") + "\n" + project);
-        if (new Date().before(project.getApplicationOpenDate())) {
-            menu.addOption("Edit Project", this::editProject);
-        }
         Date now = new Date();
+        if (now.before(project.getApplicationOpenDate())) {
+            menu.addOption("Edit Project", this::editProject);
+            menu.addOption("Back", menu::exit);
+            menu.run();
+            return;
+        }
         if (now.after(project.getApplicationOpenDate()) && now.before(project.getApplicationCloseDate())) {
             menu.addOption("View Officer Registrations", this::viewOfficerRegistrations);
         }

@@ -6,10 +6,12 @@ import com.example.app.cli.utils.*;
 import com.example.app.control.UserControl;
 import com.example.app.control.ManagerControl;
 import com.example.app.cli.common.MenuUI;
+import com.example.app.models.ProjectFilter;
 
 public class ManagerUI {
     private final ManagerControl ctrl;
     private final MenuUI menu;
+    private final ProjectFilter projectFilter = new ProjectFilter();
 
     public ManagerUI() {
         Manager me = (Manager) RuntimeData.getCurrentUser();
@@ -23,7 +25,7 @@ public class ManagerUI {
 
     private MenuUI buildMenu() {
         MenuUI m = new MenuUI(Helper.toHeader("Manager Dashboard"));
-        m.addOption("View All Projects", () -> new ManagerProjectListUI(ctrl).run());
+        m.addOption("View All Projects", () -> new ManagerProjectListUI(ctrl, projectFilter).run());
         m.addOption("View All Enquiries", () -> new ManagerAllEnquiriesUI(ctrl).run());
         m.addOption("View My Projects", () -> new ManagerMyProjectListUI(ctrl).run());
         m.addOption("Create New Project", () -> new ManagerCreateProjectUI(ctrl).run());

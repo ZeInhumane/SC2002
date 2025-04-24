@@ -22,6 +22,13 @@ public class Readers {
         return input;
     }
 
+    public static String readStringAcceptEmpty(String prompt) {
+        System.out.println(prompt);
+        String input = sc.nextLine();
+        if (input.isEmpty()) return null;
+        return input;
+    }
+
     public static void readEnter() {
         System.out.println("Press Enter to continue...");
         sc.nextLine();

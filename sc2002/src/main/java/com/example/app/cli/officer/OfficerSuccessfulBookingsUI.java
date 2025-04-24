@@ -17,7 +17,7 @@ public class OfficerSuccessfulBookingsUI {
 
     public void run() {
         PaginatedUI<Application> paginator = new PaginatedUI<>(Helper.toHeader("Successful Bookings"),
-                ctrl::getBookingApplications, this::handleApplicationSelection, 5,
+                ctrl::getBookedApplications, this::handleApplicationSelection, 5,
                 "No successful bookings found for your handling project.");
         paginator.run();
     }
